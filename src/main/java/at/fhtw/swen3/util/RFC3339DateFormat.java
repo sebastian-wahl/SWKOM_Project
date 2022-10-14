@@ -1,4 +1,4 @@
-package org.openapitools;
+package at.fhtw.swen3.util;
 
 import com.fasterxml.jackson.databind.util.StdDateFormat;
 
