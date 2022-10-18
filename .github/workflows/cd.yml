@@ -1,0 +1,59 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
+# Source: https://aws.plainenglish.io/hands-on-ci-cd-for-spring-boot-applications-using-github-actions-and-aws-1cbc1e2c9d54
+
+name: CD
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'corretto'
+        cache: maven
+    - name: Build with Maven
+      run: mvn -B package --file pom.xml
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: artifact
+       path: target/SWKOM_Project-0.0.1.jar
+
+    #Deploy's job
+    deploy:
+      #Depends on build's job
+      needs: build
+      name: Deploy
+      #Run on Ubuntu using the latest version
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download JAR
+          #Download the artifact which was uploaded in the build's job
+          uses: actions/download-artifact@v2
+          with:
+            name: artifact
+        #Deploy the artifact (JAR) into AWS Beanstalk
+        - name: Deploy to EB
+          uses: einaregilsson/beanstalk-deploy@v13
+          with:
+            aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+            aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+            aws_session_token: ${{ secrets.AWS_SESSION_TOKEN }}
+            use_existing_version_if_available: false
+            application_name: SWKOM_Project
+            environment_name: Swkomproject-env-1
+            version_label: ${{github.SHA}}
+            region: us-east-1
+            deployment_package: SWKOM_Project-0.0.1.jar
