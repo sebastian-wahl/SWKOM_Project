@@ -11,13 +11,13 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @Builder
-public class Parcel {
+public class ParcelEntity {
     // Parcel
     private Float weight;
 
-    private Recipient recipient;
+    private RecipientEntity recipient;
 
-    private Recipient sender;
+    private RecipientEntity sender;
 
     // NewParcelInfo
     private String trackingId;
@@ -25,7 +25,7 @@ public class Parcel {
     // TrackingInformation
     private TrackingInformationState state;
 
-    private List<HopArrival> visitedHops;
+    private List<HopArrivalEntity> visitedHops;
 
-    private List<HopArrival> futureHops;
+    private List<HopArrivalEntity> futureHops;
 }

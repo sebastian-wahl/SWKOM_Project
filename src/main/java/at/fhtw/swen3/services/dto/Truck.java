@@ -18,7 +18,7 @@ import javax.annotation.Generated;
 
 @JsonTypeName("truck")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class TruckDto extends HopDto {
+public class Truck extends Hop {
 
   @JsonProperty("regionGeoJson")
   private String regionGeoJson;
@@ -26,7 +26,7 @@ public class TruckDto extends HopDto {
   @JsonProperty("numberPlate")
   private String numberPlate;
 
-  public TruckDto regionGeoJson(String regionGeoJson) {
+  public Truck regionGeoJson(String regionGeoJson) {
     this.regionGeoJson = regionGeoJson;
     return this;
   }
@@ -45,7 +45,7 @@ public class TruckDto extends HopDto {
     this.regionGeoJson = regionGeoJson;
   }
 
-  public TruckDto numberPlate(String numberPlate) {
+  public Truck numberPlate(String numberPlate) {
     this.numberPlate = numberPlate;
     return this;
   }
@@ -64,32 +64,32 @@ public class TruckDto extends HopDto {
     this.numberPlate = numberPlate;
   }
 
-  public TruckDto hopType(String hopType) {
+  public Truck hopType(String hopType) {
     super.setHopType(hopType);
     return this;
   }
 
-  public TruckDto code(String code) {
+  public Truck code(String code) {
     super.setCode(code);
     return this;
   }
 
-  public TruckDto description(String description) {
+  public Truck description(String description) {
     super.setDescription(description);
     return this;
   }
 
-  public TruckDto processingDelayMins(Integer processingDelayMins) {
+  public Truck processingDelayMins(Integer processingDelayMins) {
     super.setProcessingDelayMins(processingDelayMins);
     return this;
   }
 
-  public TruckDto locationName(String locationName) {
+  public Truck locationName(String locationName) {
     super.setLocationName(locationName);
     return this;
   }
 
-  public TruckDto locationCoordinates(GeoCoordinateDto locationCoordinates) {
+  public Truck locationCoordinates(GeoCoordinate locationCoordinates) {
     super.setLocationCoordinates(locationCoordinates);
     return this;
   }
@@ -102,7 +102,7 @@ public class TruckDto extends HopDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TruckDto truckDto = (TruckDto) o;
+    Truck truckDto = (Truck) o;
     return Objects.equals(this.regionGeoJson, truckDto.regionGeoJson) &&
         Objects.equals(this.numberPlate, truckDto.numberPlate) &&
         super.equals(o);

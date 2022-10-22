@@ -20,16 +20,16 @@ import javax.annotation.Generated;
 
 @JsonTypeName("warehouse")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class WarehouseDto extends HopDto {
+public class Warehouse extends Hop {
 
   @JsonProperty("level")
   private Integer level;
 
   @JsonProperty("nextHops")
   @Valid
-  private List<WarehouseNextHopsDto> nextHops = new ArrayList<>();
+  private List<WarehouseNextHops> nextHops = new ArrayList<>();
 
-  public WarehouseDto level(Integer level) {
+  public Warehouse level(Integer level) {
     this.level = level;
     return this;
   }
@@ -48,12 +48,12 @@ public class WarehouseDto extends HopDto {
     this.level = level;
   }
 
-  public WarehouseDto nextHops(List<WarehouseNextHopsDto> nextHops) {
+  public Warehouse nextHops(List<WarehouseNextHops> nextHops) {
     this.nextHops = nextHops;
     return this;
   }
 
-  public WarehouseDto addNextHopsItem(WarehouseNextHopsDto nextHopsItem) {
+  public Warehouse addNextHopsItem(WarehouseNextHops nextHopsItem) {
     this.nextHops.add(nextHopsItem);
     return this;
   }
@@ -64,40 +64,40 @@ public class WarehouseDto extends HopDto {
   */
   @NotNull @Valid 
   @Schema(name = "nextHops", description = "Next hops after this warehouse (warehouses or trucks).", required = true)
-  public List<WarehouseNextHopsDto> getNextHops() {
+  public List<WarehouseNextHops> getNextHops() {
     return nextHops;
   }
 
-  public void setNextHops(List<WarehouseNextHopsDto> nextHops) {
+  public void setNextHops(List<WarehouseNextHops> nextHops) {
     this.nextHops = nextHops;
   }
 
-  public WarehouseDto hopType(String hopType) {
+  public Warehouse hopType(String hopType) {
     super.setHopType(hopType);
     return this;
   }
 
-  public WarehouseDto code(String code) {
+  public Warehouse code(String code) {
     super.setCode(code);
     return this;
   }
 
-  public WarehouseDto description(String description) {
+  public Warehouse description(String description) {
     super.setDescription(description);
     return this;
   }
 
-  public WarehouseDto processingDelayMins(Integer processingDelayMins) {
+  public Warehouse processingDelayMins(Integer processingDelayMins) {
     super.setProcessingDelayMins(processingDelayMins);
     return this;
   }
 
-  public WarehouseDto locationName(String locationName) {
+  public Warehouse locationName(String locationName) {
     super.setLocationName(locationName);
     return this;
   }
 
-  public WarehouseDto locationCoordinates(GeoCoordinateDto locationCoordinates) {
+  public Warehouse locationCoordinates(GeoCoordinate locationCoordinates) {
     super.setLocationCoordinates(locationCoordinates);
     return this;
   }
@@ -110,7 +110,7 @@ public class WarehouseDto extends HopDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    WarehouseDto warehouseDto = (WarehouseDto) o;
+    Warehouse warehouseDto = (Warehouse) o;
     return Objects.equals(this.level, warehouseDto.level) &&
         Objects.equals(this.nextHops, warehouseDto.nextHops) &&
         super.equals(o);

@@ -5,9 +5,9 @@
  */
 package at.fhtw.swen3.services;
 
-import at.fhtw.swen3.services.dto.ErrorDto;
-import at.fhtw.swen3.services.dto.HopDto;
-import at.fhtw.swen3.services.dto.WarehouseDto;
+import at.fhtw.swen3.services.dto.Error;
+import at.fhtw.swen3.services.dto.Hop;
+import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.util.ApiUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -49,10 +49,10 @@ public interface WarehouseApi {
         tags = { "warehouse-management" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = WarehouseDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Warehouse.class))
             }),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             }),
             @ApiResponse(responseCode = "404", description = "No hierarchy loaded yet.")
         }
@@ -62,7 +62,7 @@ public interface WarehouseApi {
         value = "/warehouse",
         produces = { "application/json" }
     )
-    default ResponseEntity<WarehouseDto> exportWarehouses(
+    default ResponseEntity<Warehouse> exportWarehouses(
         
     ) {
         getRequest().ifPresent(request -> {
@@ -93,10 +93,10 @@ public interface WarehouseApi {
         tags = { "warehouse-management" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successful response", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = HopDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Hop.class))
             }),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             }),
             @ApiResponse(responseCode = "404", description = "No hop with the specified id could be found.")
         }
@@ -106,7 +106,7 @@ public interface WarehouseApi {
         value = "/warehouse/{code}",
         produces = { "application/json" }
     )
-    default ResponseEntity<HopDto> getWarehouse(
+    default ResponseEntity<Hop> getWarehouse(
         @Parameter(name = "code", description = "", required = true) @PathVariable("code") String code
     ) {
         getRequest().ifPresent(request -> {
@@ -137,7 +137,7 @@ public interface WarehouseApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully loaded."),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             })
         }
     )
@@ -148,7 +148,7 @@ public interface WarehouseApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<Void> importWarehouses(
-        @Parameter(name = "Warehouse", description = "", required = true) @Valid @RequestBody WarehouseDto warehouseDto
+        @Parameter(name = "Warehouse", description = "", required = true) @Valid @RequestBody Warehouse warehouseDto
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }

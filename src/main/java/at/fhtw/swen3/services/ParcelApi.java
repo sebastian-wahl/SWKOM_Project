@@ -5,10 +5,10 @@
  */
 package at.fhtw.swen3.services;
 
-import at.fhtw.swen3.services.dto.ErrorDto;
-import at.fhtw.swen3.services.dto.NewParcelInfoDto;
-import at.fhtw.swen3.services.dto.ParcelDto;
-import at.fhtw.swen3.services.dto.TrackingInformationDto;
+import at.fhtw.swen3.services.dto.Error;
+import at.fhtw.swen3.services.dto.NewParcelInfo;
+import at.fhtw.swen3.services.dto.Parcel;
+import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.util.ApiUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -53,7 +53,7 @@ public interface ParcelApi {
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully reported hop."),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             }),
             @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID. ")
         }
@@ -88,7 +88,7 @@ public interface ParcelApi {
             @ApiResponse(responseCode = "200", description = "Successfully reported hop."),
             @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID or hop with code not found. "),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             })
         }
     )
@@ -109,7 +109,7 @@ public interface ParcelApi {
     /**
      * POST /parcel : Submit a new parcel to the logistics service. 
      *
-     * @param parcelDto  (required)
+     * @param parcel  (required)
      * @return Successfully submitted the new parcel (status code 201)
      *         or The operation failed due to an error. (status code 400)
      *         or The address of sender or receiver was not found. (status code 404)
@@ -120,13 +120,13 @@ public interface ParcelApi {
         tags = { "sender" },
         responses = {
             @ApiResponse(responseCode = "201", description = "Successfully submitted the new parcel", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = NewParcelInfoDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = NewParcelInfo.class))
             }),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             }),
             @ApiResponse(responseCode = "404", description = "The address of sender or receiver was not found.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             })
         }
     )
@@ -136,8 +136,8 @@ public interface ParcelApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<NewParcelInfoDto> submitParcel(
-        @Parameter(name = "Parcel", description = "", required = true) @Valid @RequestBody ParcelDto parcelDto
+    default ResponseEntity<NewParcelInfo> submitParcel(
+        @Parameter(name = "Parcel", description = "", required = true) @Valid @RequestBody Parcel parcel
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
@@ -167,10 +167,10 @@ public interface ParcelApi {
         tags = { "recipient" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Parcel exists, here's the tracking information.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = TrackingInformationDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = TrackingInformation.class))
             }),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             }),
             @ApiResponse(responseCode = "404", description = "Parcel does not exist with this tracking ID.")
         }
@@ -180,7 +180,7 @@ public interface ParcelApi {
         value = "/parcel/{trackingId}",
         produces = { "application/json" }
     )
-    default ResponseEntity<TrackingInformationDto> trackParcel(
+    default ResponseEntity<TrackingInformation> trackParcel(
         @Pattern(regexp = "^[A-Z0-9]{9}$") @Parameter(name = "trackingId", description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required = true) @PathVariable("trackingId") String trackingId
     ) {
         getRequest().ifPresent(request -> {
@@ -201,7 +201,7 @@ public interface ParcelApi {
      * POST /parcel/{trackingId} : Transfer an existing parcel into the system from the service of a logistics partner. 
      *
      * @param trackingId The tracking ID of the parcel. E.g. PYJRB4HZ6  (required)
-     * @param parcelDto  (required)
+     * @param parcel  (required)
      * @return Successfully transitioned the parcel (status code 200)
      *         or The operation failed due to an error. (status code 400)
      *         or A parcel with the specified trackingID is already in the system. (status code 409)
@@ -212,10 +212,10 @@ public interface ParcelApi {
         tags = { "logisticsPartner" },
         responses = {
             @ApiResponse(responseCode = "200", description = "Successfully transitioned the parcel", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = NewParcelInfoDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = NewParcelInfo.class))
             }),
             @ApiResponse(responseCode = "400", description = "The operation failed due to an error.", content = {
-                @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorDto.class))
+                @Content(mediaType = "application/json", schema = @Schema(implementation = Error.class))
             }),
             @ApiResponse(responseCode = "409", description = "A parcel with the specified trackingID is already in the system.")
         }
@@ -226,9 +226,9 @@ public interface ParcelApi {
         produces = { "application/json" },
         consumes = { "application/json" }
     )
-    default ResponseEntity<NewParcelInfoDto> transitionParcel(
+    default ResponseEntity<NewParcelInfo> transitionParcel(
         @Pattern(regexp = "^[A-Z0-9]{9}$") @Parameter(name = "trackingId", description = "The tracking ID of the parcel. E.g. PYJRB4HZ6 ", required = true) @PathVariable("trackingId") String trackingId,
-        @Parameter(name = "Parcel", description = "", required = true) @Valid @RequestBody ParcelDto parcelDto
+        @Parameter(name = "Parcel", description = "", required = true) @Valid @RequestBody Parcel parcel
     ) {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {

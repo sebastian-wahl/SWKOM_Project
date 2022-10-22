@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class Transferwarehouse extends Hop {
+public class TransferwarehouseEntity extends HopEntity {
 
     private String regionGeoJson;
 
@@ -17,7 +17,7 @@ public class Transferwarehouse extends Hop {
 
     private String logisticsPartnerUrl;
 
-    public Transferwarehouse(String hopType, String code, String description, Integer processingDelayMins, String locationName, GeoCoordinate locationCoordinates) {
+    public TransferwarehouseEntity(String hopType, String code, String description, Integer processingDelayMins, String locationName, GeoCoordinateEntity locationCoordinates) {
         super(hopType, code, description, processingDelayMins, locationName, locationCoordinates);
     }
 }

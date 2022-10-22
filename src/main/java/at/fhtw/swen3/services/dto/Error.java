@@ -16,12 +16,12 @@ import javax.annotation.Generated;
 
 @JsonTypeName("error")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class ErrorDto {
+public class Error {
 
   @JsonProperty("errorMessage")
   private String errorMessage;
 
-  public ErrorDto errorMessage(String errorMessage) {
+  public Error errorMessage(String errorMessage) {
     this.errorMessage = errorMessage;
     return this;
   }
@@ -48,8 +48,8 @@ public class ErrorDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ErrorDto errorDto = (ErrorDto) o;
-    return Objects.equals(this.errorMessage, errorDto.errorMessage);
+    Error error = (Error) o;
+    return Objects.equals(this.errorMessage, error.errorMessage);
   }
 
   @Override

@@ -16,7 +16,7 @@ import javax.annotation.Generated;
 
 @JsonTypeName("recipient")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class RecipientDto {
+public class Recipient {
 
   @JsonProperty("name")
   private String name;
@@ -33,7 +33,7 @@ public class RecipientDto {
   @JsonProperty("country")
   private String country;
 
-  public RecipientDto name(String name) {
+  public Recipient name(String name) {
     this.name = name;
     return this;
   }
@@ -52,7 +52,7 @@ public class RecipientDto {
     this.name = name;
   }
 
-  public RecipientDto street(String street) {
+  public Recipient street(String street) {
     this.street = street;
     return this;
   }
@@ -71,7 +71,7 @@ public class RecipientDto {
     this.street = street;
   }
 
-  public RecipientDto postalCode(String postalCode) {
+  public Recipient postalCode(String postalCode) {
     this.postalCode = postalCode;
     return this;
   }
@@ -90,7 +90,7 @@ public class RecipientDto {
     this.postalCode = postalCode;
   }
 
-  public RecipientDto city(String city) {
+  public Recipient city(String city) {
     this.city = city;
     return this;
   }
@@ -109,7 +109,7 @@ public class RecipientDto {
     this.city = city;
   }
 
-  public RecipientDto country(String country) {
+  public Recipient country(String country) {
     this.country = country;
     return this;
   }
@@ -136,12 +136,12 @@ public class RecipientDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    RecipientDto recipientDto = (RecipientDto) o;
-    return Objects.equals(this.name, recipientDto.name) &&
-        Objects.equals(this.street, recipientDto.street) &&
-        Objects.equals(this.postalCode, recipientDto.postalCode) &&
-        Objects.equals(this.city, recipientDto.city) &&
-        Objects.equals(this.country, recipientDto.country);
+    Recipient recipient = (Recipient) o;
+    return Objects.equals(this.name, recipient.name) &&
+        Objects.equals(this.street, recipient.street) &&
+        Objects.equals(this.postalCode, recipient.postalCode) &&
+        Objects.equals(this.city, recipient.city) &&
+        Objects.equals(this.country, recipient.country);
   }
 
   @Override

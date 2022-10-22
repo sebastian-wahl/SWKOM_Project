@@ -18,7 +18,7 @@ import javax.annotation.Generated;
 
 @JsonTypeName("transferwarehouse")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class TransferwarehouseDto extends HopDto {
+public class Transferwarehouse extends Hop {
 
   @JsonProperty("regionGeoJson")
   private String regionGeoJson;
@@ -29,7 +29,7 @@ public class TransferwarehouseDto extends HopDto {
   @JsonProperty("logisticsPartnerUrl")
   private String logisticsPartnerUrl;
 
-  public TransferwarehouseDto regionGeoJson(String regionGeoJson) {
+  public Transferwarehouse regionGeoJson(String regionGeoJson) {
     this.regionGeoJson = regionGeoJson;
     return this;
   }
@@ -48,7 +48,7 @@ public class TransferwarehouseDto extends HopDto {
     this.regionGeoJson = regionGeoJson;
   }
 
-  public TransferwarehouseDto logisticsPartner(String logisticsPartner) {
+  public Transferwarehouse logisticsPartner(String logisticsPartner) {
     this.logisticsPartner = logisticsPartner;
     return this;
   }
@@ -67,7 +67,7 @@ public class TransferwarehouseDto extends HopDto {
     this.logisticsPartner = logisticsPartner;
   }
 
-  public TransferwarehouseDto logisticsPartnerUrl(String logisticsPartnerUrl) {
+  public Transferwarehouse logisticsPartnerUrl(String logisticsPartnerUrl) {
     this.logisticsPartnerUrl = logisticsPartnerUrl;
     return this;
   }
@@ -86,32 +86,32 @@ public class TransferwarehouseDto extends HopDto {
     this.logisticsPartnerUrl = logisticsPartnerUrl;
   }
 
-  public TransferwarehouseDto hopType(String hopType) {
+  public Transferwarehouse hopType(String hopType) {
     super.setHopType(hopType);
     return this;
   }
 
-  public TransferwarehouseDto code(String code) {
+  public Transferwarehouse code(String code) {
     super.setCode(code);
     return this;
   }
 
-  public TransferwarehouseDto description(String description) {
+  public Transferwarehouse description(String description) {
     super.setDescription(description);
     return this;
   }
 
-  public TransferwarehouseDto processingDelayMins(Integer processingDelayMins) {
+  public Transferwarehouse processingDelayMins(Integer processingDelayMins) {
     super.setProcessingDelayMins(processingDelayMins);
     return this;
   }
 
-  public TransferwarehouseDto locationName(String locationName) {
+  public Transferwarehouse locationName(String locationName) {
     super.setLocationName(locationName);
     return this;
   }
 
-  public TransferwarehouseDto locationCoordinates(GeoCoordinateDto locationCoordinates) {
+  public Transferwarehouse locationCoordinates(GeoCoordinate locationCoordinates) {
     super.setLocationCoordinates(locationCoordinates);
     return this;
   }
@@ -124,7 +124,7 @@ public class TransferwarehouseDto extends HopDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TransferwarehouseDto transferwarehouseDto = (TransferwarehouseDto) o;
+    Transferwarehouse transferwarehouseDto = (Transferwarehouse) o;
     return Objects.equals(this.regionGeoJson, transferwarehouseDto.regionGeoJson) &&
         Objects.equals(this.logisticsPartner, transferwarehouseDto.logisticsPartner) &&
         Objects.equals(this.logisticsPartnerUrl, transferwarehouseDto.logisticsPartnerUrl) &&

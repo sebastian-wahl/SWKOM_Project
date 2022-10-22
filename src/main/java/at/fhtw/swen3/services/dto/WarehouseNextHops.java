@@ -18,15 +18,15 @@ import javax.annotation.Generated;
 
 @JsonTypeName("warehouse_allOf_nextHops")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class WarehouseNextHopsDto {
+public class WarehouseNextHops {
 
   @JsonProperty("traveltimeMins")
   private Integer traveltimeMins;
 
   @JsonProperty("hop")
-  private HopDto hopDto;
+  private Hop hop;
 
-  public WarehouseNextHopsDto traveltimeMins(Integer traveltimeMins) {
+  public WarehouseNextHops traveltimeMins(Integer traveltimeMins) {
     this.traveltimeMins = traveltimeMins;
     return this;
   }
@@ -45,8 +45,8 @@ public class WarehouseNextHopsDto {
     this.traveltimeMins = traveltimeMins;
   }
 
-  public WarehouseNextHopsDto hop(HopDto hopDto) {
-    this.hopDto = hopDto;
+  public WarehouseNextHops hop(Hop hop) {
+    this.hop = hop;
     return this;
   }
 
@@ -56,12 +56,12 @@ public class WarehouseNextHopsDto {
   */
   @NotNull @Valid 
   @Schema(name = "hop", required = true)
-  public HopDto getHop() {
-    return hopDto;
+  public Hop getHop() {
+    return hop;
   }
 
-  public void setHop(HopDto hopDto) {
-    this.hopDto = hopDto;
+  public void setHop(Hop hop) {
+    this.hop = hop;
   }
 
   @Override
@@ -72,14 +72,14 @@ public class WarehouseNextHopsDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    WarehouseNextHopsDto warehouseNextHopsDto = (WarehouseNextHopsDto) o;
-    return Objects.equals(this.traveltimeMins, warehouseNextHopsDto.traveltimeMins) &&
-        Objects.equals(this.hopDto, warehouseNextHopsDto.hopDto);
+    WarehouseNextHops warehouseNextHops = (WarehouseNextHops) o;
+    return Objects.equals(this.traveltimeMins, warehouseNextHops.traveltimeMins) &&
+        Objects.equals(this.hop, warehouseNextHops.hop);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(traveltimeMins, hopDto);
+    return Objects.hash(traveltimeMins, hop);
   }
 
   @Override
@@ -87,7 +87,7 @@ public class WarehouseNextHopsDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class WarehouseAllOfNextHops {\n");
     sb.append("    traveltimeMins: ").append(toIndentedString(traveltimeMins)).append("\n");
-    sb.append("    hop: ").append(toIndentedString(hopDto)).append("\n");
+    sb.append("    hop: ").append(toIndentedString(hop)).append("\n");
     sb.append("}");
     return sb.toString();
   }

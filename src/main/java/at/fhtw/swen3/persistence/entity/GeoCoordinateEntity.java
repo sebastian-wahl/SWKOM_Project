@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class GeoCoordinate {
+public class GeoCoordinateEntity {
     private Double lat;
 
     private Double lon;

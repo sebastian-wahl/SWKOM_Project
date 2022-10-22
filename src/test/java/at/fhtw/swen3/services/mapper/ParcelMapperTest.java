@@ -1,10 +1,10 @@
 package at.fhtw.swen3.services.mapper;
 
 import at.fhtw.swen3.persistence.entity.*;
-import at.fhtw.swen3.services.dto.NewParcelInfoDto;
-import at.fhtw.swen3.services.dto.ParcelDto;
-import at.fhtw.swen3.services.dto.RecipientDto;
-import at.fhtw.swen3.services.dto.TrackingInformationDto;
+import at.fhtw.swen3.services.dto.NewParcelInfo;
+import at.fhtw.swen3.services.dto.Parcel;
+import at.fhtw.swen3.services.dto.Recipient;
+import at.fhtw.swen3.services.dto.TrackingInformation;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -24,20 +24,20 @@ class ParcelMapperTest {
     @Test
     void GIVEN_dto_WHEN_map_fromDto_THEN_maps_correctly() {
         // GIVEN
-        RecipientDto recipientDto = new RecipientDto().name(RECIPIENT_NAME);
-        RecipientDto senderDto = new RecipientDto().name(SENDER_NAME);
-        ParcelDto parcelDto = new ParcelDto()
-                .recipient(recipientDto)
+        Recipient recipient = new Recipient().name(RECIPIENT_NAME);
+        Recipient senderDto = new Recipient().name(SENDER_NAME);
+        Parcel parcelDto = new Parcel()
+                .recipient(recipient)
                 .sender(senderDto)
                 .weight(1.0F);
 
-        NewParcelInfoDto newParcelInfoDto = new NewParcelInfoDto()
+        NewParcelInfo newParcelInfo = new NewParcelInfo()
                 .trackingId(TRACKING_ID);
 
-        TrackingInformationDto trackingInformationDto = new TrackingInformationDto();
+        TrackingInformation trackingInformation = new TrackingInformation();
 
         // WHEN
-        Parcel parcel = ParcelMapper.INSTANCE.fromDto(parcelDto, newParcelInfoDto, trackingInformationDto);
+        ParcelEntity parcel = ParcelMapper.INSTANCE.fromDto(parcelDto, newParcelInfo, trackingInformation);
 
         // THEN
         assertThat(parcel).isNotNull();
@@ -53,10 +53,10 @@ class ParcelMapperTest {
     @Test
     void GIVEN_business_entity_WHEN_toParcelDto_THEN_maps_correctly() {
         // GIVEN
-        Parcel parcel = buildParcel();
+        ParcelEntity parcel = buildParcel();
 
         // WHEN
-        ParcelDto parcelDto = ParcelMapper.INSTANCE.toParcelDto(parcel);
+        Parcel parcelDto = ParcelMapper.INSTANCE.toParcelDto(parcel);
 
         // THEN
         assertThat(parcelDto).isNotNull();
@@ -73,24 +73,24 @@ class ParcelMapperTest {
     @Test
     void GIVEN_business_entity_WHEN_toNewParcelInfoDto_THEN_maps_correctly() {
         // GIVEN
-        Parcel parcel = buildParcel();
+        ParcelEntity parcel = buildParcel();
 
         // WHEN
-        NewParcelInfoDto newParcelInfoDto = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcel);
+        NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcel);
 
 
         // THEN
-        assertThat(newParcelInfoDto).isNotNull();
-        assertThat(newParcelInfoDto.getTrackingId()).isEqualTo(TRACKING_ID);
+        assertThat(newParcelInfo).isNotNull();
+        assertThat(newParcelInfo.getTrackingId()).isEqualTo(TRACKING_ID);
     }
 
     @Test
     void GIVEN_business_entity_WHEN_toTrackingInformationDto_THEN_maps_correctly() {
         // GIVEN
-        Parcel parcel = buildParcel();
+        ParcelEntity parcel = buildParcel();
 
         // WHEN
-        TrackingInformationDto newParcelInfoDto = ParcelMapper.INSTANCE.toTrackingInformationDto(parcel);
+        TrackingInformation newParcelInfoDto = ParcelMapper.INSTANCE.toTrackingInformationDto(parcel);
 
 
         // THEN
@@ -105,8 +105,8 @@ class ParcelMapperTest {
 
     }
 
-    private Parcel buildParcel() {
-        return Parcel.builder()
+    private ParcelEntity buildParcel() {
+        return ParcelEntity.builder()
                 .weight(WEIGHT)
                 .recipient(buildRecipient(RECIPIENT_NAME))
                 .sender(buildRecipient(SENDER_NAME))
@@ -117,16 +117,16 @@ class ParcelMapperTest {
                 .build();
     }
 
-    private List<HopArrival> buildHopArrivals(String code) {
-        HopArrival hopArrival = HopArrival.builder()
+    private List<HopArrivalEntity> buildHopArrivals(String code) {
+        HopArrivalEntity hopArrival = HopArrivalEntity.builder()
                 .code(code)
                 .build();
 
         return List.of(hopArrival);
     }
 
-    private Recipient buildRecipient(String name) {
-        return Recipient.builder()
+    private RecipientEntity buildRecipient(String name) {
+        return RecipientEntity.builder()
                 .name(name)
                 .build();
     }

@@ -18,18 +18,18 @@ import javax.annotation.Generated;
 
 @JsonTypeName("parcel")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class ParcelDto {
+public class Parcel {
 
   @JsonProperty("weight")
   private Float weight;
 
   @JsonProperty("recipient")
-  private RecipientDto recipientDto;
+  private Recipient recipient;
 
   @JsonProperty("sender")
-  private RecipientDto sender;
+  private Recipient sender;
 
-  public ParcelDto weight(Float weight) {
+  public Parcel weight(Float weight) {
     this.weight = weight;
     return this;
   }
@@ -48,8 +48,8 @@ public class ParcelDto {
     this.weight = weight;
   }
 
-  public ParcelDto recipient(RecipientDto recipientDto) {
-    this.recipientDto = recipientDto;
+  public Parcel recipient(Recipient recipient) {
+    this.recipient = recipient;
     return this;
   }
 
@@ -59,15 +59,15 @@ public class ParcelDto {
   */
   @NotNull @Valid 
   @Schema(name = "recipient", required = true)
-  public RecipientDto getRecipient() {
-    return recipientDto;
+  public Recipient getRecipient() {
+    return recipient;
   }
 
-  public void setRecipient(RecipientDto recipientDto) {
-    this.recipientDto = recipientDto;
+  public void setRecipient(Recipient recipient) {
+    this.recipient = recipient;
   }
 
-  public ParcelDto sender(RecipientDto sender) {
+  public Parcel sender(Recipient sender) {
     this.sender = sender;
     return this;
   }
@@ -78,11 +78,11 @@ public class ParcelDto {
   */
   @NotNull @Valid 
   @Schema(name = "sender", required = true)
-  public RecipientDto getSender() {
+  public Recipient getSender() {
     return sender;
   }
 
-  public void setSender(RecipientDto sender) {
+  public void setSender(Recipient sender) {
     this.sender = sender;
   }
 
@@ -94,15 +94,15 @@ public class ParcelDto {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ParcelDto parcelDto = (ParcelDto) o;
-    return Objects.equals(this.weight, parcelDto.weight) &&
-        Objects.equals(this.recipientDto, parcelDto.recipientDto) &&
-        Objects.equals(this.sender, parcelDto.sender);
+    Parcel parcel = (Parcel) o;
+    return Objects.equals(this.weight, parcel.weight) &&
+        Objects.equals(this.recipient, parcel.recipient) &&
+        Objects.equals(this.sender, parcel.sender);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(weight, recipientDto, sender);
+    return Objects.hash(weight, recipient, sender);
   }
 
   @Override
@@ -110,7 +110,7 @@ public class ParcelDto {
     StringBuilder sb = new StringBuilder();
     sb.append("class Parcel {\n");
     sb.append("    weight: ").append(toIndentedString(weight)).append("\n");
-    sb.append("    recipient: ").append(toIndentedString(recipientDto)).append("\n");
+    sb.append("    recipient: ").append(toIndentedString(recipient)).append("\n");
     sb.append("    sender: ").append(toIndentedString(sender)).append("\n");
     sb.append("}");
     return sb.toString();
