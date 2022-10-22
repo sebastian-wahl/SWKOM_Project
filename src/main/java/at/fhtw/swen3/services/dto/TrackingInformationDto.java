@@ -21,7 +21,7 @@ import javax.annotation.Generated;
 
 @JsonTypeName("trackingInformation")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class TrackingInformation {
+public class TrackingInformationDto {
 
   /**
    * State of the parcel.
@@ -69,13 +69,13 @@ public class TrackingInformation {
 
   @JsonProperty("visitedHops")
   @Valid
-  private List<HopArrival> visitedHops = new ArrayList<>();
+  private List<HopArrivalDto> visitedHops = new ArrayList<>();
 
   @JsonProperty("futureHops")
   @Valid
-  private List<HopArrival> futureHops = new ArrayList<>();
+  private List<HopArrivalDto> futureHops = new ArrayList<>();
 
-  public TrackingInformation state(StateEnum state) {
+  public TrackingInformationDto state(StateEnum state) {
     this.state = state;
     return this;
   }
@@ -94,12 +94,12 @@ public class TrackingInformation {
     this.state = state;
   }
 
-  public TrackingInformation visitedHops(List<HopArrival> visitedHops) {
+  public TrackingInformationDto visitedHops(List<HopArrivalDto> visitedHops) {
     this.visitedHops = visitedHops;
     return this;
   }
 
-  public TrackingInformation addVisitedHopsItem(HopArrival visitedHopsItem) {
+  public TrackingInformationDto addVisitedHopsItem(HopArrivalDto visitedHopsItem) {
     this.visitedHops.add(visitedHopsItem);
     return this;
   }
@@ -110,20 +110,20 @@ public class TrackingInformation {
   */
   @NotNull @Valid 
   @Schema(name = "visitedHops", description = "Hops visited in the past.", required = true)
-  public List<HopArrival> getVisitedHops() {
+  public List<HopArrivalDto> getVisitedHops() {
     return visitedHops;
   }
 
-  public void setVisitedHops(List<HopArrival> visitedHops) {
+  public void setVisitedHops(List<HopArrivalDto> visitedHops) {
     this.visitedHops = visitedHops;
   }
 
-  public TrackingInformation futureHops(List<HopArrival> futureHops) {
+  public TrackingInformationDto futureHops(List<HopArrivalDto> futureHops) {
     this.futureHops = futureHops;
     return this;
   }
 
-  public TrackingInformation addFutureHopsItem(HopArrival futureHopsItem) {
+  public TrackingInformationDto addFutureHopsItem(HopArrivalDto futureHopsItem) {
     this.futureHops.add(futureHopsItem);
     return this;
   }
@@ -134,11 +134,11 @@ public class TrackingInformation {
   */
   @NotNull @Valid 
   @Schema(name = "futureHops", description = "Hops coming up in the future - their times are estimations.", required = true)
-  public List<HopArrival> getFutureHops() {
+  public List<HopArrivalDto> getFutureHops() {
     return futureHops;
   }
 
-  public void setFutureHops(List<HopArrival> futureHops) {
+  public void setFutureHops(List<HopArrivalDto> futureHops) {
     this.futureHops = futureHops;
   }
 
@@ -150,10 +150,10 @@ public class TrackingInformation {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    TrackingInformation trackingInformation = (TrackingInformation) o;
-    return Objects.equals(this.state, trackingInformation.state) &&
-        Objects.equals(this.visitedHops, trackingInformation.visitedHops) &&
-        Objects.equals(this.futureHops, trackingInformation.futureHops);
+    TrackingInformationDto trackingInformationDto = (TrackingInformationDto) o;
+    return Objects.equals(this.state, trackingInformationDto.state) &&
+        Objects.equals(this.visitedHops, trackingInformationDto.visitedHops) &&
+        Objects.equals(this.futureHops, trackingInformationDto.futureHops);
   }
 
   @Override

@@ -19,7 +19,7 @@ import javax.annotation.Generated;
 
 @JsonTypeName("hopArrival")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class HopArrival {
+public class HopArrivalDto {
 
   @JsonProperty("code")
   private String code;
@@ -31,7 +31,7 @@ public class HopArrival {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime dateTime;
 
-  public HopArrival code(String code) {
+  public HopArrivalDto code(String code) {
     this.code = code;
     return this;
   }
@@ -50,7 +50,7 @@ public class HopArrival {
     this.code = code;
   }
 
-  public HopArrival description(String description) {
+  public HopArrivalDto description(String description) {
     this.description = description;
     return this;
   }
@@ -69,7 +69,7 @@ public class HopArrival {
     this.description = description;
   }
 
-  public HopArrival dateTime(OffsetDateTime dateTime) {
+  public HopArrivalDto dateTime(OffsetDateTime dateTime) {
     this.dateTime = dateTime;
     return this;
   }
@@ -96,10 +96,10 @@ public class HopArrival {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    HopArrival hopArrival = (HopArrival) o;
-    return Objects.equals(this.code, hopArrival.code) &&
-        Objects.equals(this.description, hopArrival.description) &&
-        Objects.equals(this.dateTime, hopArrival.dateTime);
+    HopArrivalDto hopArrivalDto = (HopArrivalDto) o;
+    return Objects.equals(this.code, hopArrivalDto.code) &&
+        Objects.equals(this.description, hopArrivalDto.description) &&
+        Objects.equals(this.dateTime, hopArrivalDto.dateTime);
   }
 
   @Override

@@ -1,16 +1,16 @@
 package at.fhtw.swen3.persistence.entity;
 
-import at.fhtw.swen3.services.dto.HopArrival;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@Builder
 public class Parcel {
     // Parcel
     private Float weight;
@@ -25,7 +25,7 @@ public class Parcel {
     // TrackingInformation
     private TrackingInformationState state;
 
-    private List<HopArrival> visitedHops = new ArrayList<>();
+    private List<HopArrival> visitedHops;
 
-    private List<HopArrival> futureHops = new ArrayList<>();
+    private List<HopArrival> futureHops;
 }

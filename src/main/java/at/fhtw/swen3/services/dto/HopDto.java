@@ -25,14 +25,14 @@ import javax.annotation.Generated;
 )
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "hopType", visible = true)
 @JsonSubTypes({
-  @JsonSubTypes.Type(value = Transferwarehouse.class, name = "transferwarehouse"),
-  @JsonSubTypes.Type(value = Truck.class, name = "truck"),
-  @JsonSubTypes.Type(value = Warehouse.class, name = "warehouse")
+  @JsonSubTypes.Type(value = TransferwarehouseDto.class, name = "transferwarehouse"),
+  @JsonSubTypes.Type(value = TruckDto.class, name = "truck"),
+  @JsonSubTypes.Type(value = WarehouseDto.class, name = "warehouse")
 })
 
 @JsonTypeName("hop")
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
-public class Hop {
+public class HopDto {
 
   @JsonProperty("hopType")
   private String hopType;
@@ -50,9 +50,9 @@ public class Hop {
   private String locationName;
 
   @JsonProperty("locationCoordinates")
-  private GeoCoordinate locationCoordinates;
+  private GeoCoordinateDto locationCoordinates;
 
-  public Hop hopType(String hopType) {
+  public HopDto hopType(String hopType) {
     this.hopType = hopType;
     return this;
   }
@@ -71,7 +71,7 @@ public class Hop {
     this.hopType = hopType;
   }
 
-  public Hop code(String code) {
+  public HopDto code(String code) {
     this.code = code;
     return this;
   }
@@ -90,7 +90,7 @@ public class Hop {
     this.code = code;
   }
 
-  public Hop description(String description) {
+  public HopDto description(String description) {
     this.description = description;
     return this;
   }
@@ -109,7 +109,7 @@ public class Hop {
     this.description = description;
   }
 
-  public Hop processingDelayMins(Integer processingDelayMins) {
+  public HopDto processingDelayMins(Integer processingDelayMins) {
     this.processingDelayMins = processingDelayMins;
     return this;
   }
@@ -128,7 +128,7 @@ public class Hop {
     this.processingDelayMins = processingDelayMins;
   }
 
-  public Hop locationName(String locationName) {
+  public HopDto locationName(String locationName) {
     this.locationName = locationName;
     return this;
   }
@@ -147,7 +147,7 @@ public class Hop {
     this.locationName = locationName;
   }
 
-  public Hop locationCoordinates(GeoCoordinate locationCoordinates) {
+  public HopDto locationCoordinates(GeoCoordinateDto locationCoordinates) {
     this.locationCoordinates = locationCoordinates;
     return this;
   }
@@ -158,11 +158,11 @@ public class Hop {
   */
   @NotNull @Valid 
   @Schema(name = "locationCoordinates", required = true)
-  public GeoCoordinate getLocationCoordinates() {
+  public GeoCoordinateDto getLocationCoordinates() {
     return locationCoordinates;
   }
 
-  public void setLocationCoordinates(GeoCoordinate locationCoordinates) {
+  public void setLocationCoordinates(GeoCoordinateDto locationCoordinates) {
     this.locationCoordinates = locationCoordinates;
   }
 
@@ -174,13 +174,13 @@ public class Hop {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Hop hop = (Hop) o;
-    return Objects.equals(this.hopType, hop.hopType) &&
-        Objects.equals(this.code, hop.code) &&
-        Objects.equals(this.description, hop.description) &&
-        Objects.equals(this.processingDelayMins, hop.processingDelayMins) &&
-        Objects.equals(this.locationName, hop.locationName) &&
-        Objects.equals(this.locationCoordinates, hop.locationCoordinates);
+    HopDto hopDto = (HopDto) o;
+    return Objects.equals(this.hopType, hopDto.hopType) &&
+        Objects.equals(this.code, hopDto.code) &&
+        Objects.equals(this.description, hopDto.description) &&
+        Objects.equals(this.processingDelayMins, hopDto.processingDelayMins) &&
+        Objects.equals(this.locationName, hopDto.locationName) &&
+        Objects.equals(this.locationCoordinates, hopDto.locationCoordinates);
   }
 
   @Override
