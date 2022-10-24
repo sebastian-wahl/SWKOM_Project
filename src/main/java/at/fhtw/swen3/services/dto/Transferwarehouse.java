@@ -124,10 +124,10 @@ public class Transferwarehouse extends Hop {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Transferwarehouse transferwarehouse = (Transferwarehouse) o;
-    return Objects.equals(this.regionGeoJson, transferwarehouse.regionGeoJson) &&
-        Objects.equals(this.logisticsPartner, transferwarehouse.logisticsPartner) &&
-        Objects.equals(this.logisticsPartnerUrl, transferwarehouse.logisticsPartnerUrl) &&
+    Transferwarehouse transferwarehouseDto = (Transferwarehouse) o;
+    return Objects.equals(this.regionGeoJson, transferwarehouseDto.regionGeoJson) &&
+        Objects.equals(this.logisticsPartner, transferwarehouseDto.logisticsPartner) &&
+        Objects.equals(this.logisticsPartnerUrl, transferwarehouseDto.logisticsPartnerUrl) &&
         super.equals(o);
   }
 

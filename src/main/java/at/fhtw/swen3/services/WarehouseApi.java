@@ -126,7 +126,7 @@ public interface WarehouseApi {
     /**
      * POST /warehouse : Imports a hierarchy of Warehouse and Truck objects. 
      *
-     * @param warehouse  (required)
+     * @param warehouseDto  (required)
      * @return Successfully loaded. (status code 200)
      *         or The operation failed due to an error. (status code 400)
      */
@@ -148,7 +148,7 @@ public interface WarehouseApi {
         consumes = { "application/json" }
     )
     default ResponseEntity<Void> importWarehouses(
-        @Parameter(name = "Warehouse", description = "", required = true) @Valid @RequestBody Warehouse warehouse
+        @Parameter(name = "Warehouse", description = "", required = true) @Valid @RequestBody Warehouse warehouseDto
     ) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }

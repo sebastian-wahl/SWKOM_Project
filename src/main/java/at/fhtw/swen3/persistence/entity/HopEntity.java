@@ -13,8 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Hop {
-
+public class HopEntity {
     private String hopType;
 
     private String code;
@@ -25,6 +24,6 @@ public class Hop {
 
     private String locationName;
 
-    private GeoCoordinate locationCoordinates;
+    private GeoCoordinateEntity locationCoordinates;
 }
 

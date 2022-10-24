@@ -13,10 +13,10 @@ import java.util.List;
 
 @Getter
 @Setter
-public class Warehouse extends Hop {
+public class WarehouseEntity extends HopEntity {
 
     private Integer level;
 
-    private List<WarehouseNextHops> nextHops = new ArrayList<>();
+    private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();
 }
 

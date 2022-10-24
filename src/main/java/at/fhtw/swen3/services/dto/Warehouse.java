@@ -110,9 +110,9 @@ public class Warehouse extends Hop {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Warehouse warehouse = (Warehouse) o;
-    return Objects.equals(this.level, warehouse.level) &&
-        Objects.equals(this.nextHops, warehouse.nextHops) &&
+    Warehouse warehouseDto = (Warehouse) o;
+    return Objects.equals(this.level, warehouseDto.level) &&
+        Objects.equals(this.nextHops, warehouseDto.nextHops) &&
         super.equals(o);
   }
 

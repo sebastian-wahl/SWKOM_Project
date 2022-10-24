@@ -9,10 +9,10 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WarehouseNextHops {
+public class WarehouseNextHopsEntity {
 
     private Integer traveltimeMins;
 
-    private Hop hop;
+    private HopEntity hop;
 }
 

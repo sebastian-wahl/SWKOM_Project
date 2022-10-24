@@ -102,9 +102,9 @@ public class Truck extends Hop {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    Truck truck = (Truck) o;
-    return Objects.equals(this.regionGeoJson, truck.regionGeoJson) &&
-        Objects.equals(this.numberPlate, truck.numberPlate) &&
+    Truck truckDto = (Truck) o;
+    return Objects.equals(this.regionGeoJson, truckDto.regionGeoJson) &&
+        Objects.equals(this.numberPlate, truckDto.numberPlate) &&
         super.equals(o);
   }
 

@@ -1,6 +1,7 @@
 package at.fhtw.swen3.persistence.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,7 +12,8 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class Recipient {
+@Builder
+public class RecipientEntity {
 
     private String name;
 
