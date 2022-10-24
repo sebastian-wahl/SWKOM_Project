@@ -15,7 +15,7 @@ import java.time.OffsetDateTime;
 @Setter
 @AllArgsConstructor
 @Builder
-public class HopArrivalEntity {
+public class HopArrivalEntity implements BaseEntity {
     private String code;
 
     private String description;

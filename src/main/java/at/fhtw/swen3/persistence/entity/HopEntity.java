@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class HopEntity {
+public class HopEntity implements BaseEntity{
     private String hopType;
 
     private String code;

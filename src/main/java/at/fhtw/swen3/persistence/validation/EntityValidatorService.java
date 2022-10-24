@@ -1,0 +1,30 @@
+package at.fhtw.swen3.persistence.validation;
+
+import at.fhtw.swen3.persistence.entity.BaseEntity;
+import at.fhtw.swen3.persistence.validation.annotation.AlwaysValidate;
+import at.fhtw.swen3.persistence.validation.annotation.ConditionalValidation;
+import at.fhtw.swen3.persistence.validation.annotation.ConditionalValidatorService;
+import at.fhtw.swen3.persistence.validation.annotation.ValidateUnderCondition;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
+
+@Service
+public class EntityValidatorService {
+    @Autowired
+    private ConditionalValidatorService conditionalValidatorService;
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
+
+    public <T extends BaseEntity> Set<ConstraintViolation<T>> validate(T toValidate) {
+        if (conditionalValidatorService.validateCondition(toValidate)) {
+            return validator.validate(toValidate, AlwaysValidate.class, ValidateUnderCondition.class);
+        }
+        return validator.validate(toValidate, AlwaysValidate.class);
+    }
+}

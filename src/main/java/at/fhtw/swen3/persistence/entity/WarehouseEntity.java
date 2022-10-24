@@ -13,7 +13,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class WarehouseEntity extends HopEntity {
+public class WarehouseEntity extends HopEntity implements BaseEntity {
 
     private Integer level;
 

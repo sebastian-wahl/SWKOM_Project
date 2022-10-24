@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class WarehouseNextHopsEntity {
+public class WarehouseNextHopsEntity implements BaseEntity {
 
     private Integer traveltimeMins;
 

@@ -11,7 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @Builder
-public class ParcelEntity {
+public class ParcelEntity implements BaseEntity {
     // Parcel
     private Float weight;
 

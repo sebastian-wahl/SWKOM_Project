@@ -13,7 +13,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @Builder
-public class RecipientEntity {
+public class RecipientEntity implements BaseEntity {
 
     private String name;
 

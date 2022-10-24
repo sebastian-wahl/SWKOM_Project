@@ -11,7 +11,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @AllArgsConstructor
-public class TruckEntity extends HopEntity {
+public class TruckEntity extends HopEntity implements BaseEntity {
     private String regionGeoJson;
 
     private String numberPlate;

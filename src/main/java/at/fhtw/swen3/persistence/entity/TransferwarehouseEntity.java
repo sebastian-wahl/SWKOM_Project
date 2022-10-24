@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TransferwarehouseEntity extends HopEntity {
+public class TransferwarehouseEntity extends HopEntity implements BaseEntity {
 
     private String regionGeoJson;
 
