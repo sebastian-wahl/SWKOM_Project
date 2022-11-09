@@ -1,9 +1,11 @@
 package at.fhtw.swen3.persistence.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import at.fhtw.swen3.persistence.validation.annotation.NameCityValidation;
+import at.fhtw.swen3.persistence.validation.annotation.PostalCodeValidation;
+import at.fhtw.swen3.persistence.validation.annotation.StreetValidation;
+import lombok.*;
+
+import javax.persistence.*;
 
 /**
  * Recipient
@@ -11,18 +13,38 @@ import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class RecipientEntity {
+@Entity
+@Table(name = "RECIPIENT")
+public class RecipientEntity implements BaseEntity {
+    @Column(name = "ID")
+    @Id
+    @GeneratedValue
+    private Long id;
 
+    @NameCityValidation
+    @Column(name = "NAME")
     private String name;
 
+    @StreetValidation
+    @Column(name = "STREET")
     private String street;
 
+    @PostalCodeValidation
+    @Column(name = "POSTAL_CODE")
     private String postalCode;
 
+    @NameCityValidation
+    @Column(name = "CITY")
     private String city;
 
+    @Column(name = "COUNTRY")
     private String country;
+
+    @JoinColumn(name = "PARCEL_ID")
+    @OneToOne(fetch = FetchType.LAZY)
+    private ParcelEntity parcel;
 }
 

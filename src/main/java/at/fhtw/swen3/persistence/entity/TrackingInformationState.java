@@ -2,7 +2,7 @@ package at.fhtw.swen3.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TrackingInformationState {
+public enum TrackingInformationState implements BaseEntity {
     PICKUP("Pickup"),
 
     INTRANSPORT("InTransport"),
@@ -13,7 +13,7 @@ public enum TrackingInformationState {
 
     DELIVERED("Delivered");
 
-    private String value;
+    private final String value;
 
     TrackingInformationState(String value) {
         this.value = value;
