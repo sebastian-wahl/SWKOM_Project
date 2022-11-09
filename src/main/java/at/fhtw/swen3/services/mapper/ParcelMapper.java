@@ -12,7 +12,7 @@ public interface ParcelMapper {
 
     ParcelMapper INSTANCE = Mappers.getMapper(ParcelMapper.class);
 
-    ParcelEntity fromDto(Parcel parcel, NewParcelInfo newParcelInfo, TrackingInformation trackingInformation);
+    ParcelEntity fromDto(Parcel parcel);
     Parcel toParcelDto(ParcelEntity parcel);
     NewParcelInfo toNewParcelInfoDto(ParcelEntity parcel);
     TrackingInformation toTrackingInformationDto(ParcelEntity parcel);

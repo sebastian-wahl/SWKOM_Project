@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -21,15 +22,15 @@ public class ParcelEntity implements BaseEntity {
     private Long id;
 
     // Parcel
-    @Min(0)
+    @Min(value = 0, message = "Weight must be greater than 0")
     @Column(name = "WEIGHT")
     private Float weight;
 
-    @NotNull
+    @NotNull(message = "Recipient must not be null")
     @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private RecipientEntity recipient;
 
-    @NotNull
+    @NotNull(message = "Sender must not be null")
     @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private RecipientEntity sender;
 
@@ -38,15 +39,16 @@ public class ParcelEntity implements BaseEntity {
     private String trackingId;
 
     // TrackingInformation
-    @NotNull
     @Enumerated(EnumType.STRING)
     private TrackingInformationState state;
 
-    @NotNull
+    @Singular
+    @NotNull(message = "Visited hops must not be null")
     @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
-    private List<HopArrivalEntity> visitedHops;
+    private List<HopArrivalEntity> visitedHops = new ArrayList<>();
 
-    @NotNull
+    @Singular
+    @NotNull(message = "Future hops must not be null")
     @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
-    private List<HopArrivalEntity> futureHops;
+    private List<HopArrivalEntity> futureHops = new ArrayList<>();
 }

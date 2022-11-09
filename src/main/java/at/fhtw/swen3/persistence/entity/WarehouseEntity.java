@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,9 +21,10 @@ public class WarehouseEntity extends HopEntity {
     @Column(name = "LEVEL")
     private Integer level;
 
+    @Singular
     @NotNull
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<WarehouseNextHopsEntity> nextHops;
+    private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();
 
     @Builder
     public WarehouseEntity(Long id, String hopType, String code, String description, Integer processingDelayMins, String locationName, @NotNull GeoCoordinateEntity locationCoordinates, Integer level, List<WarehouseNextHopsEntity> nextHops) {

@@ -31,13 +31,8 @@ class ParcelMapperTest {
                 .sender(senderDto)
                 .weight(1.0F);
 
-        NewParcelInfo newParcelInfo = new NewParcelInfo()
-                .trackingId(TRACKING_ID);
-
-        TrackingInformation trackingInformation = new TrackingInformation();
-
         // WHEN
-        ParcelEntity parcel = ParcelMapper.INSTANCE.fromDto(parcelDto, newParcelInfo, trackingInformation);
+        ParcelEntity parcel = ParcelMapper.INSTANCE.fromDto(parcelDto);
 
         // THEN
         assertThat(parcel).isNotNull();
