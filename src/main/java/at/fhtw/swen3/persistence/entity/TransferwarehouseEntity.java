@@ -1,7 +1,11 @@
 package at.fhtw.swen3.persistence.entity;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 /**
  * Transferwarehouse
@@ -9,16 +13,16 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TransferwarehouseEntity extends HopEntity implements BaseEntity {
-
+@NoArgsConstructor
+@Entity
+public class TransferwarehouseEntity extends HopEntity {
+    @Column(name = "REGION_GEO_JSON")
     private String regionGeoJson;
 
+    @Column(name = "LOGISTICS_PARTNER")
     private String logisticsPartner;
 
+    @Column(name = "LOGISTICS_PARTNER_URL")
     private String logisticsPartnerUrl;
-
-    public TransferwarehouseEntity(String hopType, String code, String description, Integer processingDelayMins, String locationName, GeoCoordinateEntity locationCoordinates) {
-        super(hopType, code, description, processingDelayMins, locationName, locationCoordinates);
-    }
 }
 

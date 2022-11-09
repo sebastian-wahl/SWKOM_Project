@@ -1,10 +1,9 @@
 package at.fhtw.swen3.persistence.entity;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +13,17 @@ import java.util.List;
 
 @Getter
 @Setter
-public class WarehouseEntity extends HopEntity implements BaseEntity {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+public class WarehouseEntity extends HopEntity {
 
+    @Column(name = "LEVEL")
     private Integer level;
 
     @NotNull
-    private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<WarehouseNextHopsEntity> nextHops;
 }
 

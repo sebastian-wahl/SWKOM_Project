@@ -1,12 +1,9 @@
 package at.fhtw.swen3.persistence.entity;
 
 import at.fhtw.swen3.persistence.validation.annotation.HopArrivalCodeValidation;
-import at.fhtw.swen3.persistence.validation.annotation.WarehouseDescriptionValidation;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
+import javax.persistence.*;
 import java.time.OffsetDateTime;
 
 /**
@@ -15,15 +12,28 @@ import java.time.OffsetDateTime;
 
 @Getter
 @Setter
+@NoArgsConstructor
 @AllArgsConstructor
 @Builder
+@Entity
+@Table(name = "HOP_ARRIVAL")
 public class HopArrivalEntity implements BaseEntity {
+    @Column(name = "ID")
+    @Id
+    @GeneratedValue
+    private Long id;
+
     @HopArrivalCodeValidation
+    @Column(name = "CODE")
     private String code;
 
-    // ToDo @WarehouseDescriptionValidation <- hier auch?
+    @Column(name = "DESCRIPTION")
     private String description;
 
+    @Column(name = "DATE_TIME")
     private OffsetDateTime dateTime;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ParcelEntity parcel;
 }
 
