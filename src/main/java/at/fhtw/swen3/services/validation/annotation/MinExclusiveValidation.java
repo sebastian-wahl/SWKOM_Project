@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = HopArrivalCodeValidator.class)
+@Constraint(validatedBy = MinExclusiveValidator.class)
 public @interface MinExclusiveValidation {
     //error message
     String message() default "Parcel weight: Must be greater then 0.0";
