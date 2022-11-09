@@ -1,4 +1,4 @@
-package at.fhtw.swen3.persistence.validation.annotation;
+package at.fhtw.swen3.services.validation.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -7,10 +7,10 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = StreetValidator.class)
-public @interface StreetValidation {
+@Constraint(validatedBy = PostalCodeValidator.class)
+public @interface PostalCodeValidation {
     //error message
-    String message() default "Invalid street name: Must be a valid street name like: Laystraße 12/12";
+    String message() default "Invalid postal code: Should have the form \"A-\" + 4 digits (0000-9999). E.g. \"A-1120\"";
     //represents group of constraints
     Class<?>[] groups() default {};
     //represents additional information about annotation

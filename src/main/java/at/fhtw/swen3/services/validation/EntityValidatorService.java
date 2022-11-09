@@ -1,8 +1,8 @@
-package at.fhtw.swen3.persistence.validation;
+package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entity.BaseEntity;
-import at.fhtw.swen3.persistence.validation.annotation.ConditionalValidatorService;
-import at.fhtw.swen3.persistence.validation.annotation.ValidateUnderCondition;
+import at.fhtw.swen3.services.validation.annotation.ConditionalValidatorService;
+import at.fhtw.swen3.services.validation.annotation.ValidateUnderCondition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

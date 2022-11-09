@@ -1,8 +1,8 @@
 package at.fhtw.swen3.persistence.entity;
 
-import at.fhtw.swen3.persistence.validation.annotation.NameCityValidation;
-import at.fhtw.swen3.persistence.validation.annotation.PostalCodeValidation;
-import at.fhtw.swen3.persistence.validation.annotation.StreetValidation;
+import at.fhtw.swen3.services.validation.annotation.NameCityValidation;
+import at.fhtw.swen3.services.validation.annotation.PostalCodeValidation;
+import at.fhtw.swen3.services.validation.annotation.StreetValidation;
 import lombok.*;
 
 import javax.persistence.*;

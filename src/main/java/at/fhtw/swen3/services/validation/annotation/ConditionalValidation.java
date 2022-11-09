@@ -1,4 +1,4 @@
-package at.fhtw.swen3.persistence.validation.annotation;
+package at.fhtw.swen3.services.validation.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

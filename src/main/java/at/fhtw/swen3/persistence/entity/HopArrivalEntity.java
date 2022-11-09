@@ -1,6 +1,6 @@
 package at.fhtw.swen3.persistence.entity;
 
-import at.fhtw.swen3.persistence.validation.annotation.HopArrivalCodeValidation;
+import at.fhtw.swen3.services.validation.annotation.HopArrivalCodeValidation;
 import lombok.*;
 
 import javax.persistence.*;
