@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 
 /**
  * Truck
@@ -11,9 +12,7 @@ import javax.persistence.Entity;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class TruckEntity extends HopEntity {
     @Column(name = "REGION_GEO_JSON")
@@ -21,5 +20,12 @@ public class TruckEntity extends HopEntity {
 
     @Column(name = "NUMBER_PLATE")
     private String numberPlate;
+
+    @Builder
+    public TruckEntity(Long id, String hopType, String code, String description, Integer processingDelayMins, String locationName, @NotNull GeoCoordinateEntity locationCoordinates, String regionGeoJson, String numberPlate) {
+        super(id, hopType, code, description, processingDelayMins, locationName, locationCoordinates);
+        this.regionGeoJson = regionGeoJson;
+        this.numberPlate = numberPlate;
+    }
 }
 

@@ -13,9 +13,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class WarehouseEntity extends HopEntity {
 
@@ -25,5 +23,12 @@ public class WarehouseEntity extends HopEntity {
     @NotNull
     @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<WarehouseNextHopsEntity> nextHops;
+
+    @Builder
+    public WarehouseEntity(Long id, String hopType, String code, String description, Integer processingDelayMins, String locationName, @NotNull GeoCoordinateEntity locationCoordinates, Integer level, List<WarehouseNextHopsEntity> nextHops) {
+        super(id, hopType, code, description, processingDelayMins, locationName, locationCoordinates);
+        this.level = level;
+        this.nextHops = nextHops;
+    }
 }
 
