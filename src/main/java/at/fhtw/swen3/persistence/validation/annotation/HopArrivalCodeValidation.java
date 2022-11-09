@@ -10,9 +10,11 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = HopArrivalCodeValidator.class)
 public @interface HopArrivalCodeValidation {
     //error message
-    String message() default "Invalid hop arrival code: Must match the regex \"^[A-Z]{4}\\\\d{1,4}$\"";
+    String message() default "Hop arrival code: Must match the regex \"^[A-Z]{4}\\\\d{1,4}$\"";
+
     //represents group of constraints
     Class<?>[] groups() default {};
+
     //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
 }

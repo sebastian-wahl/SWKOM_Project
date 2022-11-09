@@ -10,9 +10,11 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = PostalCodeValidator.class)
 public @interface PostalCodeValidation {
     //error message
-    String message() default "Invalid postal code: Should have the form \"A-\" + 4 digits (0000-9999). E.g. \"A-1120\"";
+    String message() default "Postal code: Should have the form \"A-\" + 4 digits (0000-9999). E.g. \"A-1120\"";
+
     //represents group of constraints
     Class<?>[] groups() default {};
+
     //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
 }

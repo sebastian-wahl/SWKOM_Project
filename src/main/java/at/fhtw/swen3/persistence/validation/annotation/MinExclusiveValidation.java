@@ -7,10 +7,10 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = TrackingCodeValidator.class)
-public @interface TrackingCodeValidation {
+@Constraint(validatedBy = HopArrivalCodeValidator.class)
+public @interface MinExclusiveValidation {
     //error message
-    String message() default "Tracking code: Should fit the regex: \"^[A-Z0-9]{9}$\"";
+    String message() default "Parcel weight: Must be greater then 0.0";
 
     //represents group of constraints
     Class<?>[] groups() default {};
