@@ -10,9 +10,11 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = WarehouseDescriptionValidator.class)
 public @interface WarehouseDescriptionValidation {
     //error message
-    String message() default "Invalid description: Only upper and lowercase letters, \"-\" and blanks allowed.";
+    String message() default "Description: Only upper and lowercase letters, \"-\" and blanks allowed.";
+
     //represents group of constraints
     Class<?>[] groups() default {};
+
     //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
 }

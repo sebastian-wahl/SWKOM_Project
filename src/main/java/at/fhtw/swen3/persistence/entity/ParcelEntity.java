@@ -1,9 +1,9 @@
 package at.fhtw.swen3.persistence.entity;
 
+import at.fhtw.swen3.persistence.validation.annotation.MinExclusiveValidation;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ public class ParcelEntity implements BaseEntity {
     private Long id;
 
     // Parcel
-    @Min(value = 0, message = "Weight must be greater than 0")
+    @MinExclusiveValidation
     @Column(name = "WEIGHT")
     private Float weight;
 

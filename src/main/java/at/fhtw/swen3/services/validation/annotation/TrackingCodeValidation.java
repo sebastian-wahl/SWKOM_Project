@@ -10,9 +10,11 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = TrackingCodeValidator.class)
 public @interface TrackingCodeValidation {
     //error message
-    String message() default "Invalid tracking code: Should fit the regex: \"^[A-Z0-9]{9}$\"";
+    String message() default "Tracking code: Should fit the regex: \"^[A-Z0-9]{9}$\"";
+
     //represents group of constraints
     Class<?>[] groups() default {};
+
     //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
 }

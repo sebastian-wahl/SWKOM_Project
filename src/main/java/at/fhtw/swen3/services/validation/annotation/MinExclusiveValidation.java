@@ -1,4 +1,4 @@
-package at.fhtw.swen3.services.validation.annotation;
+package at.fhtw.swen3.persistence.validation.annotation;
 
 import javax.validation.Constraint;
 import javax.validation.Payload;
@@ -8,9 +8,9 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Constraint(validatedBy = HopArrivalCodeValidator.class)
-public @interface HopArrivalCodeValidation {
+public @interface MinExclusiveValidation {
     //error message
-    String message() default "Hop arrival code: Must match the regex \"^[A-Z]{4}\\\\d{1,4}$\"";
+    String message() default "Parcel weight: Must be greater then 0.0";
 
     //represents group of constraints
     Class<?>[] groups() default {};

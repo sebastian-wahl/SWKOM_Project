@@ -10,9 +10,11 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = NameCityValidator.class)
 public @interface NameCityValidation {
     //error message
-    String message() default "Invalid name: Only upper & lowercase letters, \"-\"";
+    String message() default "Name: Only upper & lowercase letters, \"-\"";
+
     //represents group of constraints
     Class<?>[] groups() default {};
+
     //represents additional information about annotation
     Class<? extends Payload>[] payload() default {};
 }
