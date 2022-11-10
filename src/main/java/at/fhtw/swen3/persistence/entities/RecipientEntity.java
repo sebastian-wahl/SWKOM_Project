@@ -1,4 +1,4 @@
-package at.fhtw.swen3.persistence.entity;
+package at.fhtw.swen3.persistence.entities;
 
 import at.fhtw.swen3.services.validation.annotation.NameCityValidation;
 import at.fhtw.swen3.services.validation.annotation.PostalCodeValidation;

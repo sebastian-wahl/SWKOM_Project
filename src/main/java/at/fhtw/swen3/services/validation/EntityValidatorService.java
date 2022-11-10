@@ -1,6 +1,6 @@
 package at.fhtw.swen3.services.validation;
 
-import at.fhtw.swen3.persistence.entity.BaseEntity;
+import at.fhtw.swen3.persistence.entities.BaseEntity;
 import at.fhtw.swen3.services.exception.ValidationException;
 import at.fhtw.swen3.services.validation.annotation.ConditionalValidatorService;
 import at.fhtw.swen3.services.validation.annotation.ValidateUnderCondition;

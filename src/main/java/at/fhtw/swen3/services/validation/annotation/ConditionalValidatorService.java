@@ -1,6 +1,6 @@
 package at.fhtw.swen3.services.validation.annotation;
 
-import at.fhtw.swen3.persistence.entity.BaseEntity;
+import at.fhtw.swen3.persistence.entities.BaseEntity;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Field;
