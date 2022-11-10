@@ -1,8 +1,6 @@
 package at.fhtw.swen3.persistence.entities;
 
-import at.fhtw.swen3.services.validation.annotation.NameCityValidation;
-import at.fhtw.swen3.services.validation.annotation.PostalCodeValidation;
-import at.fhtw.swen3.services.validation.annotation.StreetValidation;
+import at.fhtw.swen3.services.validation.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +16,11 @@ import javax.persistence.*;
 @Builder
 @Entity
 @Table(name = "RECIPIENT")
+@ConditionalValidations(value = {
+        @ConditionalValidation(field = "postalCode", contains = {"Austria", "Österreich"}),
+        @ConditionalValidation(field = "street", contains = {"Austria", "Österreich"}),
+        @ConditionalValidation(field = "city", contains = {"Austria", "Österreich"})
+})
 public class RecipientEntity implements BaseEntity {
     @Column(name = "ID")
     @Id
@@ -28,15 +31,15 @@ public class RecipientEntity implements BaseEntity {
     @Column(name = "NAME")
     private String name;
 
-    @StreetValidation
+    @StreetValidation(groups = {ValidateUnderCondition.class})
     @Column(name = "STREET")
     private String street;
 
-    @PostalCodeValidation
+    @PostalCodeValidation(groups = {ValidateUnderCondition.class})
     @Column(name = "POSTAL_CODE")
     private String postalCode;
 
-    @NameCityValidation
+    @NameCityValidation(groups = {ValidateUnderCondition.class})
     @Column(name = "CITY")
     private String city;
 

@@ -11,7 +11,7 @@ public class HopArrivalCodeValidator implements ConstraintValidator<PostalCodeVa
         if (code == null) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^[A-Z]{4}\\\\d{1,4}$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[A-Z]{4}\\d{1,4}$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(code);
         return matcher.find();
     }

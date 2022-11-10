@@ -19,7 +19,7 @@ public class ConditionalValidatorService {
                 privateField.setAccessible(true);
                 String fieldValue = String.valueOf(privateField.get(baseEntity));
 
-                if (Arrays.asList(matchingValues).contains(fieldValue)) {
+                if (Arrays.stream(matchingValues).map(String::toLowerCase).toList().contains(fieldValue.toLowerCase())) {
                     return true;
                 }
             }
