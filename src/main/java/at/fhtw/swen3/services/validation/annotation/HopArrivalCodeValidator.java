@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class HopArrivalCodeValidator implements ConstraintValidator<PostalCodeValidation, String> {
+public class HopArrivalCodeValidator implements ConstraintValidator<HopArrivalCodeValidation, String> {
     @Override
     public boolean isValid(String code, ConstraintValidatorContext constraintValidatorContext) {
         if (code == null) {

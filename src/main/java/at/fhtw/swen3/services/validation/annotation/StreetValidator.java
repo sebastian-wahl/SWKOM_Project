@@ -5,7 +5,7 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class StreetValidator implements ConstraintValidator<PostalCodeValidation, String> {
+public class StreetValidator implements ConstraintValidator<StreetValidation, String> {
     @Override
     public boolean isValid(String street, ConstraintValidatorContext constraintValidatorContext) {
         if (street == null) {
