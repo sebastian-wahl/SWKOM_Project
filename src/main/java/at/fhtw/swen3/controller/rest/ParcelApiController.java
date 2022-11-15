@@ -49,7 +49,10 @@ public class ParcelApiController implements ParcelApi {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.fromDto(parcel);
 
         NewParcelInfo newParcelInfo = parcelService.submitParcel(parcelEntity);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newParcelInfo);
+
+        return Optional.ofNullable(newParcelInfo)
+                .map(value -> ResponseEntity.status(HttpStatus.CREATED).body(value))
+                .orElse(ResponseEntity.notFound().build());
     }
 
     @Override

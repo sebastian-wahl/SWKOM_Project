@@ -3,7 +3,6 @@ package at.fhtw.swen3.controller.rest;
 import at.fhtw.swen3.controller.ParcelApi;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
-import at.fhtw.swen3.services.exception.EntityValidationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,12 +12,11 @@ import org.springframework.http.ResponseEntity;
 
 import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
-import java.util.Collections;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
 
 @SpringBootTest
 class ParcelApiControllerTest {
@@ -72,31 +70,24 @@ class ParcelApiControllerTest {
 
     @Test
     void GIVEN_valid_parcel_WHEN_submitParcel_THEN_201_created() {
-        // GIVEN
         doReturn(mockNewParcelInfo()).when(parcelService).submitParcel(any());
         Parcel parcelDto = createParcel();
 
-        // WHEN
         ResponseEntity<NewParcelInfo> response = parcelApiController.submitParcel(parcelDto);
 
-        // THEN
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
     }
 
     @Test
-    void GIVEN_invalid_parcel_WHEN_submitParcel_THEN_400_bad_request() {
-        // GIVEN
-        doThrow(new EntityValidationException(Collections.emptyList())).when(parcelService).submitParcel(any());
+    void GIVEN_newParcelInfo_null_WHEN_submitParcel_THEN_404_not_found() {
+        doReturn(null).when(parcelService).submitParcel(any());
         Parcel parcelDto = createParcel();
 
-        // WHEN
-        Throwable exception = catchThrowable(() -> parcelApiController.submitParcel(parcelDto));
+        ResponseEntity<NewParcelInfo> response = parcelApiController.submitParcel(parcelDto);
 
-        // THEN
-        assertThat(exception)
-                .isNotNull()
-                .isInstanceOf(EntityValidationException.class);
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
