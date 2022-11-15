@@ -2,10 +2,7 @@ package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entities.BaseEntity;
 import at.fhtw.swen3.services.exception.EntityValidationException;
-import at.fhtw.swen3.services.validation.annotation.ConditionalValidatorService;
-import at.fhtw.swen3.services.validation.annotation.ValidateUnderCondition;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.validation.ConstraintViolation;
@@ -19,15 +16,11 @@ import java.util.Set;
 @Service
 @Slf4j
 public class EntityValidatorService {
-    @Autowired
-    private ConditionalValidatorService conditionalValidatorService;
+
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
     public <T extends BaseEntity> void validate(T toValidate) {
-        if (conditionalValidatorService.validateCondition(toValidate)) {
-            validateGroups(toValidate, Default.class, ValidateUnderCondition.class);
-        }
         validateGroups(toValidate, Default.class);
     }
 

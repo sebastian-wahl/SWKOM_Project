@@ -1,17 +1,22 @@
 package at.fhtw.swen3.services.validation.annotation;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import javax.validation.Constraint;
+import javax.validation.Payload;
+import java.lang.annotation.*;
 
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Constraint(validatedBy = ConditionalValidator.class)
 public @interface ConditionalValidations {
-    // check fields for values
+
+    String message() default "Austria-specific validations violated";
+
+    Class<?>[] groups() default {};
+
+    Class<? extends Payload>[] payload() default {};
+
     String field();
 
     String[] contains();
-
-
 }

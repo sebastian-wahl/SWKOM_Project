@@ -1,9 +1,6 @@
 package at.fhtw.swen3.persistence.entities;
 
-import at.fhtw.swen3.services.validation.annotation.NameCityValidation;
-import at.fhtw.swen3.services.validation.annotation.PostalCodeValidation;
-import at.fhtw.swen3.services.validation.annotation.StreetValidation;
-import at.fhtw.swen3.services.validation.annotation.ValidateUnderCondition;
+import at.fhtw.swen3.services.validation.annotation.*;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +15,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Builder
 @Entity
+@ConditionalValidations(
+        field = "country", contains = {"Austria", "Österreich"}
+)
 @Table(name = "RECIPIENT")
 public class RecipientEntity implements BaseEntity {
     @Column(name = "ID")

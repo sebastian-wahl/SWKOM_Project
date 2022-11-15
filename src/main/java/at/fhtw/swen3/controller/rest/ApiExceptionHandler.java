@@ -8,13 +8,16 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.util.List;
+
 @ControllerAdvice
 @Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({ EntityValidationException.class })
     public ResponseEntity<Error> handleEntityValidationException(EntityValidationException exception) {
-        String message = String.join("; ", exception.getValidationMessages());
+        List<String> messages = exception.getValidationMessages().stream().filter(message -> !message.isBlank()).toList();
+        String message = String.join("; ", messages);
         Error error = new Error().errorMessage(message);
         log.info(message);
 

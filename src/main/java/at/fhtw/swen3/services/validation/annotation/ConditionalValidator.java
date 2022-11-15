@@ -1,14 +1,20 @@
 package at.fhtw.swen3.services.validation.annotation;
 
 import at.fhtw.swen3.persistence.entities.BaseEntity;
-import org.springframework.stereotype.Service;
 
+import javax.validation.*;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.Set;
 
-@Service
-public class ConditionalValidatorService {
-    public boolean validateCondition(BaseEntity baseEntity) {
+
+public class ConditionalValidator implements ConstraintValidator<ConditionalValidations, BaseEntity> {
+
+    private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+    private final Validator validator = factory.getValidator();
+
+    @Override
+    public boolean isValid(BaseEntity baseEntity, ConstraintValidatorContext context) {
         try {
             ConditionalValidations annotation = baseEntity.getClass().getAnnotation(ConditionalValidations.class);
             if (annotation != null) {
@@ -20,7 +26,12 @@ public class ConditionalValidatorService {
                 String fieldValue = String.valueOf(privateField.get(baseEntity));
 
                 if (Arrays.stream(matchingValues).map(String::toLowerCase).toList().contains(fieldValue.toLowerCase())) {
-                    return true;
+                    Set<ConstraintViolation<BaseEntity>> violations = validator.validate(baseEntity, ValidateUnderCondition.class);
+
+                    violations.forEach(violation -> context.buildConstraintViolationWithTemplate(violation.getMessage())
+                            .addPropertyNode(violation.getPropertyPath().toString())
+                            .addConstraintViolation());
+                    return violations.isEmpty();
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
