@@ -13,6 +13,14 @@ public class ConditionalValidator implements ConstraintValidator<ConditionalVali
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
+    /**
+     * Returns true if no conditional validation is necessary or the conditional validation did not fail.
+     * Returns false if the conditional validation failed.
+     *
+     * @param baseEntity
+     * @param context
+     * @return
+     */
     @Override
     public boolean isValid(BaseEntity baseEntity, ConstraintValidatorContext context) {
         try {
@@ -35,8 +43,8 @@ public class ConditionalValidator implements ConstraintValidator<ConditionalVali
                 }
             }
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            return false;
+            return true;
         }
-        return false;
+        return true;
     }
 }

@@ -27,8 +27,8 @@ public class ParcelEntity implements BaseEntity {
     @Column(name = "WEIGHT")
     private Float weight;
 
-    @NotNull(message = "Recipient must not be null")
     @Valid
+    @NotNull(message = "Recipient must not be null")
     @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private RecipientEntity recipient;
 
