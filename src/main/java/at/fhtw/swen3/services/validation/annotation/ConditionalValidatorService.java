@@ -10,7 +10,7 @@ import java.util.Arrays;
 public class ConditionalValidatorService {
     public boolean validateCondition(BaseEntity baseEntity) {
         try {
-            ConditionalValidation annotation = baseEntity.getClass().getAnnotation(ConditionalValidation.class);
+            ConditionalValidations annotation = baseEntity.getClass().getAnnotation(ConditionalValidations.class);
             if (annotation != null) {
                 String field = annotation.field();
                 String[] matchingValues = annotation.contains();

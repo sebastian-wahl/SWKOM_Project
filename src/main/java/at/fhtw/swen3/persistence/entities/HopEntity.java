@@ -1,6 +1,10 @@
 package at.fhtw.swen3.persistence.entities;
 
-import lombok.*;
+import at.fhtw.swen3.services.validation.annotation.WarehouseDescriptionValidation;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -24,9 +28,11 @@ public class HopEntity implements BaseEntity {
 
     @Column(name = "HOP_TYPE")
     private String hopType;
+
     @Column(name = "CODE")
     private String code;
 
+    @WarehouseDescriptionValidation
     @Column(name = "DESCRIPTION")
     private String description;
 

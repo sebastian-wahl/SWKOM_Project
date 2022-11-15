@@ -8,5 +8,10 @@ import java.lang.annotation.Target;
 @Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface ConditionalValidations {
-    ConditionalValidation[] value();
+    // check fields for values
+    String field();
+
+    String[] contains();
+
+
 }

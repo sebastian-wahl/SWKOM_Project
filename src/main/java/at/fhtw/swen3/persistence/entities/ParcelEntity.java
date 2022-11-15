@@ -1,6 +1,7 @@
 package at.fhtw.swen3.persistence.entities;
 
 import at.fhtw.swen3.services.validation.annotation.MinExclusiveValidation;
+import at.fhtw.swen3.services.validation.annotation.ValidBaseEntity;
 import lombok.*;
 
 import javax.persistence.*;
@@ -27,10 +28,12 @@ public class ParcelEntity implements BaseEntity {
     private Float weight;
 
     @NotNull(message = "Recipient must not be null")
+    @ValidBaseEntity
     @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private RecipientEntity recipient;
 
     @NotNull(message = "Sender must not be null")
+    @ValidBaseEntity
     @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private RecipientEntity sender;
 

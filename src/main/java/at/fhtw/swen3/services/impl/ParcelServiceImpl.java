@@ -1,13 +1,19 @@
 package at.fhtw.swen3.services.impl;
 
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
-import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.TrackingInformation;
+import at.fhtw.swen3.services.validation.EntityValidatorService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 
 @Service
 public class ParcelServiceImpl implements ParcelService {
+
+    @Autowired
+    private EntityValidatorService entityValidatorService;
 
     @Override
     public void reportParcelDelivery(String trackingId) {
@@ -20,7 +26,8 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo submitParcel(Parcel parcel) {
+    public NewParcelInfo submitParcel(ParcelEntity parcel) {
+        entityValidatorService.validate(parcel);
         return null;
     }
 
@@ -30,7 +37,7 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public NewParcelInfo transitionParcel(Parcel parcel) {
+    public NewParcelInfo transitionParcel(ParcelEntity parcel) {
         return null;
     }
 }
