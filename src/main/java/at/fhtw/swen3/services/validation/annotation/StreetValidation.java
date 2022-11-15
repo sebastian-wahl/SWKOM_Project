@@ -10,7 +10,7 @@ import java.lang.annotation.*;
 @Constraint(validatedBy = StreetValidator.class)
 public @interface StreetValidation {
     //error message
-    String message() default "Street name: Must be a valid street name like: Laystraße 12/12";
+    String message() default "Street name: Must be a valid street name like: Leystraße 12/12";
 
     //represents group of constraints
     Class<?>[] groups() default {};
