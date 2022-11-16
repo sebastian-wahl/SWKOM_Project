@@ -61,6 +61,11 @@ class EntityValidatorServiceTest {
     }
 
     @Test
+    void GIVEN_invalid_recipient_country_germany_WHEN_validating_THEN_no_exception() {
+        assertDoesNotThrow(() -> entityValidatorService.validate(invalidPostalCodeNotATRecipient));
+    }
+
+    @Test
     void GIVEN_invalid_recipient_no_conditional_WHEN_validating_THEN_no_exception() {
         assertDoesNotThrow(() -> entityValidatorService.validate(validRecipient));
     }
@@ -68,7 +73,7 @@ class EntityValidatorServiceTest {
 
     @Test
     void GIVEN_valid_hoparrival_WHEN_validating_THEN_no_exception() {
-        assertDoesNotThrow(() -> entityValidatorService.validate(invalidPostalCodeNotATRecipient));
+        assertDoesNotThrow(() -> entityValidatorService.validate(validHopArrivalEntity));
     }
 
     @Test

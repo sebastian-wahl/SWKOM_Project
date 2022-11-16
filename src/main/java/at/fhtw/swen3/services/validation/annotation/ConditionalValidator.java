@@ -1,6 +1,8 @@
 package at.fhtw.swen3.services.validation.annotation;
 
 import at.fhtw.swen3.persistence.entities.BaseEntity;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.validation.*;
 import java.lang.reflect.Field;
@@ -13,7 +15,11 @@ public class ConditionalValidator implements ConstraintValidator<ConditionalVali
     private final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private final Validator validator = factory.getValidator();
 
+    @Getter
+    @Setter
     private String field;
+    @Getter
+    @Setter
     private String[] contains;
 
     @Override
