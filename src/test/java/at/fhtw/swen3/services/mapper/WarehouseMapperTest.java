@@ -1,15 +1,13 @@
 package at.fhtw.swen3.services.mapper;
 
-import at.fhtw.swen3.persistence.entity.HopEntity;
-import at.fhtw.swen3.persistence.entity.WarehouseEntity;
-import at.fhtw.swen3.persistence.entity.WarehouseNextHopsEntity;
+import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.WarehouseEntity;
+import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

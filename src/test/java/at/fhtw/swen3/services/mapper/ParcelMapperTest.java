@@ -1,6 +1,6 @@
 package at.fhtw.swen3.services.mapper;
 
-import at.fhtw.swen3.persistence.entity.*;
+import at.fhtw.swen3.persistence.entities.*;
 import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.Recipient;
@@ -31,13 +31,8 @@ class ParcelMapperTest {
                 .sender(senderDto)
                 .weight(1.0F);
 
-        NewParcelInfo newParcelInfo = new NewParcelInfo()
-                .trackingId(TRACKING_ID);
-
-        TrackingInformation trackingInformation = new TrackingInformation();
-
         // WHEN
-        ParcelEntity parcel = ParcelMapper.INSTANCE.fromDto(parcelDto, newParcelInfo, trackingInformation);
+        ParcelEntity parcel = ParcelMapper.INSTANCE.fromDto(parcelDto);
 
         // THEN
         assertThat(parcel).isNotNull();
@@ -46,8 +41,6 @@ class ParcelMapperTest {
 
         assertThat(parcel.getSender()).isNotNull();
         assertThat(parcel.getSender().getName()).isEqualTo(SENDER_NAME);
-
-        assertThat(parcel.getTrackingId()).isEqualTo(TRACKING_ID);
     }
 
     @Test
