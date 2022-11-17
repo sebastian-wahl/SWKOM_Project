@@ -4,6 +4,7 @@ import at.fhtw.swen3.services.validation.annotation.HopArrivalCodeValidation;
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 /**
@@ -31,9 +32,11 @@ public class HopArrivalEntity implements BaseEntity {
     private String description;
 
     @Column(name = "DATE_TIME")
+    @NotNull(message = "DateTime must not be null")
     private OffsetDateTime dateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @NotNull(message = "Parcel must not be null")
     private ParcelEntity parcel;
 }
 
