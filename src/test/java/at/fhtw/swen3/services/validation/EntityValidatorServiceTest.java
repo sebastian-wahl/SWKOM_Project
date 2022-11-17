@@ -1,11 +1,14 @@
 package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.services.exception.EntityValidationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
+import java.time.OffsetDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
@@ -37,6 +40,8 @@ class EntityValidatorServiceTest {
             .build();
 
     private final HopArrivalEntity validHopArrivalEntity = HopArrivalEntity.builder()
+            .parcel(ParcelEntity.builder().build())
+            .dateTime(OffsetDateTime.now())
             .code("FHBX799")
             .build();
 
