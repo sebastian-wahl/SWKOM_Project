@@ -1,6 +1,7 @@
 package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.services.exception.EntityValidationException;
 import org.junit.jupiter.api.Test;
@@ -37,6 +38,7 @@ class EntityValidatorServiceTest {
             .build();
 
     private final HopArrivalEntity validHopArrivalEntity = HopArrivalEntity.builder()
+            .parcel(ParcelEntity.builder().build())
             .code("FHBX799")
             .build();
 

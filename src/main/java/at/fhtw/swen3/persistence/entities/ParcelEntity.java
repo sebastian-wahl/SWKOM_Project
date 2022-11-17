@@ -43,6 +43,7 @@ public class ParcelEntity implements BaseEntity {
 
     // TrackingInformation
     @Enumerated(EnumType.STRING)
+    @NotNull(message = "State must not be null")
     private TrackingInformationState state;
 
     @Singular
