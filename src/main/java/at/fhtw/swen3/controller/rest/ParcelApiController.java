@@ -48,7 +48,7 @@ public class ParcelApiController implements ParcelApi {
     public ResponseEntity<NewParcelInfo> submitParcel(Parcel parcel) {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.fromDto(parcel);
 
-        NewParcelInfo newParcelInfo = parcelService.submitParcel(parcelEntity);
+        NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcelService.submitParcel(parcelEntity));
 
         return Optional.ofNullable(newParcelInfo)
                 .map(value -> ResponseEntity.status(HttpStatus.CREATED).body(value))
@@ -57,7 +57,7 @@ public class ParcelApiController implements ParcelApi {
 
     @Override
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId) {
-        TrackingInformation trackingInformation = parcelService.trackParcel(trackingId);
+        TrackingInformation trackingInformation = ParcelMapper.INSTANCE.toTrackingInformationDto(parcelService.trackParcel(trackingId));
         return ResponseEntity.ok(trackingInformation);
 
     }
@@ -65,7 +65,7 @@ public class ParcelApiController implements ParcelApi {
     @Override
     public ResponseEntity<NewParcelInfo> transitionParcel(String trackingId, Parcel parcel) {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.fromDto(trackingId, parcel);
-        NewParcelInfo newParcelInfo = parcelService.transitionParcel(parcelEntity);
+        NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcelService.transitionParcel(parcelEntity));
 
         return ResponseEntity.ok(newParcelInfo);
     }

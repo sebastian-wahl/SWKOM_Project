@@ -6,6 +6,7 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
+import at.fhtw.swen3.services.mapper.HopMapper;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -36,13 +37,13 @@ public class WarehouseApiController implements WarehouseApi {
 
     @Override
     public ResponseEntity<Warehouse> exportWarehouses() {
-        Warehouse warehouse = warehouseService.exportWarehouses();
+        Warehouse warehouse = WarehouseMapper.INSTANCE.toDto(warehouseService.exportWarehouses());
         return ResponseEntity.of(Optional.ofNullable(warehouse));
     }
 
     @Override
     public ResponseEntity<Hop> getWarehouse(String code) {
-        Hop hop = warehouseService.getWarehouse(code);
+        Hop hop = HopMapper.INSTANCE.toDto(warehouseService.getWarehouse(code));
         return ResponseEntity.of(Optional.ofNullable(hop));
     }
 
