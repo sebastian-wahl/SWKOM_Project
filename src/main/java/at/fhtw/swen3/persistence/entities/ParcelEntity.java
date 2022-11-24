@@ -29,12 +29,12 @@ public class ParcelEntity implements BaseEntity {
 
     @Valid
     @NotNull(message = "Recipient must not be null")
-    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private RecipientEntity recipient;
 
     @NotNull(message = "Sender must not be null")
     @Valid
-    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private RecipientEntity sender;
 
     // NewParcelInfo

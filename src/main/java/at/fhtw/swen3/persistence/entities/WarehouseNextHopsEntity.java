@@ -25,11 +25,11 @@ public class WarehouseNextHopsEntity implements BaseEntity {
 
     @NotNull
     @Valid
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @MapsId
     private HopEntity hop;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     private WarehouseEntity warehouse;
 }
 
