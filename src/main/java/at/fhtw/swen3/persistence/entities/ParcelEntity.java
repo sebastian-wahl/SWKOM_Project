@@ -29,12 +29,14 @@ public class ParcelEntity implements BaseEntity {
 
     @Valid
     @NotNull(message = "Recipient must not be null")
-    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "RECIPIENT_ID", referencedColumnName = "ID")
     private RecipientEntity recipient;
 
     @NotNull(message = "Sender must not be null")
     @Valid
-    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "SENDER_ID", referencedColumnName = "ID")
     private RecipientEntity sender;
 
     // NewParcelInfo
@@ -48,11 +50,13 @@ public class ParcelEntity implements BaseEntity {
 
     @Singular
     @NotNull(message = "Visited hops must not be null")
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PARCEL_ID", referencedColumnName = "ID")
     private List<HopArrivalEntity> visitedHops = new ArrayList<>();
 
     @Singular
     @NotNull(message = "Future hops must not be null")
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "PARCEL_ID", referencedColumnName = "ID")
     private List<HopArrivalEntity> futureHops = new ArrayList<>();
 }

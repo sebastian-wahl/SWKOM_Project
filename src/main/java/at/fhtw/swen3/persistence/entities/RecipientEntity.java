@@ -43,9 +43,5 @@ public class RecipientEntity implements BaseEntity {
 
     @Column(name = "COUNTRY")
     private String country;
-
-    @JoinColumn(name = "PARCEL_ID")
-    @OneToOne(fetch = FetchType.LAZY)
-    private ParcelEntity parcel;
 }
 

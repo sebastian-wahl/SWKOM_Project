@@ -35,8 +35,16 @@ public class HopArrivalEntity implements BaseEntity {
     @NotNull(message = "DateTime must not be null")
     private OffsetDateTime dateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name="PARCEL_ID")
+    private long parcelId;
+    /*@ManyToOne
     @NotNull(message = "Parcel must not be null")
-    private ParcelEntity parcel;
+    @JoinColumn(name = "PARCEL_VISITED_ID")
+    private ParcelEntity parcelVisited;
+
+    @ManyToOne
+    @NotNull(message = "Parcel must not be null")
+    @JoinColumn(name = "PARCEL_FUTURE_ID")
+    private ParcelEntity parcelFuture;*/
 }
 
