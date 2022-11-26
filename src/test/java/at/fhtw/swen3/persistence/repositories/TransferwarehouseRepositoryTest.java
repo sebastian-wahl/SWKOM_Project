@@ -1,7 +1,11 @@
 package at.fhtw.swen3.persistence.repositories;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
+@SpringBootTest
 class TransferwarehouseRepositoryTest {
 
+    @Autowired
+    private TransferwarehouseRepository transferwarehouseRepository;
 }

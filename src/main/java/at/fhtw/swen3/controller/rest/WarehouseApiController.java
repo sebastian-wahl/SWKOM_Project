@@ -20,10 +20,9 @@ import java.util.Optional;
 @Controller
 public class WarehouseApiController implements WarehouseApi {
 
+    private final NativeWebRequest request;
     @Autowired
     private WarehouseService warehouseService;
-
-    private final NativeWebRequest request;
 
     @Autowired
     public WarehouseApiController(NativeWebRequest request) {
@@ -43,8 +42,7 @@ public class WarehouseApiController implements WarehouseApi {
 
     @Override
     public ResponseEntity<Hop> getWarehouse(String code) {
-        Hop hop = HopMapper.INSTANCE.toDto(warehouseService.getWarehouse(code));
-        return ResponseEntity.of(Optional.ofNullable(hop));
+        return ResponseEntity.of(warehouseService.getWarehouse(code).map(hopEntity -> HopMapper.INSTANCE.toDto(hopEntity)));
     }
 
     @Override

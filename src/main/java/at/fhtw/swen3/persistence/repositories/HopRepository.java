@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface HopRepository extends JpaRepository<HopEntity, Long> {
-    HopEntity findFirstByCode(String code);
+    Optional<HopEntity> findFirstByCode(String code);
 }

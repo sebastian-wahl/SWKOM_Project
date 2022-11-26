@@ -1,8 +1,8 @@
-package at.fhtw.swen3.persistence.entities;
+package at.fhtw.swen3.persistence.entities.enums;
 
 import com.fasterxml.jackson.annotation.JsonValue;
 
-public enum TrackingInformationState implements BaseEntity {
+public enum TrackingInformationState {
     PICKUP("Pickup"),
 
     INTRANSPORT("InTransport"),

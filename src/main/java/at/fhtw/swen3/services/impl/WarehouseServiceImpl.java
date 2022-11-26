@@ -5,14 +5,11 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.WarehouseService;
-import at.fhtw.swen3.services.dto.GeoCoordinate;
-import at.fhtw.swen3.services.dto.Hop;
-import at.fhtw.swen3.services.dto.Warehouse;
-import at.fhtw.swen3.services.mapper.HopMapper;
-import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class WarehouseServiceImpl implements WarehouseService {
@@ -33,7 +30,7 @@ public class WarehouseServiceImpl implements WarehouseService {
     }
 
     @Override
-    public HopEntity getWarehouse(String code) {
+    public Optional<HopEntity> getWarehouse(String code) {
         return hopRepository.findFirstByCode(code);
     }
 

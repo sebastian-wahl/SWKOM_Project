@@ -2,14 +2,16 @@ package at.fhtw.swen3.services;
 
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 
-public interface ParcelService {
-    void reportParcelDelivery(String trackingId);
+import java.util.Optional;
 
-    void reportParcelHop(String trackingId, String code);
+public interface ParcelService {
+    Optional<ParcelEntity> reportParcelDelivery(String trackingId);
+
+    Optional<ParcelEntity> reportParcelHop(String trackingId, String code);
 
     ParcelEntity submitParcel(ParcelEntity parcel);
 
-    ParcelEntity trackParcel(String trackingId);
+    Optional<ParcelEntity> trackParcel(String trackingId);
 
     ParcelEntity transitionParcel(ParcelEntity parcel);
 }
