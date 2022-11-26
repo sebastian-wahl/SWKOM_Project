@@ -1,8 +1,8 @@
 package at.fhtw.swen3.services.mapper;
 
-import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
-import at.fhtw.swen3.services.dto.Hop;
+import at.fhtw.swen3.services.dto.Truck;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Test;
 
@@ -18,7 +18,7 @@ class WarehouseNextHopsMapperTest {
         // GIVEN
         WarehouseNextHops dto = new WarehouseNextHops()
                 .traveltimeMins(TRAVELTIME_MINS)
-                .hop(new Hop().code(CODE));
+                .hop(new Truck().code(CODE));
 
         // WHEN
         WarehouseNextHopsEntity entity = WarehouseNextHopsMapper.INSTANCE.fromDto(dto);
@@ -35,7 +35,7 @@ class WarehouseNextHopsMapperTest {
         // GIVEN
         WarehouseNextHopsEntity entity = WarehouseNextHopsEntity.builder()
                 .traveltimeMins(TRAVELTIME_MINS)
-                .hop(HopEntity.builder().code(CODE).build())
+                .hop(TruckEntity.builder().code(CODE).build())
                 .build();
 
         // WHEN
