@@ -34,8 +34,6 @@ class WarehouseRepositoryTest {
                 .nextHops(Collections.emptyList())
                 .build();
 
-        geoCoordinateEntity.setHop(warehouseEntity);
-
         warehouseRepository.save(warehouseEntity);
 
         // WHEN
