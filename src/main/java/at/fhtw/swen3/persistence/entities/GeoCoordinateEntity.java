@@ -1,7 +1,6 @@
 package at.fhtw.swen3.persistence.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 
@@ -13,6 +12,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "GEO_COORDINATE")
 public class GeoCoordinateEntity implements BaseEntity {
     @Column(name = "ID")

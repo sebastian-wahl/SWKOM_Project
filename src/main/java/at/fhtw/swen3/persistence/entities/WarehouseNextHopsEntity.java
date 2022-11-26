@@ -1,7 +1,6 @@
 package at.fhtw.swen3.persistence.entities;
 
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -14,6 +13,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "WAREHOUSE_NEXT_HOPS")
 public class WarehouseNextHopsEntity implements BaseEntity {
     @Column(name = "ID")
