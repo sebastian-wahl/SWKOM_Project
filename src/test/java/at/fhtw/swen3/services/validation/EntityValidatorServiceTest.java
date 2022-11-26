@@ -40,7 +40,6 @@ class EntityValidatorServiceTest {
             .build();
 
     private final HopArrivalEntity validHopArrivalEntity = HopArrivalEntity.builder()
-            .parcel(ParcelEntity.builder().build())
             .dateTime(OffsetDateTime.now())
             .code("FHBX799")
             .build();

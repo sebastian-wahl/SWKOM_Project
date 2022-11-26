@@ -25,7 +25,7 @@ public class HopArrivalEntity implements BaseEntity {
     private Long id;
 
     @HopArrivalCodeValidation
-    @Column(name = "CODE")
+    @Column(name = "CODE") // unique = true ?
     private String code;
 
     @Column(name = "DESCRIPTION")
@@ -35,8 +35,18 @@ public class HopArrivalEntity implements BaseEntity {
     @NotNull(message = "DateTime must not be null")
     private OffsetDateTime dateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @NotNull(message = "Parcel must not be null")
-    private ParcelEntity parcel;
+    /*@OneToMany(mappedBy = "hopArrival")
+    private List<ParcelHopArrivalEntity> parcelHopArrival = new ArrayList<>();*/
+
+    /*@Singular
+    @NotNull(message = "Visited parcels must not be null")
+    @ManyToMany(mappedBy = "visitedHops")
+    private List<ParcelEntity> visitedParcels = new ArrayList<>();
+
+    @Singular
+    @NotNull(message = "Future parcels must not be null")
+    //@OneToMany(mappedBy = "hopArrival", fetch = FetchType.EAGER)
+    @ManyToMany(mappedBy = "futureHops")
+    private List<ParcelEntity> futureHops = new ArrayList<>();*/
 }
 

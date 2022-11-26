@@ -31,7 +31,7 @@ public class HopEntity implements BaseEntity {
     @Column(name = "HOP_TYPE")
     private String hopType;
 
-    @Column(name = "CODE")
+    @Column(name = "CODE") // unique = true ?
     private String code;
 
     @WarehouseDescriptionValidation
@@ -45,7 +45,7 @@ public class HopEntity implements BaseEntity {
     private String locationName;
 
     @NotNull
-    @OneToOne(mappedBy = "hop", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "hop", cascade = CascadeType.ALL)
     private GeoCoordinateEntity locationCoordinates;
 }
 

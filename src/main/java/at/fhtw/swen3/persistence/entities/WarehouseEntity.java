@@ -30,7 +30,7 @@ public class WarehouseEntity extends HopEntity {
     @Singular
     @NotNull
     @Valid
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();
 }
 
