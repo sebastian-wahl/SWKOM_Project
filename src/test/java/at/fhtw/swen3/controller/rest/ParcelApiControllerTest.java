@@ -1,8 +1,12 @@
 package at.fhtw.swen3.controller.rest;
 
 import at.fhtw.swen3.controller.ParcelApi;
+import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
+import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.mapper.ParcelMapper;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 
 import javax.validation.ValidationException;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
@@ -70,7 +75,8 @@ class ParcelApiControllerTest {
 
     @Test
     void GIVEN_valid_parcel_WHEN_submitParcel_THEN_201_created() {
-        doReturn(mockNewParcelInfo()).when(parcelService).submitParcel(any());
+        ParcelEntity parcelEntity = createParcelEntity();
+        doReturn(parcelEntity).when(parcelService).submitParcel(any());
         Parcel parcelDto = createParcel();
 
         ResponseEntity<NewParcelInfo> response = parcelApiController.submitParcel(parcelDto);
@@ -92,7 +98,8 @@ class ParcelApiControllerTest {
 
     @Test
     void GIVEN_valid_trackingId_WHEN_trackParcel_THEN_200_ok() {
-        doReturn(mockTrackingInformation()).when(parcelService).trackParcel(any());
+        Optional<ParcelEntity> parcelEntityOptional = Optional.of(createParcelEntity());
+        doReturn(parcelEntityOptional).when(parcelService).trackParcel(any());
 
         ResponseEntity<TrackingInformation> response = parcelApiController.trackParcel(VALID_TRACKING_ID);
 
@@ -110,9 +117,11 @@ class ParcelApiControllerTest {
 
     @Test
     void GIVEN_valid_trackingId_WHEN_transitionParcel_THEN_200_ok() {
+        ParcelEntity parcelEntity = createParcelEntity();
         Parcel parcel = createParcel();
         NewParcelInfo newParcelInfo = mockNewParcelInfo();
-        doReturn(newParcelInfo).when(parcelService).transitionParcel(any());
+        doReturn(parcelEntity).when(parcelService).transitionParcel(any());
+
 
         ResponseEntity<NewParcelInfo> response = parcelApiController.transitionParcel(VALID_TRACKING_ID, parcel);
 
@@ -146,19 +155,35 @@ class ParcelApiControllerTest {
                 .weight(WEIGHT);
     }
 
+    private ParcelEntity createParcelEntity() {
+        HopArrivalEntity hopArrival = HopArrivalEntity.builder()
+                .code("code")
+                .description("description")
+                .dateTime(OffsetDateTime.now())
+                .build();
+
+        return ParcelEntity.builder()
+                .recipient(createRecipientEntity(RECIPIENT_NAME))
+                .sender(createRecipientEntity(SENDER_NAME))
+                .trackingId(VALID_TRACKING_ID)
+                .visitedHop(hopArrival)
+                .futureHop(hopArrival)
+                .weight(WEIGHT)
+                .build();
+    }
+
+    private RecipientEntity createRecipientEntity(String recipientName) {
+        return RecipientEntity.builder()
+                .name(recipientName)
+                .city(CITY)
+                .country(COUNTRY)
+                .postalCode(POSTAL_CODE)
+                .street(STREET)
+                .build();
+    }
+
     private NewParcelInfo mockNewParcelInfo() {
         return new NewParcelInfo()
                 .trackingId(VALID_TRACKING_ID);
-    }
-
-    private TrackingInformation mockTrackingInformation() {
-        HopArrival hopArrival = new HopArrival()
-                .code("code")
-                .description("description")
-                .dateTime(OffsetDateTime.now());
-
-        return new TrackingInformation()
-                .addVisitedHopsItem(hopArrival)
-                .addFutureHopsItem(hopArrival);
     }
 }

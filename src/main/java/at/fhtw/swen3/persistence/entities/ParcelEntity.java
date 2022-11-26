@@ -1,7 +1,10 @@
 package at.fhtw.swen3.persistence.entities;
 
+import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.services.validation.annotation.MinExclusiveValidation;
 import lombok.*;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -29,16 +32,18 @@ public class ParcelEntity implements BaseEntity {
 
     @Valid
     @NotNull(message = "Recipient must not be null")
-    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "RECIPIENT_ID", referencedColumnName = "ID")
     private RecipientEntity recipient;
 
     @NotNull(message = "Sender must not be null")
     @Valid
-    @OneToOne(mappedBy = "parcel", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "SENDER_ID", referencedColumnName = "ID")
     private RecipientEntity sender;
 
     // NewParcelInfo
-    @Column(name = "TRACKING_ID")
+    @Column(name = "TRACKING_ID") // unique = true ?
     private String trackingId;
 
     // TrackingInformation
@@ -47,12 +52,24 @@ public class ParcelEntity implements BaseEntity {
     private TrackingInformationState state;
 
     @Singular
+    //@Builder.Default
     @NotNull(message = "Visited hops must not be null")
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "VISITED_PARCEL_HOP_ARRIVAL",
+            joinColumns = @JoinColumn(name = "PARCEL_ID"),
+            inverseJoinColumns = @JoinColumn(name = "HOP_ARRIVAL_ID"))
     private List<HopArrivalEntity> visitedHops = new ArrayList<>();
 
     @Singular
+    //@Builder.Default
     @NotNull(message = "Future hops must not be null")
-    @OneToMany(mappedBy = "parcel", cascade = CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "FUTURE_PARCEL_HOP_ARRIVAL",
+            joinColumns = @JoinColumn(name = "PARCEL_ID"),
+            inverseJoinColumns = @JoinColumn(name = "HOP_ARRIVAL_ID"))
     private List<HopArrivalEntity> futureHops = new ArrayList<>();
 }
