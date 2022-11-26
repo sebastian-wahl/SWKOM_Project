@@ -3,7 +3,10 @@ package at.fhtw.swen3.services.mapper;
 import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
-import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.dto.GeoCoordinate;
+import at.fhtw.swen3.services.dto.Hop;
+import at.fhtw.swen3.services.dto.Warehouse;
+import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -68,7 +71,7 @@ class WarehouseMapperTest {
     }
 
     private Hop buildHop() {
-        return new Truck()
+        return new Hop()
                 .code(NEXT_HOP_CODE)
                 .description(DESCRIPTION)
                 .hopType(HOP_TYPE)
