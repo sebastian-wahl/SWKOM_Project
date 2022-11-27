@@ -45,7 +45,7 @@ public class HopEntity implements BaseEntity {
     private String locationName;
 
     @NotNull
-    @OneToOne(mappedBy = "hop", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "hop", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private GeoCoordinateEntity locationCoordinates;
 }
 

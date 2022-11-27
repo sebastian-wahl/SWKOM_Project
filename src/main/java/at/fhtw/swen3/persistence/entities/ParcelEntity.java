@@ -32,13 +32,13 @@ public class ParcelEntity implements BaseEntity {
 
     @Valid
     @NotNull(message = "Recipient must not be null")
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "RECIPIENT_ID", referencedColumnName = "ID")
     private RecipientEntity recipient;
 
     @NotNull(message = "Sender must not be null")
     @Valid
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "SENDER_ID", referencedColumnName = "ID")
     private RecipientEntity sender;
 

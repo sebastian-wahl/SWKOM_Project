@@ -44,8 +44,8 @@ class WarehouseMapperTest {
         assertThat(warehouseEntity.getLocationName()).isEqualTo(LOCATION_NAME);
 
         assertThat(warehouseEntity.getLocationCoordinates()).isNotNull();
-        assertThat(warehouseEntity.getLocationCoordinates().getLat()).isEqualTo(LAT);
-        assertThat(warehouseEntity.getLocationCoordinates().getLon()).isEqualTo(LON);
+        assertThat(warehouseEntity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
+        assertThat(warehouseEntity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
 
         assertThat(warehouseEntity.getNextHops()).isNotNull().isNotEmpty();
         WarehouseNextHopsEntity warehouseNextHopsEntity = warehouseEntity.getNextHops().get(0);
@@ -54,6 +54,9 @@ class WarehouseMapperTest {
         HopEntity hopEntity = warehouseNextHopsEntity.getHop();
         assertThat(hopEntity).isNotNull();
         assertThat(hopEntity.getCode()).isEqualTo(NEXT_HOP_CODE);
+        assertThat(hopEntity.getLocationCoordinates()).isNotNull();
+        assertThat(hopEntity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
+        assertThat(hopEntity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
     }
 
     private Warehouse buildWarehouse() {
