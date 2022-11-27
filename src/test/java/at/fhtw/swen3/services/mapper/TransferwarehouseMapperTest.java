@@ -51,8 +51,8 @@ class TransferwarehouseMapperTest {
         assertThat(entity.getProcessingDelayMins()).isEqualTo(PROCESSING_DELAYS_MINS);
         assertThat(entity.getLocationName()).isEqualTo(LOCATION_NAME);
         assertThat(entity.getLocationCoordinates()).isNotNull();
-        assertThat(entity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
-        assertThat(entity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
+        assertThat(entity.getLocationCoordinates().getLat()).isEqualTo(LAT);
+        assertThat(entity.getLocationCoordinates().getLon()).isEqualTo(LON);
     }
 
     @Test
@@ -65,7 +65,7 @@ class TransferwarehouseMapperTest {
                 .code(CODE)
                 .description(DESCRIPTION)
                 .hopType(HOP_TYPE)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(" + LAT + " " + LON + ")")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().lat(LAT).lon(LON).build())
                 .processingDelayMins(PROCESSING_DELAYS_MINS)
                 .locationName(LOCATION_NAME)
                 .build();

@@ -17,26 +17,6 @@ public interface GeoCoordinateMapper {
 
     GeoCoordinateMapper INSTANCE = Mappers.getMapper(GeoCoordinateMapper.class);
 
-    @Mapping(target = "location", source = "geoCoordinate", qualifiedByName = "mapLocation")
     GeoCoordinateEntity fromDto(GeoCoordinate geoCoordinate);
-
-    @Mapping(target = "lat", source = "location", qualifiedByName = "mapLat")
-    @Mapping(target = "lon", source = "location", qualifiedByName = "mapLon")
     GeoCoordinate toDto(GeoCoordinateEntity geoCoordinateEntity);
-
-    @Named("mapLocation")
-    static Point mapLocation(GeoCoordinate dto) {
-        String wktPoint = String.format(Locale.US,"POINT(%f %f)", dto.getLat(), dto.getLon());
-        return (Point) wktToGeometry(wktPoint);
-    }
-
-    @Named("mapLat")
-    static Double mapLat(Point location) {
-        return location.getX();
-    }
-
-    @Named("mapLon")
-    static Double mapLon(Point location) {
-        return location.getY();
-    }
 }

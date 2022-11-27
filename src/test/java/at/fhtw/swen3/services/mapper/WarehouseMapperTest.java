@@ -3,7 +3,10 @@ package at.fhtw.swen3.services.mapper;
 import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
-import at.fhtw.swen3.services.dto.*;
+import at.fhtw.swen3.services.dto.GeoCoordinate;
+import at.fhtw.swen3.services.dto.Hop;
+import at.fhtw.swen3.services.dto.Warehouse;
+import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -44,8 +47,8 @@ class WarehouseMapperTest {
         assertThat(warehouseEntity.getLocationName()).isEqualTo(LOCATION_NAME);
 
         assertThat(warehouseEntity.getLocationCoordinates()).isNotNull();
-        assertThat(warehouseEntity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
-        assertThat(warehouseEntity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
+        assertThat(warehouseEntity.getLocationCoordinates().getLat()).isEqualTo(LAT);
+        assertThat(warehouseEntity.getLocationCoordinates().getLon()).isEqualTo(LON);
 
         assertThat(warehouseEntity.getNextHops()).isNotNull().isNotEmpty();
         WarehouseNextHopsEntity warehouseNextHopsEntity = warehouseEntity.getNextHops().get(0);
@@ -55,8 +58,8 @@ class WarehouseMapperTest {
         assertThat(hopEntity).isNotNull();
         assertThat(hopEntity.getCode()).isEqualTo(NEXT_HOP_CODE);
         assertThat(hopEntity.getLocationCoordinates()).isNotNull();
-        assertThat(hopEntity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
-        assertThat(hopEntity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
+        assertThat(hopEntity.getLocationCoordinates().getLat()).isEqualTo(LAT);
+        assertThat(hopEntity.getLocationCoordinates().getLon()).isEqualTo(LON);
     }
 
     private Warehouse buildWarehouse() {
@@ -71,7 +74,7 @@ class WarehouseMapperTest {
     }
 
     private Hop buildHop() {
-        return new Truck()
+        return new Hop()
                 .code(NEXT_HOP_CODE)
                 .description(DESCRIPTION)
                 .hopType(HOP_TYPE)
