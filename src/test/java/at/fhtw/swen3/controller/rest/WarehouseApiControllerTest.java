@@ -8,6 +8,7 @@ import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,9 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import javax.validation.ValidationException;
-
 import java.util.Optional;
 
+import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -124,8 +125,7 @@ class WarehouseApiControllerTest {
                 .locationName("locationName")
                 .processingDelayMins(1)
                 .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
+                        .location((Point) wktToGeometry("POINT(1 2)"))
                         .build())
                 .nextHop(warehouseNextHops)
                 .build();
@@ -139,8 +139,7 @@ class WarehouseApiControllerTest {
                 .locationName("locationName")
                 .processingDelayMins(1)
                 .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
+                        .location((Point) wktToGeometry("POINT(1 2)"))
                         .build())
                 .build();
     }
@@ -153,8 +152,7 @@ class WarehouseApiControllerTest {
                 .locationName("locationName")
                 .processingDelayMins(1)
                 .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
+                        .location((Point) wktToGeometry("POINT(1 2)"))
                         .build())
                 .build();
     }
