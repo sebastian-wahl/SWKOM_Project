@@ -27,8 +27,4 @@ public class GeoCoordinateEntity implements BaseEntity {
 
     @Column(name = "LON")
     private Double lon;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "HOP_ID")
-    private HopEntity hop;
 }
