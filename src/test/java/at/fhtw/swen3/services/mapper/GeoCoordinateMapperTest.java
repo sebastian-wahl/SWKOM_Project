@@ -3,9 +3,7 @@ package at.fhtw.swen3.services.mapper;
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Point;
 
-import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class GeoCoordinateMapperTest {

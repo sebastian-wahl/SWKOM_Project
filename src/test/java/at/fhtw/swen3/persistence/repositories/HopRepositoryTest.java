@@ -3,11 +3,9 @@ package at.fhtw.swen3.persistence.repositories;
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.HopEntity;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
@@ -19,9 +17,6 @@ class HopRepositoryTest {
     @Autowired
     private HopRepository hopRepository;
 
-    @Autowired
-    private GeoCoordinateRepository geoCoordinateRepository;
-
     @Test
     void GIVEN_correct_hopecode_WHEN_findFirstByCode_RETURN_hop_with_geocoordinate() {
         // GIVEN
@@ -29,7 +24,6 @@ class HopRepositoryTest {
                 .lat(1.0)
                 .lon(2.0)
                 .build();
-        geoCoordinateRepository.save(geoCoordinateEntity);
 
         HopEntity hopEntity = HopEntity.builder()
                 .hopType(HOP_TYPE)

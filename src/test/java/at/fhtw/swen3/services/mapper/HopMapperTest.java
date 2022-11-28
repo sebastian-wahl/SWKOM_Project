@@ -8,9 +8,7 @@ import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Truck;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Point;
 
-import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HopMapperTest {
