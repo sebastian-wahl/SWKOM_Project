@@ -8,10 +8,12 @@ import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 import at.fhtw.swen3.services.impl.WarehouseServiceImpl;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+@TestConfiguration
 public class DependencyConfig {
 
     @Bean
