@@ -56,7 +56,7 @@ class HopMapperTest {
     }
 
     @Test
-    void GIVEN_entity_WHEN_toDto_THEN_maps_to_dto() {
+    void GIVEN_truckEntity_WHEN_toDto_THEN_maps_to_truckDto() {
         // GIVEN
         TruckEntity truckEntity = TruckEntity.builder()
                 .hopType(HOP_TYPE)
@@ -86,5 +86,58 @@ class HopMapperTest {
         assertThat(hop).isInstanceOf(Truck.class);
         assertThat(((Truck) hop).getNumberPlate()).isEqualTo(NUMBER_PLATE);
         assertThat(((Truck) hop).getRegionGeoJson()).isEqualTo(REGION_GEO_JSON);
+    }
+
+    @Test
+    void GIVEN_hopDto_WHEN_fromDto_THEN_maps_to_hopEntity() {
+        // GIVEN
+        Hop truck = new Hop()
+                .hopType(HOP_TYPE)
+                .code(CODE)
+                .description(DESCRIPTION)
+                .locationCoordinates(new GeoCoordinate().lat(LAT).lon(LON))
+                .locationName(LOCATION_NAME)
+                .processingDelayMins(PROCESSING_DELAY_MINS);
+
+        // WHEN
+        HopEntity hopEntity = HopMapper.INSTANCE.fromDto(truck);
+
+        // THEN
+        assertThat(hopEntity).isNotNull();
+        assertThat(hopEntity.getHopType()).isEqualTo(HOP_TYPE);
+        assertThat(hopEntity.getCode()).isEqualTo(CODE);
+        assertThat(hopEntity.getDescription()).isEqualTo(DESCRIPTION);
+        assertThat(hopEntity.getProcessingDelayMins()).isEqualTo(PROCESSING_DELAY_MINS);
+        assertThat(hopEntity.getLocationName()).isEqualTo(LOCATION_NAME);
+        assertThat(hopEntity.getLocationCoordinates()).isNotNull();
+        assertThat(hopEntity.getLocationCoordinates().getLat()).isEqualTo(LAT);
+        assertThat(hopEntity.getLocationCoordinates().getLon()).isEqualTo(LON);
+    }
+
+    @Test
+    void GIVEN_hopEntity_WHEN_toDto_THEN_maps_to_hopDto() {
+        // GIVEN
+        HopEntity truckEntity = HopEntity.builder()
+                .hopType(HOP_TYPE)
+                .code(CODE)
+                .description(DESCRIPTION)
+                .processingDelayMins(PROCESSING_DELAY_MINS)
+                .locationName(LOCATION_NAME)
+                .locationCoordinates(GeoCoordinateEntity.builder().lat(LAT).lon(LON).build())
+                .build();
+
+        // WHEN
+        Hop hop = HopMapper.INSTANCE.toDto(truckEntity);
+
+        // THEN
+        assertThat(hop).isNotNull();
+        assertThat(hop.getHopType()).isEqualTo(HOP_TYPE);
+        assertThat(hop.getCode()).isEqualTo(CODE);
+        assertThat(hop.getDescription()).isEqualTo(DESCRIPTION);
+        assertThat(hop.getProcessingDelayMins()).isEqualTo(PROCESSING_DELAY_MINS);
+        assertThat(hop.getLocationName()).isEqualTo(LOCATION_NAME);
+        assertThat(hop.getLocationCoordinates()).isNotNull();
+        assertThat(hop.getLocationCoordinates().getLat()).isEqualTo(LAT);
+        assertThat(hop.getLocationCoordinates().getLon()).isEqualTo(LON);
     }
 }
