@@ -8,6 +8,7 @@ import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.mapper.HopMapper;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
 @Controller
+@Slf4j
 public class WarehouseApiController implements WarehouseApi {
 
     private final NativeWebRequest request;
