@@ -9,6 +9,7 @@ import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.TrackingInformation;
 import at.fhtw.swen3.services.mapper.ParcelMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.locationtech.jts.edgegraph.HalfEdge;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -52,14 +53,13 @@ public class ParcelApiController implements ParcelApi {
 
         NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcelService.submitParcel(parcelEntity));
 
-        return Optional.ofNullable(newParcelInfo)
-                .map(value -> ResponseEntity.status(HttpStatus.CREATED).body(value))
-                .orElse(ResponseEntity.notFound().build());
+        return ResponseEntity.status(HttpStatus.CREATED).body(newParcelInfo);
     }
 
     @Override
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId) {
-        return ResponseEntity.of(parcelService.trackParcel(trackingId).map(parcelEntity -> ParcelMapper.INSTANCE.toTrackingInformationDto(parcelEntity)));
+        // ToDo change back to .of
+        return ResponseEntity.ok(parcelService.trackParcel(trackingId).map(parcelEntity -> ParcelMapper.INSTANCE.toTrackingInformationDto(parcelEntity)).orElse(null));
     }
 
     @Override
