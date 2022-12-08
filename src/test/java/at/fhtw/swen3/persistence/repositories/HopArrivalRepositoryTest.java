@@ -38,6 +38,6 @@ class HopArrivalRepositoryTest {
         assertThat(optionalHop).isPresent();
         assertThat(optionalHop.get().getDescription()).isEqualTo(HOP_DESC);
         assertThat(optionalHop.get().getCode()).isEqualTo(HOP_CODE);
-        assertThat(optionalHop.get().getDateTime()).isCloseTo(dateNow, within(1, ChronoUnit.MILLIS));
+        assertThat(optionalHop.get().getDateTime()).isCloseTo(dateNow, within(1, ChronoUnit.SECONDS));
     }
 }
