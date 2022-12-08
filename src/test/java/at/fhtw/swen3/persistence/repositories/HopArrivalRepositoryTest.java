@@ -6,8 +6,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 
 @SpringBootTest
 class HopArrivalRepositoryTest {
@@ -36,6 +38,6 @@ class HopArrivalRepositoryTest {
         assertThat(optionalHop).isPresent();
         assertThat(optionalHop.get().getDescription()).isEqualTo(HOP_DESC);
         assertThat(optionalHop.get().getCode()).isEqualTo(HOP_CODE);
-        // ToDO fix date assertion
+        assertThat(optionalHop.get().getDateTime()).isCloseTo(dateNow, within(1, ChronoUnit.SECONDS));
     }
 }

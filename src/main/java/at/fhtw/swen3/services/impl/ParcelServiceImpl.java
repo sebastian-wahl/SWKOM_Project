@@ -8,6 +8,7 @@ import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +17,25 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 public class ParcelServiceImpl implements ParcelService {
 
-    @Autowired
-    private EntityValidatorService entityValidatorService;
+    private final EntityValidatorService entityValidatorService;
+
+    private final ParcelRepository parcelRepository;
+
+    private final HopRepository hopRepository;
 
     @Autowired
-    private ParcelRepository parcelRepository;
-
-    @Autowired
-    private HopRepository hopRepository;
+    public ParcelServiceImpl(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository, HopRepository hopRepository) {
+        this.entityValidatorService = entityValidatorService;
+        this.parcelRepository = parcelRepository;
+        this.hopRepository = hopRepository;
+    }
 
     @Override
     public Optional<ParcelEntity> reportParcelDelivery(String trackingId) {
+        log.debug("Reporting parcel delivery for id {}", trackingId);
         Optional<ParcelEntity> parcelOpt = parcelRepository.findFirstByTrackingId(trackingId);
         parcelOpt.ifPresent(this::changeTrackingStateToDelivered);
         return parcelOpt;
@@ -37,6 +44,7 @@ public class ParcelServiceImpl implements ParcelService {
 
     @Override
     public Optional<ParcelEntity> reportParcelHop(String trackingId, String code) {
+        log.debug("Reporting parcel hop for hop with id {} and parcel with id {}", code, trackingId);
         Optional<ParcelEntity> parcelOpt = parcelRepository.findFirstByTrackingId(trackingId);
 
         Optional<HopEntity> hopOptional = hopRepository.findFirstByCode(code);
@@ -55,23 +63,34 @@ public class ParcelServiceImpl implements ParcelService {
             parcelRepository.save(parcel);
             return Optional.of(parcel);
         }
+        log.error("Reporting parcel not possible! Hop found: {}; Parcel found: {}", hopOptional.isPresent(), parcelOpt.isPresent());
         return Optional.empty();
     }
 
     @Override
     public ParcelEntity submitParcel(ParcelEntity parcel) {
+        log.debug("Submitting new parcel");
         entityValidatorService.validate(parcel);
-        parcel.setTrackingId("");
-        return parcelRepository.save(parcel);
+        log.debug("Parcel validated");
+        generateAndSetTrackingId(parcel);
+        ParcelEntity out = parcelRepository.save(parcel);
+        log.debug("Parcel saved successfully");
+        return out;
+    }
+
+    private void generateAndSetTrackingId(ParcelEntity parcel) {
+        parcel.setTrackingId("ABCD1234");
     }
 
     @Override
     public Optional<ParcelEntity> trackParcel(String trackingId) {
+        log.debug("Search parcel with tracking id {}", trackingId);
         return parcelRepository.findFirstByTrackingId(trackingId);
     }
 
     @Override
     public ParcelEntity transitionParcel(ParcelEntity parcel) {
+        log.debug("Transition parcel with tracking id {}", parcel.getId());
         entityValidatorService.validate(parcel);
         return parcelRepository.save(parcel);
     }

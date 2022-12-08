@@ -8,6 +8,7 @@ import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.mapper.HopMapper;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", date = "2022-10-13T12:19:08.753753Z[Etc/UTC]")
 @Controller
+@Slf4j
 public class WarehouseApiController implements WarehouseApi {
 
     private final NativeWebRequest request;
@@ -37,12 +39,14 @@ public class WarehouseApiController implements WarehouseApi {
     @Override
     public ResponseEntity<Warehouse> exportWarehouses() {
         Warehouse warehouse = WarehouseMapper.INSTANCE.toDto(warehouseService.exportWarehouses());
-        return ResponseEntity.of(Optional.ofNullable(warehouse));
+        // ToDo change to .of
+        return ResponseEntity.ok(warehouse);
     }
 
     @Override
     public ResponseEntity<Hop> getWarehouse(String code) {
-        return ResponseEntity.of(warehouseService.getWarehouse(code).map(hopEntity -> HopMapper.INSTANCE.toDto(hopEntity)));
+        // ToDo change to .of
+        return ResponseEntity.ok(warehouseService.getWarehouse(code).map(hopEntity -> HopMapper.INSTANCE.toDto(hopEntity)).orElse(null));
     }
 
     @Override
