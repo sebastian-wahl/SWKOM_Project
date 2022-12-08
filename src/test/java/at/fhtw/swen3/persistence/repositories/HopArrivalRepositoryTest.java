@@ -1,7 +1,6 @@
 package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
