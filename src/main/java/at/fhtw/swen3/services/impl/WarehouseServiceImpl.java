@@ -16,14 +16,16 @@ import java.util.Optional;
 @Slf4j
 public class WarehouseServiceImpl implements WarehouseService {
 
-    @Autowired
-    private EntityValidatorService entityValidatorService;
+    private final EntityValidatorService entityValidatorService;
 
-    @Autowired
-    private WarehouseRepository warehouseRepository;
+    private final WarehouseRepository warehouseRepository;
+    private final HopRepository hopRepository;
 
-    @Autowired
-    private HopRepository hopRepository;
+    public WarehouseServiceImpl(EntityValidatorService entityValidatorService, WarehouseRepository warehouseRepository, HopRepository hopRepository) {
+        this.entityValidatorService = entityValidatorService;
+        this.warehouseRepository = warehouseRepository;
+        this.hopRepository = hopRepository;
+    }
 
     @Override
     public WarehouseEntity exportWarehouses() {

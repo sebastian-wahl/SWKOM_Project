@@ -20,14 +20,18 @@ import java.util.Optional;
 @Slf4j
 public class ParcelServiceImpl implements ParcelService {
 
-    @Autowired
-    private EntityValidatorService entityValidatorService;
+    private final EntityValidatorService entityValidatorService;
+
+    private final ParcelRepository parcelRepository;
+
+    private final HopRepository hopRepository;
 
     @Autowired
-    private ParcelRepository parcelRepository;
-
-    @Autowired
-    private HopRepository hopRepository;
+    public ParcelServiceImpl(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository, HopRepository hopRepository) {
+        this.entityValidatorService = entityValidatorService;
+        this.parcelRepository = parcelRepository;
+        this.hopRepository = hopRepository;
+    }
 
     @Override
     public Optional<ParcelEntity> reportParcelDelivery(String trackingId) {
