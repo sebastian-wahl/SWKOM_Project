@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @TestConfiguration
-public class DependencyConfig {
+public class AppConfig {
 
     @Bean
     public ParcelService parcelService(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository, HopRepository hopRepository) {
