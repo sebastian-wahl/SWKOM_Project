@@ -11,6 +11,7 @@ import at.fhtw.swen3.services.impl.ParcelServiceImpl;
 import at.fhtw.swen3.services.impl.WarehouseServiceImpl;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
@@ -30,7 +31,17 @@ public class AppConfig {
     }
 
     @Bean
-    public GeoEncodingService geoEncodingService() {
-        return new OpenStreetMapsEncodingProxy(new RestTemplate());
+    public RestTemplateBuilder restTemplateBuilder() {
+        return new RestTemplateBuilder();
+    }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder) {
+        return builder.build();
+    }
+
+    @Bean
+    public GeoEncodingService geoEncodingService(RestTemplate restTemplate) {
+        return new OpenStreetMapsEncodingProxy(restTemplate);
     }
 }
