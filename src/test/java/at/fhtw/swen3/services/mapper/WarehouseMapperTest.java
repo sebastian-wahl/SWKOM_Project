@@ -54,6 +54,7 @@ class WarehouseMapperTest {
         WarehouseNextHopsEntity warehouseNextHopsEntity = warehouseEntity.getNextHops().get(0);
         assertThat(warehouseNextHopsEntity).isNotNull();
         assertThat(warehouseNextHopsEntity.getTraveltimeMins()).isEqualTo(TRAVELTIME_MINS);
+        assertThat(warehouseNextHopsEntity.getWarehouse().getCode()).isEqualTo(WAREHOUSE_CODE);
         HopEntity hopEntity = warehouseNextHopsEntity.getHop();
         assertThat(hopEntity).isNotNull();
         assertThat(hopEntity.getCode()).isEqualTo(NEXT_HOP_CODE);

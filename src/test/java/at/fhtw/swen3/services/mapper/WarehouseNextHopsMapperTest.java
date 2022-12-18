@@ -3,6 +3,7 @@ package at.fhtw.swen3.services.mapper;
 import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
 import at.fhtw.swen3.services.dto.Truck;
+import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Test;
 
@@ -11,6 +12,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WarehouseNextHopsMapperTest {
 
     public static final String CODE = "CODE";
+    public static final String WAREHOUSE_CODE = "WAEHOUSE_CODE";
     public static final int TRAVELTIME_MINS = 24;
 
     @Test
@@ -21,10 +23,11 @@ class WarehouseNextHopsMapperTest {
                 .hop(new Truck().code(CODE));
 
         // WHEN
-        WarehouseNextHopsEntity entity = WarehouseNextHopsMapper.INSTANCE.fromDto(dto);
+        WarehouseNextHopsEntity entity = WarehouseNextHopsMapper.INSTANCE.fromDto(dto, new Warehouse().code(WAREHOUSE_CODE));
 
         // THEN
         assertThat(entity).isNotNull();
+        assertThat(entity.getWarehouse().getCode()).isEqualTo(WAREHOUSE_CODE);
         assertThat(entity.getTraveltimeMins()).isEqualTo(TRAVELTIME_MINS);
         assertThat(entity.getHop()).isNotNull();
         assertThat(entity.getHop().getCode()).isEqualTo(CODE);

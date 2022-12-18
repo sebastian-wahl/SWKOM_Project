@@ -7,6 +7,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 
 /**
  * Transferwarehouse
@@ -18,6 +19,7 @@ import javax.persistence.Entity;
 @SuperBuilder
 @Entity
 public class TransferwarehouseEntity extends HopEntity {
+    @Lob
     @Column(name = "REGION_GEO_JSON")
     private String regionGeoJson;
 

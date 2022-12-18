@@ -1,19 +1,20 @@
 package at.fhtw.swen3.persistence.repositories;
 
-import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
-import at.fhtw.swen3.persistence.entities.HopEntity;
-import at.fhtw.swen3.persistence.entities.TruckEntity;
-import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
+import at.fhtw.swen3.persistence.entities.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class WarehouseNextHopsRepositoryTest {
+
+    @Autowired
+    private WarehouseRepository warehouseRepository;
 
     @Autowired
     private WarehouseNextHopsRepository warehouseNextHopsRepository;

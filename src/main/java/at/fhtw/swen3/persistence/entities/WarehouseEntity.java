@@ -1,10 +1,9 @@
 package at.fhtw.swen3.persistence.entities;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.Singular;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -28,9 +27,10 @@ public class WarehouseEntity extends HopEntity {
     private Integer level;
 
     @Singular
+    //@Builder.Default
     @NotNull
     @Valid
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "warehouse", fetch = FetchType.EAGER)
     private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();
 }
 

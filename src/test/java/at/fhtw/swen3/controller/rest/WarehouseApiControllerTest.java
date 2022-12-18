@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.lenient;
 
 @SpringBootTest
 class WarehouseApiControllerTest {
@@ -116,13 +117,13 @@ class WarehouseApiControllerTest {
                 .addNextHopsItem(warehouseNextHops);
     }
 
-    private WarehouseEntity mockWarehouseEntity() {
+    private Optional<WarehouseEntity> mockWarehouseEntity() {
         WarehouseNextHopsEntity warehouseNextHops = WarehouseNextHopsEntity.builder()
                 .hop(mockHopEntity())
                 .traveltimeMins(10)
                 .build();
 
-        return WarehouseEntity.builder()
+        return Optional.of(WarehouseEntity.builder()
                 .level(3)
                 .code(VALID_CODE)
                 .description("description")
@@ -134,7 +135,7 @@ class WarehouseApiControllerTest {
                         .lon(2.0)
                         .build())
                 .nextHop(warehouseNextHops)
-                .build();
+                .build());
     }
 
     private HopEntity mockHopEntity() {

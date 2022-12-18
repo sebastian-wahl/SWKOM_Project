@@ -1,9 +1,8 @@
 package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
-import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
-import at.fhtw.swen3.services.exception.EntityValidationException;
+import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -57,7 +56,7 @@ class EntityValidatorServiceTest {
 
     @Test
     void GIVEN_invalid_recipient_WHEN_validating_THEN_throw_exception() {
-        EntityValidationException exception = assertThrows(EntityValidationException.class, () -> {
+        BLEntityValidationException exception = assertThrows(BLEntityValidationException.class, () -> {
             entityValidatorService.validate(invalidPostalCodeRecipient);
         });
 
@@ -82,7 +81,7 @@ class EntityValidatorServiceTest {
 
     @Test
     void GIVEN_invalid_hoparrival_WHEN_validating_THEN_throw_exception() {
-        EntityValidationException exception = assertThrows(EntityValidationException.class, () -> {
+        BLEntityValidationException exception = assertThrows(BLEntityValidationException.class, () -> {
             entityValidatorService.validate(invalidHopArrivalEntity);
         });
         assertThat(exception.getValidationMessages()).contains("Hop arrival code: Must match the regex \"^[A-Z]{4}\\d{1,4}$\"");

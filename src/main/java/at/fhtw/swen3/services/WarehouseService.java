@@ -6,7 +6,7 @@ import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import java.util.Optional;
 
 public interface WarehouseService {
-    WarehouseEntity exportWarehouses();
+    Optional<WarehouseEntity> exportWarehouses();
 
     Optional<HopEntity> getWarehouse(String code);
 

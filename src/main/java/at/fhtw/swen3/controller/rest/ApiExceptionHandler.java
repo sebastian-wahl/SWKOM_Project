@@ -1,7 +1,7 @@
 package at.fhtw.swen3.controller.rest;
 
 import at.fhtw.swen3.services.dto.Error;
-import at.fhtw.swen3.services.exception.EntityValidationException;
+import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,8 +14,8 @@ import java.util.List;
 @Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ EntityValidationException.class })
-    public ResponseEntity<Error> handleEntityValidationException(EntityValidationException exception) {
+    @ExceptionHandler({ BLEntityValidationException.class })
+    public ResponseEntity<Error> handleEntityValidationException(BLEntityValidationException exception) {
         List<String> messages = exception.getValidationMessages().stream().filter(message -> !message.isBlank()).toList();
         String message = String.join("; ", messages);
         Error error = new Error().errorMessage(message);
