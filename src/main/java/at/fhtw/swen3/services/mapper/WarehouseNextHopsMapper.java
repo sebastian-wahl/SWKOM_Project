@@ -12,7 +12,6 @@ public interface WarehouseNextHopsMapper {
 
     WarehouseNextHopsMapper INSTANCE = Mappers.getMapper(WarehouseNextHopsMapper.class);
 
-    @Mapping(source = "warehouse", target = "warehouse")
-    WarehouseNextHopsEntity fromDto(WarehouseNextHops warehouseNextHops, Warehouse warehouse);
+    WarehouseNextHopsEntity fromDto(WarehouseNextHops warehouseNextHops);
     WarehouseNextHops toDto(WarehouseNextHopsEntity warehouseNextHopsEntity);
 }

@@ -11,6 +11,7 @@ import org.postgresql.util.PSQLException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -42,7 +43,6 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public void importWarehouses(WarehouseEntity warehouse) {
-        warehouse.getNextHops().forEach(warehouseNextHopsEntity -> warehouseNextHopsEntity.setWarehouse(warehouse));
         log.debug("Importing warehouse");
         entityValidatorService.validate(warehouse);
         log.debug("Given warehouse is valid");

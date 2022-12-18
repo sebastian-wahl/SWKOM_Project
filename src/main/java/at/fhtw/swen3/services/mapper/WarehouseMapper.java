@@ -16,15 +16,8 @@ public interface WarehouseMapper {
 
     WarehouseMapper INSTANCE = Mappers.getMapper(WarehouseMapper.class);
 
-    @Mapping(source = "warehouse", target = "nextHops", qualifiedByName = "nextHopSetRelation")
     WarehouseEntity fromDto(Warehouse warehouse);
 
     Warehouse toDto(WarehouseEntity warehouseEntity);
-
-    @Named("nextHopSetRelation")
-    static List<WarehouseNextHopsEntity> nextHopSetRelation(Warehouse warehouse) {
-        return warehouse.getNextHops().stream().map(nextHop -> WarehouseNextHopsMapper.INSTANCE.fromDto(nextHop, warehouse))
-                .collect(Collectors.toList());
-    }
 
 }

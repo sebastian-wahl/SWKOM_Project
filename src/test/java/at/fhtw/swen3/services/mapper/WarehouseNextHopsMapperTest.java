@@ -12,7 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WarehouseNextHopsMapperTest {
 
     public static final String CODE = "CODE";
-    public static final String WAREHOUSE_CODE = "WAEHOUSE_CODE";
     public static final int TRAVELTIME_MINS = 24;
 
     @Test
@@ -23,11 +22,10 @@ class WarehouseNextHopsMapperTest {
                 .hop(new Truck().code(CODE));
 
         // WHEN
-        WarehouseNextHopsEntity entity = WarehouseNextHopsMapper.INSTANCE.fromDto(dto, new Warehouse().code(WAREHOUSE_CODE));
+        WarehouseNextHopsEntity entity = WarehouseNextHopsMapper.INSTANCE.fromDto(dto);
 
         // THEN
         assertThat(entity).isNotNull();
-        assertThat(entity.getWarehouse().getCode()).isEqualTo(WAREHOUSE_CODE);
         assertThat(entity.getTraveltimeMins()).isEqualTo(TRAVELTIME_MINS);
         assertThat(entity.getHop()).isNotNull();
         assertThat(entity.getHop().getCode()).isEqualTo(CODE);

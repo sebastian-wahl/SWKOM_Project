@@ -32,8 +32,8 @@ public class WarehouseNextHopsEntity implements BaseEntity {
     //@MapsId
     private HopEntity hop;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @JoinColumn(name="WAREHOUSE_ID")
-    private WarehouseEntity warehouse;
+    /*@ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "WAREHOUSE_ID")
+    private WarehouseEntity warehouse;*/
 }
 
