@@ -11,7 +11,7 @@ public class WarehouseDescriptionValidator implements ConstraintValidator<Wareho
         if (description == null) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^[A-Za-zß \\-0-9]+$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[A-Za-zßäöüÄÖÜ \\-0-9]+$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(description);
         return matcher.find();
     }

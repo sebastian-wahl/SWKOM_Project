@@ -1,13 +1,11 @@
 package at.fhtw.swen3.persistence.repositories;
 
 
-import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
-import at.fhtw.swen3.persistence.entities.WarehouseEntity;
+import at.fhtw.swen3.persistence.entities.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Collections;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +21,11 @@ class WarehouseRepositoryTest {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder().build();
 
+        WarehouseNextHopsEntity warehouseNextHopsEntity = WarehouseNextHopsEntity.builder()
+                .traveltimeMins(1)
+                .hop(buildHopEntity())
+                .build();
+
         WarehouseEntity warehouseEntity = WarehouseEntity.builder()
                 .code("ABCD1234")
                 .hopType("warehouse")
@@ -31,8 +34,9 @@ class WarehouseRepositoryTest {
                 .locationName("Vienna")
                 .processingDelayMins(2)
                 .level(1)
-                .nextHops(Collections.emptyList())
+                .nextHop(warehouseNextHopsEntity)
                 .build();
+
 
         warehouseRepository.save(warehouseEntity);
 
@@ -44,5 +48,20 @@ class WarehouseRepositoryTest {
         assertThat(foundWarehouse.get())
                 .usingRecursiveComparison()
                 .isEqualTo(warehouseEntity);
+    }
+
+    private HopEntity buildHopEntity() {
+        GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder().build();
+
+        return TruckEntity.builder()
+                .code("ABCD1234")
+                .hopType("warehouse")
+                .description("description")
+                .locationCoordinates(geoCoordinateEntity)
+                .locationName("Vienna")
+                .processingDelayMins(2)
+                .regionGeoJson("regionGeoJson")
+                .numberPlate("numberPlate")
+                .build();
     }
 }
