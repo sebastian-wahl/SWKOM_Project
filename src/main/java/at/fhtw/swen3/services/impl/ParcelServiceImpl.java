@@ -7,6 +7,7 @@ import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.services.ParcelService;
+import at.fhtw.swen3.services.exception.BLException.BLTrackingNumberExistException;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import com.github.curiousoddman.rgxgen.RgxGen;
 import lombok.extern.slf4j.Slf4j;
@@ -108,6 +109,10 @@ public class ParcelServiceImpl implements ParcelService {
     public ParcelEntity transitionParcel(ParcelEntity parcel) {
         log.debug("Transition parcel with tracking id {}", parcel.getId());
         entityValidatorService.validate(parcel);
+        if (parcelRepository.findFirstByTrackingId(parcel.getTrackingId()).isPresent()) {
+            throw new BLTrackingNumberExistException(parcel.getTrackingId());
+        }
+        // ToDo predict future hops (GeoSpatial)
         return parcelRepository.save(parcel);
     }
 
