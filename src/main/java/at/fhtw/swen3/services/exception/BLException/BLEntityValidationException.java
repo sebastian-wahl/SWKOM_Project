@@ -1,13 +1,13 @@
-package at.fhtw.swen3.services.exception;
+package at.fhtw.swen3.services.exception.BLException;
 
 
 import java.util.List;
 
-public class EntityValidationException extends RuntimeException {
+public class BLEntityValidationException extends BLException {
 
     private final List<String> validationMessages;
 
-    public EntityValidationException(List<String> validationMessages) {
+    public BLEntityValidationException(List<String> validationMessages) {
         super();
         this.validationMessages = validationMessages;
     }

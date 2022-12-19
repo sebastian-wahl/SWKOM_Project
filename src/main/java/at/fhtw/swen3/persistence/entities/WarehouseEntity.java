@@ -28,9 +28,11 @@ public class WarehouseEntity extends HopEntity {
     private Integer level;
 
     @Singular
+    //@Builder.Default
     @NotNull
     @Valid
-    @OneToMany(mappedBy = "warehouse", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "WAREHOUSE_NEXT_HOPS_ID")
     private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();
 }
 
