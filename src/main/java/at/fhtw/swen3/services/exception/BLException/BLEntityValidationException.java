@@ -8,11 +8,16 @@ public class BLEntityValidationException extends BLException {
     private final List<String> validationMessages;
 
     public BLEntityValidationException(List<String> validationMessages) {
-        super();
         this.validationMessages = validationMessages;
+        this.message = concatenateValidationMessages();
     }
 
     public List<String> getValidationMessages() {
         return validationMessages;
+    }
+
+    private String concatenateValidationMessages() {
+        List<String> messages = validationMessages.stream().filter(message -> !message.isBlank()).toList();
+        return String.join("; ", messages);
     }
 }

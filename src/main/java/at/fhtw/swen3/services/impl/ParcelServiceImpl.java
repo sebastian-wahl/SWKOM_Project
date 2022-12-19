@@ -7,6 +7,7 @@ import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.services.ParcelService;
+import at.fhtw.swen3.services.exception.BLException.BLParcelNotFound;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,12 +35,20 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     @Override
-    public Optional<ParcelEntity> reportParcelDelivery(String trackingId) {
+    public void reportParcelDelivery(String trackingId) {
         log.debug("Reporting parcel delivery for id {}", trackingId);
         Optional<ParcelEntity> parcelOpt = parcelRepository.findFirstByTrackingId(trackingId);
-        parcelOpt.ifPresent(this::changeTrackingStateToDelivered);
-        return parcelOpt;
-
+        if (parcelOpt.isPresent()) {
+            /*
+            // ToDo check if last location is the arrival dest to validate the delivery
+            String hopArrivalCode = parcelOpt.get().getVisitedHops().get(parcelOpt.get().getVisitedHops().size()-1).getCode();
+            hopRepository.findFirstByCode(hopArrivalCode).get().getLocationCoordinates();
+            parcelOpt.get().getRecipient().getStreet();
+             */
+            changeTrackingStateToDelivered(parcelOpt.get());
+        } else {
+            throw new BLParcelNotFound(trackingId);
+        }
     }
 
     @Override
