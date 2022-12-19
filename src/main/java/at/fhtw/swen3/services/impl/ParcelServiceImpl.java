@@ -8,6 +8,7 @@ import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
+import com.github.curiousoddman.rgxgen.RgxGen;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,14 +73,29 @@ public class ParcelServiceImpl implements ParcelService {
         log.debug("Submitting new parcel");
         entityValidatorService.validate(parcel);
         log.debug("Parcel validated");
-        generateAndSetTrackingId(parcel);
-        ParcelEntity out = parcelRepository.save(parcel);
+        ParcelEntity out = setFieldsAndSaveParcel(parcel);
         log.debug("Parcel saved successfully");
         return out;
     }
 
+    private ParcelEntity setFieldsAndSaveParcel(ParcelEntity parcel) {
+        generateAndSetTrackingId(parcel);
+        parcel.setState(TrackingInformationState.PICKUP);
+        // ToDo predict future hops (GeoSpatial)
+        return parcelRepository.save(parcel);
+    }
+
+    /**
+     * Recursively generates a unique tracking id for the given parcel
+     */
     private void generateAndSetTrackingId(ParcelEntity parcel) {
-        parcel.setTrackingId("ABCD1234");
+        RgxGen rgxGen = new RgxGen(ParcelEntity.TRACKING_ID_PATTERN);
+        String generatedTrackingId = rgxGen.generate();
+        if (parcelRepository.findFirstByTrackingId(generatedTrackingId).isPresent()) {
+            generateAndSetTrackingId(parcel);
+        } else {
+            parcel.setTrackingId(rgxGen.generate());
+        }
     }
 
     @Override
