@@ -43,6 +43,7 @@ public class WarehouseServiceImpl implements WarehouseService {
         log.debug("Importing warehouse");
         entityValidatorService.validate(warehouse);
         log.debug("Given warehouse is valid");
+        warehouseRepository.deleteAll();
         warehouseRepository.save(warehouse);
         log.debug("Warehouse imported successfully");
     }
