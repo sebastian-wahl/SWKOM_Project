@@ -1,9 +1,10 @@
 package at.fhtw.swen3.persistence.entities;
 
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.Singular;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 
 import javax.persistence.*;
 import javax.validation.Valid;
@@ -30,7 +31,6 @@ public class WarehouseEntity extends HopEntity {
     //@Builder.Default
     @NotNull
     @Valid
-    //@OneToMany(cascade = CascadeType.ALL, mappedBy = "warehouse", fetch = FetchType.EAGER)
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "WAREHOUSE_NEXT_HOPS_ID")
     private List<WarehouseNextHopsEntity> nextHops = new ArrayList<>();

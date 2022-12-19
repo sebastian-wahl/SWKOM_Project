@@ -14,7 +14,7 @@ import java.util.List;
 @Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler({ BLEntityValidationException.class })
+    @ExceptionHandler({BLEntityValidationException.class})
     public ResponseEntity<Error> handleEntityValidationException(BLEntityValidationException exception) {
         List<String> messages = exception.getValidationMessages().stream().filter(message -> !message.isBlank()).toList();
         String message = String.join("; ", messages);

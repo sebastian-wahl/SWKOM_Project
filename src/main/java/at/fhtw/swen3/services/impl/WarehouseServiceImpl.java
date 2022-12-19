@@ -7,11 +7,8 @@ import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import lombok.extern.slf4j.Slf4j;
-import org.postgresql.util.PSQLException;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 @Service
@@ -31,7 +28,7 @@ public class WarehouseServiceImpl implements WarehouseService {
 
     @Override
     public Optional<WarehouseEntity> exportWarehouses() {
-        log.debug("Exporting warehouses");
+        log.debug("Exporting warehouse with level 0");
         return warehouseRepository.getFirstByLevel(0);
     }
 

@@ -20,7 +20,6 @@ import javax.validation.constraints.NotNull;
 public class WarehouseNextHopsEntity implements BaseEntity {
     @Column(name = "ID")
     @Id
-    @GeneratedValue
     private Long id;
 
     @Column(name = "TRAVELTIME_MINS")
@@ -29,11 +28,7 @@ public class WarehouseNextHopsEntity implements BaseEntity {
     @NotNull
     @Valid
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    //@MapsId
+    @MapsId
     private HopEntity hop;
-
-    /*@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "WAREHOUSE_ID")
-    private WarehouseEntity warehouse;*/
 }
 
