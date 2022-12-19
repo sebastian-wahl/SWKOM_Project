@@ -11,5 +11,6 @@ public interface WarehouseNextHopsMapper {
     WarehouseNextHopsMapper INSTANCE = Mappers.getMapper(WarehouseNextHopsMapper.class);
 
     WarehouseNextHopsEntity fromDto(WarehouseNextHops warehouseNextHops);
+
     WarehouseNextHops toDto(WarehouseNextHopsEntity warehouseNextHopsEntity);
 }
