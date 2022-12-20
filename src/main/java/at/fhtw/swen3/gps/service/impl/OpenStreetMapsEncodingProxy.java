@@ -7,11 +7,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,14 +33,18 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
         this.restTemplate = restTemplate;
     }
 
-    // TODO: fix empty response
     @Override
     public Optional<GeoEncodingCoordinate> encodeAddress(Address address) {
-        String url = buildUrl(address);
+        URI url = buildUrl(address);
         log.debug("OpenStreetMaps url={}", url);
-        ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
-        log.debug("OpenStreetMaps response={}", response);
-        String json = response.getBody();
+
+        String json = restTemplate.getForObject(url, String.class);
+        log.debug("OpenStreetMaps response={}", json);
+
+        return mapJsonToGeoCoordinateOptional(json);
+    }
+
+    private Optional<GeoEncodingCoordinate> mapJsonToGeoCoordinateOptional(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
             List<GeoEncodingCoordinate> coordinates = objectMapper.readValue(json, new TypeReference<>(){});
@@ -54,13 +58,13 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
         return Optional.empty();
     }
 
-    String buildUrl(Address address) {
+    private URI buildUrl(Address address) {
         return UriComponentsBuilder.fromHttpUrl(OPENSTREETMAP_BASE_URL)
                 .queryParam(STREET_PARAM, address.getStreet())
                 .queryParam(POSTALCODE_PARAM, address.getPostalCode())
                 .queryParam(CITY_PARAM, address.getCity())
                 .queryParam(COUNTRY_PARAM, address.getCountry())
                 .queryParam(FORMAT_PARAM, FORMAT)
-                .toUriString();
+                .build().toUri();
     }
 }
