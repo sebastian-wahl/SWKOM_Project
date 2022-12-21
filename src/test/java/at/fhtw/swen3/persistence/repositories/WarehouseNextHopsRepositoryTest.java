@@ -16,6 +16,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WarehouseNextHopsRepositoryTest {
 
     @Autowired
+    private WarehouseRepository warehouseRepository;
+
+    @Autowired
     private WarehouseNextHopsRepository warehouseNextHopsRepository;
 
     @Test
