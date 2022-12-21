@@ -8,6 +8,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -37,11 +38,15 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
     public Optional<GeoEncodingCoordinate> encodeAddress(Address address) {
         URI url = buildUrl(address);
         log.debug("OpenStreetMaps url={}", url);
+        try {
+            String json = restTemplate.getForObject(url, String.class);
+            log.debug("OpenStreetMaps response={}", json);
 
-        String json = restTemplate.getForObject(url, String.class);
-        log.debug("OpenStreetMaps response={}", json);
-
-        return mapJsonToGeoCoordinateOptional(json);
+            return mapJsonToGeoCoordinateOptional(json);
+        } catch (HttpClientErrorException e) {
+            log.warn("Error while fetching geo coordinates");
+        }
+        return Optional.empty();
     }
 
     private Optional<GeoEncodingCoordinate> mapJsonToGeoCoordinateOptional(String json) {

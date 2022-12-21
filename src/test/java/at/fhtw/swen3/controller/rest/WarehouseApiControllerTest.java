@@ -9,7 +9,6 @@ import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,18 +18,17 @@ import org.springframework.http.ResponseEntity;
 import javax.validation.ValidationException;
 import java.util.Optional;
 
-import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.lenient;
 
 @SpringBootTest
 class WarehouseApiControllerTest {
 
     public static final String VALID_CODE = "ABCD123";
-    @MockBean
+
+    @MockBean(name="warehouseService")
     private WarehouseService warehouseService;
 
     @Autowired
