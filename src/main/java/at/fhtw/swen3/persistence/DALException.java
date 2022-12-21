@@ -1,4 +1,4 @@
-package at.fhtw.swen3.services.exception.DALException;
+package at.fhtw.swen3.persistence;
 
 public class DALException extends RuntimeException {
 }

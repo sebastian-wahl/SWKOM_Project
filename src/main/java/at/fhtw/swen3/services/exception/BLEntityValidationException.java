@@ -1,5 +1,7 @@
-package at.fhtw.swen3.services.exception.BLException;
+package at.fhtw.swen3.services.exception;
 
+
+import at.fhtw.swen3.services.BLException;
 
 import java.util.List;
 

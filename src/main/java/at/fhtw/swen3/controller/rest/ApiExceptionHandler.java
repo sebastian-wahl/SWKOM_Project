@@ -1,7 +1,7 @@
 package at.fhtw.swen3.controller.rest;
 
 import at.fhtw.swen3.services.dto.Error;
-import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
+import at.fhtw.swen3.services.exception.BLEntityValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
