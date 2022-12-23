@@ -6,13 +6,19 @@ import org.locationtech.jts.io.WKTReader;
 
 public class JTSUtil {
 
+    private static WKTReader wktReader;
+
     private JTSUtil() {
         /* prevent instantiation */
     }
 
     public static Geometry wktToGeometry(String wktString) {
+        if (wktReader == null) {
+            wktReader = new WKTReader();
+        }
+
         try {
-            return new WKTReader().read(wktString);
+            return wktReader.read(wktString);
         } catch (ParseException e) {
             return null;
         }
