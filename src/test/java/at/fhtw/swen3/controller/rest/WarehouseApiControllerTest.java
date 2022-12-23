@@ -29,7 +29,8 @@ import static org.mockito.Mockito.doReturn;
 class WarehouseApiControllerTest {
 
     public static final String VALID_CODE = "ABCD123";
-    @MockBean
+
+    @MockBean(name="warehouseService")
     private WarehouseService warehouseService;
 
     @Autowired
@@ -116,25 +117,22 @@ class WarehouseApiControllerTest {
                 .addNextHopsItem(warehouseNextHops);
     }
 
-    private WarehouseEntity mockWarehouseEntity() {
+    private Optional<WarehouseEntity> mockWarehouseEntity() {
         WarehouseNextHopsEntity warehouseNextHops = WarehouseNextHopsEntity.builder()
                 .hop(mockHopEntity())
                 .traveltimeMins(10)
                 .build();
 
-        return WarehouseEntity.builder()
+        return Optional.of(WarehouseEntity.builder()
                 .level(3)
                 .code(VALID_CODE)
                 .description("description")
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
-                        .build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
                 .nextHop(warehouseNextHops)
-                .build();
+                .build());
     }
 
     private HopEntity mockHopEntity() {
@@ -144,10 +142,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
-                        .build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
                 .build();
     }
 
@@ -158,10 +153,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
-                        .build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
                 .build();
     }
 

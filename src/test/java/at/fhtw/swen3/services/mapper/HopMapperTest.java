@@ -8,7 +8,9 @@ import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Truck;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Point;
 
+import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HopMapperTest {
@@ -47,8 +49,8 @@ class HopMapperTest {
         assertThat(hopEntity.getProcessingDelayMins()).isEqualTo(PROCESSING_DELAY_MINS);
         assertThat(hopEntity.getLocationName()).isEqualTo(LOCATION_NAME);
         assertThat(hopEntity.getLocationCoordinates()).isNotNull();
-        assertThat(hopEntity.getLocationCoordinates().getLat()).isEqualTo(LAT);
-        assertThat(hopEntity.getLocationCoordinates().getLon()).isEqualTo(LON);
+        assertThat(hopEntity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
+        assertThat(hopEntity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
 
         assertThat(hopEntity).isInstanceOf(TruckEntity.class);
         assertThat(((TruckEntity) hopEntity).getNumberPlate()).isEqualTo(NUMBER_PLATE);
@@ -64,7 +66,7 @@ class HopMapperTest {
                 .description(DESCRIPTION)
                 .processingDelayMins(PROCESSING_DELAY_MINS)
                 .locationName(LOCATION_NAME)
-                .locationCoordinates(GeoCoordinateEntity.builder().lat(LAT).lon(LON).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT("+LAT+" "+LON+")")).build())
                 .regionGeoJson(REGION_GEO_JSON)
                 .numberPlate(NUMBER_PLATE)
                 .build();
@@ -110,8 +112,8 @@ class HopMapperTest {
         assertThat(hopEntity.getProcessingDelayMins()).isEqualTo(PROCESSING_DELAY_MINS);
         assertThat(hopEntity.getLocationName()).isEqualTo(LOCATION_NAME);
         assertThat(hopEntity.getLocationCoordinates()).isNotNull();
-        assertThat(hopEntity.getLocationCoordinates().getLat()).isEqualTo(LAT);
-        assertThat(hopEntity.getLocationCoordinates().getLon()).isEqualTo(LON);
+        assertThat(hopEntity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
+        assertThat(hopEntity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
     }
 
     @Test
@@ -123,7 +125,7 @@ class HopMapperTest {
                 .description(DESCRIPTION)
                 .processingDelayMins(PROCESSING_DELAY_MINS)
                 .locationName(LOCATION_NAME)
-                .locationCoordinates(GeoCoordinateEntity.builder().lat(LAT).lon(LON).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT("+LAT+" "+LON+")")).build())
                 .build();
 
         // WHEN
