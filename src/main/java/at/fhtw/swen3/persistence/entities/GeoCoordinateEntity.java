@@ -1,6 +1,7 @@
 package at.fhtw.swen3.persistence.entities;
 
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 
 import javax.persistence.*;
 
@@ -11,10 +12,10 @@ import javax.persistence.*;
 
 @Getter
 @Setter
-@Entity
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
+@Entity
 @Table(name = "GEO_COORDINATE")
 public class GeoCoordinateEntity implements BaseEntity {
     @Column(name = "ID")
@@ -22,9 +23,6 @@ public class GeoCoordinateEntity implements BaseEntity {
     @GeneratedValue
     private Long id;
 
-    @Column(name = "LAT")
-    private Double lat;
-
-    @Column(name = "LON")
-    private Double lon;
+    @Column(name = "LOCATION")
+    private Point location;
 }

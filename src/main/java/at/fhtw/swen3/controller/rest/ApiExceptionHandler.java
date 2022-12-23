@@ -1,7 +1,7 @@
 package at.fhtw.swen3.controller.rest;
 
+import at.fhtw.swen3.services.BLException;
 import at.fhtw.swen3.services.dto.Error;
-import at.fhtw.swen3.services.exception.BLException.BLException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -11,17 +11,6 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 @Slf4j
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
-
-    /*@ExceptionHandler({BLEntityValidationException.class})
-    public ResponseEntity<Error> handleEntityValidationException(BLEntityValidationException exception) {
-        List<String> messages = exception.getValidationMessages().stream().filter(message -> !message.isBlank()).toList();
-        String message = String.join("; ", messages);
-        Error error = new Error().errorMessage(message);
-        log.info(message);
-
-        return ResponseEntity.badRequest().body(error);
-    }*/
-
     @ExceptionHandler({BLException.class})
     public ResponseEntity<Error> handleEntityValidationException(BLException exception) {
         Error error = new Error().errorMessage(exception.getMessage());

@@ -1,6 +1,8 @@
 package at.fhtw.swen3.services.exception.BLException;
 
 
+import at.fhtw.swen3.services.BLException;
+
 import java.util.List;
 
 public class BLEntityValidationException extends BLException {
