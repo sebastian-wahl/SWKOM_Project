@@ -18,5 +18,4 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
         return ResponseEntity.badRequest().body(error);
     }
-
 }
