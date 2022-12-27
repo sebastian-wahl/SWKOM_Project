@@ -1,5 +1,6 @@
 package at.fhtw.swen3.services.impl;
 
+import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
@@ -27,11 +28,14 @@ public class ParcelServiceImpl implements ParcelService {
 
     private final HopRepository hopRepository;
 
+    private final GeoEncodingService geoEncodingService;
+
     @Autowired
-    public ParcelServiceImpl(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository, HopRepository hopRepository) {
+    public ParcelServiceImpl(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository, HopRepository hopRepository, GeoEncodingService geoEncodingService) {
         this.entityValidatorService = entityValidatorService;
         this.parcelRepository = parcelRepository;
         this.hopRepository = hopRepository;
+        this.geoEncodingService = geoEncodingService;
     }
 
     @Override
@@ -39,12 +43,11 @@ public class ParcelServiceImpl implements ParcelService {
         log.debug("Reporting parcel delivery for id {}", trackingId);
         Optional<ParcelEntity> parcelOpt = parcelRepository.findFirstByTrackingId(trackingId);
         if (parcelOpt.isPresent()) {
-            /*
             // ToDo check if last location is the arrival dest to validate the delivery
-            String hopArrivalCode = parcelOpt.get().getVisitedHops().get(parcelOpt.get().getVisitedHops().size()-1).getCode();
+            String hopArrivalCode = parcelOpt.get().getVisitedHops().get(parcelOpt.get().getVisitedHops().size() - 1).getCode();
             hopRepository.findFirstByCode(hopArrivalCode).get().getLocationCoordinates();
             parcelOpt.get().getRecipient().getStreet();
-             */
+
             changeTrackingStateToDelivered(parcelOpt.get());
         } else {
             throw new BLParcelNotFound(trackingId);
