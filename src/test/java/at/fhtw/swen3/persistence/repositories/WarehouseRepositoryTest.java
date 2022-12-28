@@ -37,6 +37,9 @@ class WarehouseRepositoryTest {
                 .nextHop(warehouseNextHopsEntity)
                 .build();
 
+        // set warehouse for next hop+
+        warehouseNextHopsEntity.setWarehouse(warehouseEntity);
+
 
         warehouseRepository.save(warehouseEntity);
 
