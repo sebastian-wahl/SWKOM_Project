@@ -9,52 +9,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.util.TestPropertyValues;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.test.web.server.LocalServerPort;
-import org.springframework.context.ApplicationContextInitializer;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.testcontainers.containers.JdbcDatabaseContainer;
-import org.testcontainers.containers.PostgisContainerProvider;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.List;
 
+import static at.fhtw.swen3.services.dto.TrackingInformation.StateEnum.*;
+import static at.fhtw.swen3.util.FileUtil.readFromFile;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(SpringExtension.class)
-@SpringBootTest(classes = Application.class, webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-@ContextConfiguration(initializers = {ParcelIntegrationTest.Initializer.class})
-@TestPropertySource("/integration-tests.properties")
-@Testcontainers
-class ParcelIntegrationTest {
-
-    @Container
-    public static JdbcDatabaseContainer postgis = new PostgisContainerProvider().newInstance("15-3.3-alpine");
-
-    static class Initializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-        public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
-            TestPropertyValues.of(
-                    "spring.datasource.url=" + postgis.getJdbcUrl(),
-                    "spring.datasource.username=" + postgis.getUsername(),
-                    "spring.datasource.password=" + postgis.getPassword()
-            ).applyTo(configurableApplicationContext.getEnvironment());
-        }
-    }
-
-    @LocalServerPort
-    private int port;
+class ParcelIntegrationTest extends BaseIntegrationTest {
 
     private HttpClient httpClient;
 
@@ -69,18 +35,94 @@ class ParcelIntegrationTest {
 
     @Test
     void test_whole_parcel_tracking_flow() throws IOException {
-        // 1. Import all warehouses from json file
+        // 0. Import all warehouses from json file
         postImportWarehouses();
 
-        // 2. Submit a parcel
+        // 1. Submit a parcel
         String trackingId = postSubmitParcel();
 
-        // 3. Expect parcel tracking state to be PICKUP and futureHops have correct HopArrivals
-        getTrackParcel(trackingId);
+        // 2. Expect parcel tracking state to be PICKUP and futureHops have correct HopArrivals
+        TrackingInformation trackingInformation = checkParcelTrackingInfoInStatePickup(trackingId);
 
+        // 3. Report parcel hop
+        postReportParcelHop(trackingId, findNextHop(trackingInformation.getFutureHops()));
+
+        // 4. Expect parcel tracking state to be INTRANSPORT and futureHops have correct HopArrivals
+        checkParcelTrackingInfoInStateInTransport(trackingId);
+
+        // 5. Report parcel delivery
+        postReportParcelDelivery(trackingId);
+
+        // 6. Expect parcel tracking state to be DELIVERED and futureHops to be empty
+        checkParcelTrackingInfoInStateInDelivered(trackingId);
     }
 
-    private void getTrackParcel(String trackingId) throws IOException {
+    private void postReportParcelDelivery(String trackingId) {
+        // WHEN
+        ResponseEntity<Void> response = httpClient.post("/parcel/" + trackingId + "/reportDelivery", null, Void.class);
+
+        // THEN
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    private void postReportParcelHop(String trackingId, HopArrival nextHop) {
+        // GIVEN
+        String hopCode = nextHop.getCode();
+
+        // WHEN
+        ResponseEntity<Void> response = httpClient.post("/parcel/" + trackingId + "/reportHop/" + hopCode, null, Void.class);
+
+        // THEN
+        assertThat(response).isNotNull();
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
+
+    private TrackingInformation checkParcelTrackingInfoInStatePickup(String trackingId) throws IOException {
+        // WHEN
+        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, PICKUP);
+
+        // THEN
+        assertThat(response.getBody()).isNotNull();
+
+        assertThat(response.getBody().getVisitedHops()).isEmpty();
+
+        List<HopArrival> expectedFutureHops = mapper.readValue(readFromFile("expected-hops.json"), new TypeReference<>(){});
+        assertThat(response.getBody().getFutureHops())
+                .usingRecursiveFieldByFieldElementComparatorOnFields("code")
+                .containsSequence(expectedFutureHops);
+
+        return response.getBody();
+    }
+
+    private void checkParcelTrackingInfoInStateInTransport(String trackingId) throws IOException {
+        // WHEN
+        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, INTRANSPORT);
+
+        // THEN
+        assertThat(response.getBody()).isNotNull();
+
+        List<HopArrival> expectedHops = mapper.readValue(readFromFile("expected-hops.json"), new TypeReference<>(){});
+        assertThat(response.getBody().getVisitedHops())
+                .usingRecursiveFieldByFieldElementComparatorOnFields("code")
+                .containsSequence(expectedHops.remove(0));
+
+        assertThat(response.getBody().getFutureHops())
+                .usingRecursiveFieldByFieldElementComparatorOnFields("code")
+                .containsSequence(expectedHops);
+    }
+
+
+    private void checkParcelTrackingInfoInStateInDelivered(String trackingId) {
+        // WHEN
+        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, DELIVERED);
+
+        // THEN
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getFutureHops()).isEmpty();
+    }
+
+    private ResponseEntity<TrackingInformation> getTrackParcel(String trackingId, TrackingInformation.StateEnum expectedState) {
         // WHEN
         ResponseEntity<TrackingInformation> response = httpClient.get("/parcel/" + trackingId, TrackingInformation.class);
 
@@ -88,13 +130,9 @@ class ParcelIntegrationTest {
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().getState()).isEqualTo(expectedState);
 
-        assertThat(response.getBody().getState()).isEqualTo(TrackingInformation.StateEnum.PICKUP);
-        assertThat(response.getBody().getVisitedHops()).isEmpty();
-
-        List<HopArrival> expectedFutureHops = mapper.readValue(readFromFile("expected-future-hops.json"), new TypeReference<>(){});
-        assertThat(response.getBody().getFutureHops()).usingRecursiveFieldByFieldElementComparatorOnFields("code")
-                .containsSequence(expectedFutureHops);
+        return response;
     }
 
     private void postImportWarehouses() throws IOException {
@@ -102,7 +140,7 @@ class ParcelIntegrationTest {
         String body = readFromFile("trucks-light-transferwh.json");
 
         // WHEN
-        ResponseEntity<String> response = httpClient.post("/warehouse", body, String.class);
+        ResponseEntity<Void> response = httpClient.post("/warehouse", body, Void.class);
 
         // THEN
         assertThat(response).isNotNull();
@@ -127,7 +165,8 @@ class ParcelIntegrationTest {
         return trackingId;
     }
 
-    private String readFromFile(String filename) throws IOException {
-        return Files.readString(Paths.get("src/integration-test/resources/" + filename));
+    private HopArrival findNextHop(List<HopArrival> futureHops) {
+        assertThat(futureHops).hasSizeGreaterThanOrEqualTo(2);
+        return futureHops.get(1);
     }
 }
