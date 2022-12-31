@@ -4,6 +4,7 @@ import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -22,6 +23,11 @@ class ParcelRepositoryTest {
     private static final String HOP_DESC = "Test";
     @Autowired
     private ParcelRepository parcelRepository;
+
+    @AfterEach
+    void tearDown() {
+        parcelRepository.deleteAll();
+    }
 
     @Test
     void GIVEN_correct_trackingId_WHEN_findFirstByTrackingId_RETURN_parcel_with_hop_arrival() {

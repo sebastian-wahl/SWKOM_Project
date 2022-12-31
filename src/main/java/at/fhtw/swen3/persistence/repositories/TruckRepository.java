@@ -10,11 +10,11 @@ import java.util.Optional;
 
 public interface TruckRepository extends JpaRepository<TruckEntity, Long> {
     @Query(value =
-        "SELECT * FROM truck_entity t " +
-            "INNER JOIN hop h on t.id = h.id " +
-            "INNER JOIN geo_coordinate gc on h.geo_coordinate_id " +
-        "ORDER BY st_distance(gc.location, :location) " +
-        "LIMIT 1",
-    nativeQuery = true)
+            "SELECT * FROM truck_entity t " +
+                    "INNER JOIN hop h on t.id = h.id " +
+                    "INNER JOIN geo_coordinate gc on h.geo_coordinate_id = gc.id " +
+                    "ORDER BY st_distance(gc.location, :location) " +
+                    "LIMIT 1",
+            nativeQuery = true)
     Optional<TruckEntity> findFirstNearestTruck(@Param("location") Point location);
 }

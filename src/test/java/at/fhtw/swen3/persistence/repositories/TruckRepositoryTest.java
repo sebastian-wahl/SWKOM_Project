@@ -2,6 +2,7 @@ package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.TruckEntity;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
@@ -24,6 +25,11 @@ class TruckRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        //truckRepository.deleteAll();
+    }
+
+    @AfterEach
+    void tearDown() {
         truckRepository.deleteAll();
     }
 
@@ -68,7 +74,7 @@ class TruckRepositoryTest {
 
     private TruckEntity buildTruck(double lat, double lon) {
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point)wktToGeometry(String.format("POINT(%f %f)", lat, lon)))
+                .location((Point) wktToGeometry(String.format("POINT(%f %f)", lat, lon)))
                 .build();
 
         return TruckEntity.builder()
