@@ -163,18 +163,14 @@ public class ParcelServiceImpl implements ParcelService {
             String senderWarehouseCode = warehouseNextHopsSender.get().getWarehouse().getCode();
             if (recipientWarehouseCode.equals(senderWarehouseCode)) {
                 // found common parent
+                log.debug("Found common parent");
+
                 hopArrivalList.add(HopArrivalEntity.fromHop(warehouseNextHopsSender.get().getWarehouse(), dateTimeSender));
                 recipientHopList.add(warehouseNextHopsRecipient.get());
 
                 Collections.reverse(recipientHopList);
-                OffsetDateTime dateTimeRecipient = dateTimeSender;
-                for (WarehouseNextHopsEntity recipientNextHop : recipientHopList) {
-                    dateTimeRecipient = dateTimeRecipient.plus(recipientNextHop.getTraveltimeMins(), ChronoUnit.MINUTES)
-                            .plus(recipientNextHop.getWarehouse().getProcessingDelayMins(), ChronoUnit.MINUTES);
-                    hopArrivalList.add(HopArrivalEntity.fromHop(recipientNextHop.getHop(), dateTimeRecipient));
-                }
+                addRecipientHopsToHopArrivalList(recipientHopList, hopArrivalList, dateTimeSender);
 
-                log.debug("Found common parent");
                 break;
             }
             recipientHopList.add(warehouseNextHopsRecipient.get());
@@ -188,6 +184,15 @@ public class ParcelServiceImpl implements ParcelService {
         // map hopEntity to hopArrivalEntity and set for futurehops
         parcel.setFutureHops(hopArrivalList);
         log.debug("Future hops set");
+    }
+
+    private void addRecipientHopsToHopArrivalList(List<WarehouseNextHopsEntity> recipientHopList, List<HopArrivalEntity> hopArrivalList, OffsetDateTime startDateTime) {
+        OffsetDateTime dateTimeRecipient = startDateTime;
+        for (WarehouseNextHopsEntity recipientNextHop : recipientHopList) {
+            dateTimeRecipient = dateTimeRecipient.plus(recipientNextHop.getTraveltimeMins(), ChronoUnit.MINUTES)
+                    .plus(recipientNextHop.getWarehouse().getProcessingDelayMins(), ChronoUnit.MINUTES);
+            hopArrivalList.add(HopArrivalEntity.fromHop(recipientNextHop.getHop(), dateTimeRecipient));
+        }
     }
 
     private ParcelEntity setTrackingIdAndSaveParcel(ParcelEntity parcel) {
