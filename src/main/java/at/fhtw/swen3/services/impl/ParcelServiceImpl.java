@@ -13,7 +13,6 @@ import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.exception.BLException.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.BLException.BLParcelNotFound;
 import at.fhtw.swen3.services.exception.BLException.BLSubmitParcelAddressIncorrect;
-import at.fhtw.swen3.services.exception.BLException.BLWarehouseNextHopsNotFound;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import com.github.curiousoddman.rgxgen.RgxGen;
 import lombok.extern.slf4j.Slf4j;
@@ -135,55 +134,81 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     private void predictNextHops(ParcelEntity parcel, TruckEntity nearestRecipientTruck, TruckEntity nearestSenderTruck) {
-        List<WarehouseNextHopsEntity> recipientHopList = new ArrayList<>();
-        List<HopArrivalEntity> hopArrivalList = new ArrayList<>();
+        List<HopEntity> nextSenderHops = retrieveAllHopParents(nearestSenderTruck);
+        List<HopEntity> nextRecipientHops = retrieveAllHopParents(nearestRecipientTruck);
 
-        HopEntity tmpRecipient = nearestRecipientTruck;
-        HopEntity tmpSender = nearestSenderTruck;
+        HopEntity commonParent = null;
 
-        // set date beforehand to set fixed start point
-        OffsetDateTime dateTimeSender = OffsetDateTime.now();
-        // initially add sender truck to hopArrivalList
-        hopArrivalList.add(HopArrivalEntity.fromHop(tmpSender, dateTimeSender));
-        while (true) {
-            // get warehouse from nearestTruck
-            Optional<WarehouseNextHopsEntity> warehouseNextHopsRecipient = warehouseNextHopsRepository.findByHop(tmpRecipient);
-            Optional<WarehouseNextHopsEntity> warehouseNextHopsSender = warehouseNextHopsRepository.findByHop(tmpSender);
-            if (warehouseNextHopsRecipient.isEmpty()) {
-                throw new BLWarehouseNextHopsNotFound(nearestRecipientTruck.getCode());
-            }
-            if (warehouseNextHopsSender.isEmpty()) {
-                throw new BLWarehouseNextHopsNotFound(nearestSenderTruck.getCode());
-            }
-            // calculate sender date
-            dateTimeSender = dateTimeSender.plus(warehouseNextHopsSender.get().getTraveltimeMins(), ChronoUnit.MINUTES)
-                    .plus(warehouseNextHopsSender.get().getHop().getProcessingDelayMins(), ChronoUnit.MINUTES);
-
-            String recipientWarehouseCode = warehouseNextHopsRecipient.get().getWarehouse().getCode();
-            String senderWarehouseCode = warehouseNextHopsSender.get().getWarehouse().getCode();
-            if (recipientWarehouseCode.equals(senderWarehouseCode)) {
-                // found common parent
+        while (!nextRecipientHops.isEmpty() && !nextSenderHops.isEmpty()) {
+            HopEntity lastSenderHop = getLastElement(nextSenderHops);
+            HopEntity lastRecipientHop = getLastElement(nextRecipientHops);
+            if (!lastSenderHop.getCode().equals(lastRecipientHop.getCode())) {
                 log.debug("Found common parent");
-
-                hopArrivalList.add(HopArrivalEntity.fromHop(warehouseNextHopsSender.get().getWarehouse(), dateTimeSender));
-                recipientHopList.add(warehouseNextHopsRecipient.get());
-
-                Collections.reverse(recipientHopList);
-                addRecipientHopsToHopArrivalList(recipientHopList, hopArrivalList, dateTimeSender);
-
                 break;
             }
-            recipientHopList.add(warehouseNextHopsRecipient.get());
-            hopArrivalList.add(HopArrivalEntity.fromHop(warehouseNextHopsSender.get().getWarehouse(), dateTimeSender));
+            removeLastElement(nextSenderHops);
+            removeLastElement(nextRecipientHops);
+            commonParent = lastSenderHop;
+        }
+        Collections.reverse(nextRecipientHops);
+        List<HopEntity> finalFutureHopsSender = new ArrayList<>();
+        finalFutureHopsSender.add(nearestSenderTruck);
+        finalFutureHopsSender.addAll(nextSenderHops);
+        finalFutureHopsSender.add(commonParent);
 
-            // setting warehouses for the next iteration
-            tmpRecipient = warehouseNextHopsRecipient.get().getWarehouse();
-            tmpSender = warehouseNextHopsSender.get().getWarehouse();
+
+        List<HopEntity> finalFutureHopsRecipient = new ArrayList<>();
+        finalFutureHopsRecipient.addAll(nextRecipientHops);
+        finalFutureHopsRecipient.add(nearestRecipientTruck);
+
+        List<HopArrivalEntity> hopArrivalEntityList = new ArrayList<>();
+
+        OffsetDateTime arrivalTime = OffsetDateTime.now();
+        for (int i = 0; i < finalFutureHopsSender.size(); i++) {
+            HopEntity hop = finalFutureHopsSender.get(i);
+            hopArrivalEntityList.add(HopArrivalEntity.fromHop(hop, arrivalTime));
+            if (i < finalFutureHopsSender.size() - 1) {
+                arrivalTime = arrivalTime.plus(calculateDelaySender(hop), ChronoUnit.MINUTES);
+            }
+        }
+        for (HopEntity hop : finalFutureHopsRecipient) {
+            arrivalTime = arrivalTime.plus(calculateDelayRecipient(hop), ChronoUnit.MINUTES);
+            hopArrivalEntityList.add(HopArrivalEntity.fromHop(hop, arrivalTime));
         }
 
-        // map hopEntity to hopArrivalEntity and set for futurehops
-        parcel.setFutureHops(hopArrivalList);
+        parcel.setFutureHops(hopArrivalEntityList);
         log.debug("Future hops set");
+    }
+
+    private HopEntity getLastElement(List<HopEntity> list) {
+        return list.get(list.size() - 1);
+    }
+
+    private HopEntity removeLastElement(List<HopEntity> list) {
+        return list.remove(list.size() - 1);
+    }
+
+    private int calculateDelaySender(HopEntity hopEntity) {
+        return hopEntity.getProcessingDelayMins() + hopEntity.getPreviousHop().getTraveltimeMins();
+    }
+
+    private int calculateDelayRecipient(HopEntity hopEntity) {
+        return hopEntity.getPreviousHop().getWarehouse().getProcessingDelayMins() + hopEntity.getPreviousHop().getTraveltimeMins();
+    }
+
+    private List<HopEntity> retrieveAllHopParents(TruckEntity truckEntity) {
+        List<HopEntity> nextHops = new ArrayList<>();
+        HopEntity nextHop = truckEntity.getPreviousHop().getWarehouse();
+        while (nextHop != null) {
+            nextHops.add(nextHop);
+
+            // root warehouse
+            if (nextHop.getPreviousHop() == null) {
+                break;
+            }
+            nextHop = nextHop.getPreviousHop().getWarehouse();
+        }
+        return nextHops;
     }
 
     private void addRecipientHopsToHopArrivalList(List<WarehouseNextHopsEntity> recipientHopList, List<HopArrivalEntity> hopArrivalList, OffsetDateTime startDateTime) {

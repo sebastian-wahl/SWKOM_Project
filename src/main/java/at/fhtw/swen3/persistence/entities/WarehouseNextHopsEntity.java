@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 public class WarehouseNextHopsEntity implements BaseEntity {
     @Column(name = "ID")
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column(name = "TRAVELTIME_MINS")

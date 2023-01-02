@@ -3,6 +3,7 @@ package at.fhtw.swen3.controller.rest;
 import at.fhtw.swen3.services.BLException;
 import at.fhtw.swen3.services.dto.Error;
 import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
+import at.fhtw.swen3.services.exception.BLException.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.BLException.BLSubmitParcelAddressIncorrect;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.badRequest().body(error);
     }
 
-    @ExceptionHandler({BLSubmitParcelAddressIncorrect.class})
+    @ExceptionHandler({BLSubmitParcelAddressIncorrect.class, BLNoTruckFound.class})
     public ResponseEntity<Error> handleRecipientAddressException(BLException exception) {
         Error error = new Error().errorMessage(exception.getMessage());
         log.info(exception.getMessage());
