@@ -28,13 +28,17 @@ public class WarehouseNextHopsEntity implements BaseEntity {
 
     @NotNull
     @Valid
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @MapsId
+    @OneToOne(mappedBy = "previousHop", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private HopEntity hop;
 
     // ref WarehouseEntity
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "WAREHOUSE_ID")
     private WarehouseEntity warehouse;
+
+    public void setHop(HopEntity hop) {
+        this.hop = hop;
+        hop.setPreviousHop(this);
+    }
 }
 

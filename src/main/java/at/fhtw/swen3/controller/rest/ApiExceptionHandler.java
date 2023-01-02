@@ -6,6 +6,7 @@ import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
 import at.fhtw.swen3.services.exception.BLException.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.BLException.BLSubmitParcelAddressIncorrect;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -27,6 +28,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Error error = new Error().errorMessage(exception.getMessage());
         log.info(exception.getMessage());
 
-        return ResponseEntity.badRequest().body(error);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
     }
 }
