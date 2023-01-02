@@ -66,7 +66,7 @@ class HopMapperTest {
                 .description(DESCRIPTION)
                 .processingDelayMins(PROCESSING_DELAY_MINS)
                 .locationName(LOCATION_NAME)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT("+LAT+" "+LON+")")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry(LAT, LON)).build())
                 .regionGeoJson(REGION_GEO_JSON)
                 .numberPlate(NUMBER_PLATE)
                 .build();
@@ -125,7 +125,7 @@ class HopMapperTest {
                 .description(DESCRIPTION)
                 .processingDelayMins(PROCESSING_DELAY_MINS)
                 .locationName(LOCATION_NAME)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT("+LAT+" "+LON+")")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry(LAT, LON)).build())
                 .build();
 
         // WHEN

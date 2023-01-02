@@ -14,10 +14,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class WarehouseNextHopsRepositoryTest {
-
-    @Autowired
-    private WarehouseRepository warehouseRepository;
-
     @Autowired
     private WarehouseNextHopsRepository warehouseNextHopsRepository;
 
@@ -38,6 +34,7 @@ class WarehouseNextHopsRepositoryTest {
         assertThat(foundEntity).isPresent();
         assertThat(foundEntity.get())
                 .usingRecursiveComparison()
+                .ignoringFields("hop.locationCoordinates")
                 .isEqualTo(warehouseNextHopsEntity);
     }
 

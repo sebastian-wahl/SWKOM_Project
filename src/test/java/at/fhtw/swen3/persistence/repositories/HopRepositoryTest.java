@@ -23,7 +23,7 @@ class HopRepositoryTest {
     void GIVEN_correct_hopecode_WHEN_findFirstByCode_RETURN_hop_with_geocoordinate() {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point) wktToGeometry("POINT(1 1)"))
+                .location((Point) wktToGeometry(1, 1))
                 .build();
 
         HopEntity hopEntity = HopEntity.builder()

@@ -65,7 +65,7 @@ class TransferwarehouseMapperTest {
                 .code(CODE)
                 .description(DESCRIPTION)
                 .hopType(HOP_TYPE)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT("+LAT+" "+LON+")")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry(LAT, LON)).build())
                 .processingDelayMins(PROCESSING_DELAYS_MINS)
                 .locationName(LOCATION_NAME)
                 .build();

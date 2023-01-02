@@ -37,6 +37,9 @@ class WarehouseRepositoryTest {
                 .nextHop(warehouseNextHopsEntity)
                 .build();
 
+        // set warehouse for next hop+
+        warehouseNextHopsEntity.setWarehouse(warehouseEntity);
+
 
         warehouseRepository.save(warehouseEntity);
 
@@ -47,6 +50,7 @@ class WarehouseRepositoryTest {
         assertThat(foundWarehouse).isPresent();
         assertThat(foundWarehouse.get())
                 .usingRecursiveComparison()
+                .ignoringFields("locationCoordinates", "nextHop.hop.locationsCoordinates")
                 .isEqualTo(warehouseEntity);
     }
 

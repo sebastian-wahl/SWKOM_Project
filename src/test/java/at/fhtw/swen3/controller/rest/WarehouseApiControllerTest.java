@@ -130,7 +130,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry(1, 2)).build())
                 .nextHop(warehouseNextHops)
                 .build());
     }
@@ -142,7 +142,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry(1, 2)).build())
                 .build();
     }
 
@@ -153,7 +153,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry(1, 2)).build())
                 .build();
     }
 

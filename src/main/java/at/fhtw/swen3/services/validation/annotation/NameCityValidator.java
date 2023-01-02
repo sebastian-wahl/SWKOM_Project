@@ -11,7 +11,7 @@ public class NameCityValidator implements ConstraintValidator<NameCityValidation
         if (city == null) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^[A-Z]([a-zA-ZßÖÜÄöüä\\- ]*[a-zA-Zß])*$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[A-Z]([a-zA-ZßÖÜÄöüä\\- +.])*$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(city);
         return matcher.find();
     }

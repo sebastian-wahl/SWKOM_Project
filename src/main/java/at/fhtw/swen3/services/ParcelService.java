@@ -5,7 +5,7 @@ import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import java.util.Optional;
 
 public interface ParcelService {
-    Optional<ParcelEntity> reportParcelDelivery(String trackingId);
+    void reportParcelDelivery(String trackingId);
 
     Optional<ParcelEntity> reportParcelHop(String trackingId, String code);
 
