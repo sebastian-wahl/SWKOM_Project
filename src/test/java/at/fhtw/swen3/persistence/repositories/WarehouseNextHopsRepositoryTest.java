@@ -20,7 +20,7 @@ class WarehouseNextHopsRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        //warehouseNextHopsRepository.deleteAll();
+        warehouseNextHopsRepository.deleteAll();
     }
 
     @Test

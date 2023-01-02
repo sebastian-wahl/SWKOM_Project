@@ -25,7 +25,7 @@ class TruckRepositoryTest {
 
     @BeforeEach
     void setUp() {
-        //truckRepository.deleteAll();
+        truckRepository.deleteAll();
     }
 
     @AfterEach

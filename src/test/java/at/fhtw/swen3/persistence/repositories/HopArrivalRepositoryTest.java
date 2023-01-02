@@ -21,7 +21,7 @@ class HopArrivalRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        //hopArrivalRepository.deleteAll();
+        hopArrivalRepository.deleteAll();
     }
 
     @Test

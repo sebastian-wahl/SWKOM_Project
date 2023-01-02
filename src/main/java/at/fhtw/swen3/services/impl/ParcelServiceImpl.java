@@ -128,7 +128,7 @@ public class ParcelServiceImpl implements ParcelService {
         }
         log.debug("Address validated");
 
-        predictNextHops(parcel, nearestRecipientTruckOpt.get(), nearestSenderTruckOpt.get());
+        //predictNextHops(parcel, nearestRecipientTruckOpt.get(), nearestSenderTruckOpt.get());
         ParcelEntity out = setTrackingIdAndSaveParcel(parcel);
         log.debug("Parcel saved successfully");
         return out;
