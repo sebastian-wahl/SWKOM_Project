@@ -21,7 +21,7 @@ class GeoCoordinateRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        geoCoordinateRepository.deleteAll();
+        //geoCoordinateRepository.deleteAll();
     }
 
     @Test

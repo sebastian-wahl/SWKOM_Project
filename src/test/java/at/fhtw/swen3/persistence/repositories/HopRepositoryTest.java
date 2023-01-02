@@ -22,7 +22,7 @@ class HopRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        hopRepository.deleteAll();
+        //hopRepository.deleteAll();
     }
 
     @Test

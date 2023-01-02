@@ -19,7 +19,7 @@ class WarehouseRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        warehouseRepository.deleteAll();
+        //warehouseRepository.deleteAll();
     }
 
     @Test

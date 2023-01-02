@@ -30,7 +30,7 @@ class TruckRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        truckRepository.deleteAll();
+        //truckRepository.deleteAll();
     }
 
     @Test

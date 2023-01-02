@@ -19,7 +19,7 @@ class RecipientRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        recipientRepository.deleteAll();
+        //recipientRepository.deleteAll();
     }
 
     @Test

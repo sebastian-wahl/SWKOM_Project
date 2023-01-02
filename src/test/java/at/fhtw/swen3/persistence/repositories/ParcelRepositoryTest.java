@@ -26,7 +26,7 @@ class ParcelRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        parcelRepository.deleteAll();
+        //parcelRepository.deleteAll();
     }
 
     @Test

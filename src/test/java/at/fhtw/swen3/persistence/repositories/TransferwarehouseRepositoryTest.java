@@ -19,7 +19,7 @@ class TransferwarehouseRepositoryTest {
 
     @AfterEach
     void tearDown() {
-        transferwarehouseRepository.deleteAll();
+        //transferwarehouseRepository.deleteAll();
     }
 
     @Test
