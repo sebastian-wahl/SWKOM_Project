@@ -1,7 +1,6 @@
 package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,11 +17,6 @@ class HopArrivalRepositoryTest {
     private static final String HOP_DESC = "Test";
     @Autowired
     private HopArrivalRepository hopArrivalRepository;
-
-    @AfterEach
-    void tearDown() {
-        hopArrivalRepository.deleteAll();
-    }
 
     @Test
     void GIVEN_correct_trackingId_WHEN_findFirstByTrackingId_RETURN_parcel_with_hop_arrival() {

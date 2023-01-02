@@ -13,6 +13,7 @@ public interface TruckRepository extends JpaRepository<TruckEntity, Long> {
             "SELECT * FROM truck_entity t " +
                     "INNER JOIN hop h on t.id = h.id " +
                     "INNER JOIN geo_coordinate gc on h.geo_coordinate_id = gc.id " +
+                    "WHERE gc.location IS NOT NULL " +
                     "ORDER BY st_distance(gc.location, :location) " +
                     "LIMIT 1",
             nativeQuery = true)

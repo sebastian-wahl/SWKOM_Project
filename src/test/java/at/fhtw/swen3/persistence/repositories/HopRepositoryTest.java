@@ -2,7 +2,6 @@ package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.HopEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,16 +19,11 @@ class HopRepositoryTest {
     @Autowired
     private HopRepository hopRepository;
 
-    @AfterEach
-    void tearDown() {
-        hopRepository.deleteAll();
-    }
-
     @Test
     void GIVEN_correct_hopecode_WHEN_findFirstByCode_RETURN_hop_with_geocoordinate() {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point) wktToGeometry("POINT(1 1)"))
+                .location((Point) wktToGeometry(1, 1))
                 .build();
 
         HopEntity hopEntity = HopEntity.builder()

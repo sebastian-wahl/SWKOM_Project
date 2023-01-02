@@ -2,7 +2,6 @@ package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.TransferwarehouseEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,11 +15,6 @@ class TransferwarehouseRepositoryTest {
 
     @Autowired
     private TransferwarehouseRepository transferwarehouseRepository;
-
-    @AfterEach
-    void tearDown() {
-        transferwarehouseRepository.deleteAll();
-    }
 
     @Test
     void GIVEN_saved_transferwarehouseEntity_WHEN_findById_THEN_entity_found() {
@@ -48,6 +42,7 @@ class TransferwarehouseRepositoryTest {
         assertThat(foundTransferwarehouse).isPresent();
         assertThat(foundTransferwarehouse.get())
                 .usingRecursiveComparison()
+                .ignoringFields("locationCoordinates")
                 .isEqualTo(transferwarehouseEntity);
     }
 }

@@ -62,7 +62,6 @@ class ParcelServiceImplTest {
     private TruckRepository truckRepository;
 
     @Test
-    @Disabled
     void GIVEN_validAddress_WHEN_submitting_parcel_THEN_return_correct_parcel() {
         // GIVEN
         when(geoEncodingService.encodeAddress(any())).thenReturn(Optional.of(buildRecipientGeo())).thenReturn(Optional.of(buildSenderGeo()));

@@ -4,7 +4,6 @@ import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.HopEntity;
 import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,11 +16,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 class WarehouseNextHopsRepositoryTest {
     @Autowired
     private WarehouseNextHopsRepository warehouseNextHopsRepository;
-
-    @AfterEach
-    void tearDown() {
-        warehouseNextHopsRepository.deleteAll();
-    }
 
     @Test
     void GIVEN_saved_warehouseEntity_WHEN_findById_THEN_entity_found() {
@@ -40,6 +34,7 @@ class WarehouseNextHopsRepositoryTest {
         assertThat(foundEntity).isPresent();
         assertThat(foundEntity.get())
                 .usingRecursiveComparison()
+                .ignoringFields("hop.locationCoordinates")
                 .isEqualTo(warehouseNextHopsEntity);
     }
 

@@ -2,7 +2,6 @@ package at.fhtw.swen3.persistence.repositories;
 
 
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,16 +18,11 @@ class GeoCoordinateRepositoryTest {
     @Autowired
     private GeoCoordinateRepository geoCoordinateRepository;
 
-    @AfterEach
-    void tearDown() {
-        geoCoordinateRepository.deleteAll();
-    }
-
     @Test
     void GIVEN_saved_geoCoordinateEntity_WHEN_findById_THEN_entity_found() {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point) wktToGeometry("POINT(1 2)"))
+                .location((Point) wktToGeometry(1, 2))
                 .build();
 
         geoCoordinateRepository.save(geoCoordinateEntity);

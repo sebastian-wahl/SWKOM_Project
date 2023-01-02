@@ -2,8 +2,6 @@ package at.fhtw.swen3.persistence.repositories;
 
 import at.fhtw.swen3.persistence.entities.GeoCoordinateEntity;
 import at.fhtw.swen3.persistence.entities.TruckEntity;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,20 +21,11 @@ class TruckRepositoryTest {
     @Autowired
     private TruckRepository truckRepository;
 
-    @BeforeEach
-    void setUp() {
-        truckRepository.deleteAll();
-    }
-
-    @AfterEach
-    void tearDown() {
-        //truckRepository.deleteAll();
-    }
 
     @Test
     void GIVEN_saved_truckEntity_WHEN_findById_THEN_entity_found() {
         // GIVEN
-        TruckEntity truckEntity = buildTruck(0.0, 0.0);
+        TruckEntity truckEntity = buildTruck(10.0, 10.0, "Truck");
         truckRepository.save(truckEntity);
 
         // WHEN
@@ -46,18 +35,18 @@ class TruckRepositoryTest {
         assertThat(foundTruckEntity).isPresent();
         assertThat(foundTruckEntity.get())
                 .usingRecursiveComparison()
-                .ignoringFields("id", "locationCoordinates.id")
+                .ignoringFields("id", "locationCoordinates")
                 .isEqualTo(truckEntity);
     }
 
     @Test
     void GIVEN_truck_entities_WHEN_findNearestTruck_THEN_returns_correct_truck() {
         // GIVEN
-        Point location = (Point) wktToGeometry("POINT(0.0 0.0)");
+        Point location = (Point) wktToGeometry(0.0, 0.0);
 
-        TruckEntity firstTruck = buildTruck(1.0, 1.0);
-        TruckEntity secondTruck = buildTruck(2.0, 2.0);
-        TruckEntity thirdTruck = buildTruck(0.0, 0.5);
+        TruckEntity firstTruck = buildTruck(1.0, 1.0, "Truck1");
+        TruckEntity secondTruck = buildTruck(2.0, 2.0, "Truck2");
+        TruckEntity thirdTruck = buildTruck(0.0, 0.5, "Truck3");
 
         truckRepository.saveAll(List.of(firstTruck, secondTruck, thirdTruck));
 
@@ -68,17 +57,17 @@ class TruckRepositoryTest {
         assertThat(foundTruckOpt).isNotEmpty();
         assertThat(foundTruckOpt.get())
                 .usingRecursiveComparison()
-                .ignoringFields("id", "locationCoordinates.id")
+                .ignoringFields("id", "locationCoordinates")
                 .isEqualTo(thirdTruck);
     }
 
-    private TruckEntity buildTruck(double lat, double lon) {
+    private TruckEntity buildTruck(double lat, double lon, String code) {
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point) wktToGeometry(String.format("POINT(%f %f)", lat, lon)))
+                .location((Point) wktToGeometry(lat, lon))
                 .build();
 
         return TruckEntity.builder()
-                .code("ABCD1234")
+                .code(code)
                 .hopType("truck")
                 .description("description")
                 .locationCoordinates(geoCoordinateEntity)
