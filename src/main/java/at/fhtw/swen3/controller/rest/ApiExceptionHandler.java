@@ -2,9 +2,9 @@ package at.fhtw.swen3.controller.rest;
 
 import at.fhtw.swen3.services.BLException;
 import at.fhtw.swen3.services.dto.Error;
-import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
-import at.fhtw.swen3.services.exception.BLException.BLNoTruckFound;
-import at.fhtw.swen3.services.exception.BLException.BLSubmitParcelAddressIncorrect;
+import at.fhtw.swen3.services.exception.blexception.BLEntityValidationException;
+import at.fhtw.swen3.services.exception.blexception.BLNoTruckFound;
+import at.fhtw.swen3.services.exception.blexception.BLSubmitParcelAddressIncorrect;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

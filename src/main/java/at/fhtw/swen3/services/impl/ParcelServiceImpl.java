@@ -3,21 +3,23 @@ package at.fhtw.swen3.services.impl;
 import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.gps.service.models.Address;
 import at.fhtw.swen3.gps.service.models.GeoEncodingCoordinate;
-import at.fhtw.swen3.persistence.entities.*;
+import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
+import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.TruckRepository;
-import at.fhtw.swen3.persistence.repositories.WarehouseNextHopsRepository;
 import at.fhtw.swen3.services.ParcelService;
-import at.fhtw.swen3.services.exception.BLException.BLNoTruckFound;
-import at.fhtw.swen3.services.exception.BLException.BLParcelNotFound;
-import at.fhtw.swen3.services.exception.BLException.BLSubmitParcelAddressIncorrect;
+import at.fhtw.swen3.services.exception.blexception.BLNoTruckFound;
+import at.fhtw.swen3.services.exception.blexception.BLParcelNotFound;
+import at.fhtw.swen3.services.exception.blexception.BLSubmitParcelAddressIncorrect;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import com.github.curiousoddman.rgxgen.RgxGen;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.locationtech.jts.geom.Point;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
@@ -32,6 +34,7 @@ import static at.fhtw.swen3.util.JTSUtil.geoEncodingCoordinateToGeometry;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class ParcelServiceImpl implements ParcelService {
 
     private final EntityValidatorService entityValidatorService;
@@ -43,21 +46,6 @@ public class ParcelServiceImpl implements ParcelService {
     private final GeoEncodingService geoEncodingService;
 
     private final TruckRepository truckRepository;
-
-    private final WarehouseNextHopsRepository warehouseNextHopsRepository;
-
-    @Autowired
-    public ParcelServiceImpl(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository,
-                             HopRepository hopRepository, GeoEncodingService geoEncodingService, TruckRepository truckRepository,
-                             WarehouseNextHopsRepository warehouseNextHopsRepository) {
-        this.entityValidatorService = entityValidatorService;
-        this.parcelRepository = parcelRepository;
-        this.hopRepository = hopRepository;
-        this.geoEncodingService = geoEncodingService;
-        this.truckRepository = truckRepository;
-        this.warehouseNextHopsRepository = warehouseNextHopsRepository;
-
-    }
 
     @Override
     public void reportParcelDelivery(String trackingId) {
@@ -85,14 +73,6 @@ public class ParcelServiceImpl implements ParcelService {
         if (parcelOpt.isPresent() && hopOptional.isPresent()) {
             ParcelEntity parcel = parcelOpt.get();
 
-            HopArrivalEntity hopArrivalEntity = HopArrivalEntity.builder()
-                    .dateTime(OffsetDateTime.now())
-                    .code(hopOptional.get().getCode())
-                    .description(hopOptional.get().getDescription())
-                    .build();
-
-
-            //parcel.getVisitedHops().add(hopArrivalEntity);
             parcelRepository.save(parcel);
             return Optional.of(parcel);
         }
@@ -111,10 +91,10 @@ public class ParcelServiceImpl implements ParcelService {
         Optional<GeoEncodingCoordinate> recipientCoordinates = geoEncodingService.encodeAddress(recipientAddress);
         Optional<GeoEncodingCoordinate> senderCoordinates = geoEncodingService.encodeAddress(senderAddress);
         if (senderCoordinates.isEmpty()) {
-            throw new BLSubmitParcelAddressIncorrect(senderAddress, null);
+            throw new BLSubmitParcelAddressIncorrect(senderAddress, true);
         }
         if (recipientCoordinates.isEmpty()) {
-            throw new BLSubmitParcelAddressIncorrect(null, recipientAddress);
+            throw new BLSubmitParcelAddressIncorrect(recipientAddress, false);
 
         }
         Optional<TruckEntity> nearestRecipientTruckOpt = this.truckRepository.findFirstNearestTruck((Point) geoEncodingCoordinateToGeometry(recipientCoordinates.get()));
@@ -156,9 +136,7 @@ public class ParcelServiceImpl implements ParcelService {
         finalFutureHopsSender.addAll(nextSenderHops);
         finalFutureHopsSender.add(commonParent);
 
-
-        List<HopEntity> finalFutureHopsRecipient = new ArrayList<>();
-        finalFutureHopsRecipient.addAll(nextRecipientHops);
+        List<HopEntity> finalFutureHopsRecipient = new ArrayList<>(nextRecipientHops);
         finalFutureHopsRecipient.add(nearestRecipientTruck);
 
         List<HopArrivalEntity> hopArrivalEntityList = new ArrayList<>();
@@ -171,6 +149,7 @@ public class ParcelServiceImpl implements ParcelService {
                 arrivalTime = arrivalTime.plus(calculateDelaySender(hop), ChronoUnit.MINUTES);
             }
         }
+
         for (HopEntity hop : finalFutureHopsRecipient) {
             arrivalTime = arrivalTime.plus(calculateDelayRecipient(hop), ChronoUnit.MINUTES);
             hopArrivalEntityList.add(HopArrivalEntity.fromHop(hop, arrivalTime));
@@ -184,8 +163,8 @@ public class ParcelServiceImpl implements ParcelService {
         return list.get(list.size() - 1);
     }
 
-    private HopEntity removeLastElement(List<HopEntity> list) {
-        return list.remove(list.size() - 1);
+    private void removeLastElement(List<HopEntity> list) {
+        list.remove(list.size() - 1);
     }
 
     private int calculateDelaySender(HopEntity hopEntity) {
@@ -209,15 +188,6 @@ public class ParcelServiceImpl implements ParcelService {
             nextHop = nextHop.getPreviousHop().getWarehouse();
         }
         return nextHops;
-    }
-
-    private void addRecipientHopsToHopArrivalList(List<WarehouseNextHopsEntity> recipientHopList, List<HopArrivalEntity> hopArrivalList, OffsetDateTime startDateTime) {
-        OffsetDateTime dateTimeRecipient = startDateTime;
-        for (WarehouseNextHopsEntity recipientNextHop : recipientHopList) {
-            dateTimeRecipient = dateTimeRecipient.plus(recipientNextHop.getTraveltimeMins(), ChronoUnit.MINUTES)
-                    .plus(recipientNextHop.getWarehouse().getProcessingDelayMins(), ChronoUnit.MINUTES);
-            hopArrivalList.add(HopArrivalEntity.fromHop(recipientNextHop.getHop(), dateTimeRecipient));
-        }
     }
 
     private ParcelEntity setTrackingIdAndSaveParcel(ParcelEntity parcel) {

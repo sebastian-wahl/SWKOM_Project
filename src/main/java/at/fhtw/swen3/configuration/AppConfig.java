@@ -2,7 +2,10 @@ package at.fhtw.swen3.configuration;
 
 import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.gps.service.impl.OpenStreetMapsEncodingProxy;
-import at.fhtw.swen3.persistence.repositories.*;
+import at.fhtw.swen3.persistence.repositories.HopRepository;
+import at.fhtw.swen3.persistence.repositories.ParcelRepository;
+import at.fhtw.swen3.persistence.repositories.TruckRepository;
+import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.impl.ParcelServiceImpl;
@@ -18,8 +21,8 @@ public class AppConfig {
     @Bean
     public ParcelService parcelService(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository,
                                        HopRepository hopRepository, GeoEncodingService geoEncodingService,
-                                       TruckRepository truckRepository, WarehouseNextHopsRepository warehouseNextHopsRepository) {
-        return new ParcelServiceImpl(entityValidatorService, parcelRepository, hopRepository, geoEncodingService, truckRepository, warehouseNextHopsRepository);
+                                       TruckRepository truckRepository) {
+        return new ParcelServiceImpl(entityValidatorService, parcelRepository, hopRepository, geoEncodingService, truckRepository);
     }
 
     @Bean
