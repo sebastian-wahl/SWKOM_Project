@@ -10,15 +10,15 @@ public class BLEntityValidationException extends BLException {
     private final List<String> validationMessages;
 
     public BLEntityValidationException(List<String> validationMessages) {
+        super(concatenateValidationMessages(validationMessages));
         this.validationMessages = validationMessages;
-        this.message = concatenateValidationMessages();
     }
 
     public List<String> getValidationMessages() {
         return validationMessages;
     }
 
-    private String concatenateValidationMessages() {
+    private static String concatenateValidationMessages(List<String> validationMessages) {
         List<String> messages = validationMessages.stream().filter(message -> !message.isBlank()).toList();
         return String.join("; ", messages);
     }
