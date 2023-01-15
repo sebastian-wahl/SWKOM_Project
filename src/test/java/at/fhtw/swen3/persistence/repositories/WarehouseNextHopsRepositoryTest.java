@@ -20,10 +20,13 @@ class WarehouseNextHopsRepositoryTest {
     @Test
     void GIVEN_saved_warehouseEntity_WHEN_findById_THEN_entity_found() {
         // GIVEN
+        HopEntity hopEntity = buildHopEntity();
+
         WarehouseNextHopsEntity warehouseNextHopsEntity = WarehouseNextHopsEntity.builder()
                 .traveltimeMins(1)
-                .hop(buildHopEntity())
+                .hop(hopEntity)
                 .build();
+        hopEntity.setReferencedNextHop(warehouseNextHopsEntity);
 
         warehouseNextHopsRepository.save(warehouseNextHopsEntity);
 

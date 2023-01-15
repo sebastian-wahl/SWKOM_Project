@@ -18,12 +18,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
 //@SpringBootTest
@@ -63,55 +65,32 @@ class ParcelServiceImplTest {
     @Test
     void GIVEN_validAddress_WHEN_submitting_parcel_THEN_return_correct_parcel() {
         // GIVEN
+        TruckEntity truckRecipient = buildTruckRecipient();
+        TruckEntity truckSender = buildTruckSender();
+
         when(geoEncodingService.encodeAddress(any())).thenReturn(Optional.of(buildRecipientGeo())).thenReturn(Optional.of(buildSenderGeo()));
-        when(truckRepository.findFirstNearestTruck(any())).thenReturn(Optional.of(buildTruckRecipient())).thenReturn(Optional.of(buildTruckSender()));
+        when(truckRepository.findFirstNearestTruck(any())).thenReturn(Optional.of(truckRecipient)).thenReturn(Optional.of(truckSender));
 
         // two layer of warehouses .thenReturn(WarehouseA).thenReturn(WarehouseB).thenReturn(WarehouseC).ThenReturn(WarehouseC)
         // warehouseA (Recipient) -> warehouseC
         // warehouseB (Sender) -> warehouseC
         // warehouseC (C1 -> Sender)
-        WarehouseNextHopsEntity warehouseNextHopsA = WarehouseNextHopsEntity.builder()
-                .hop(buildTruckRecipient())
-                .traveltimeMins(10)
-                .build();
-        WarehouseNextHopsEntity warehouseNextHopsB = WarehouseNextHopsEntity.builder()
-                .hop(buildTruckSender())
-                .traveltimeMins(10)
-                .build();
-        WarehouseEntity warehouseA = WarehouseEntity.builder()
-                .processingDelayMins(5)
-                .code("WarehouseA")
-                .nextHop(warehouseNextHopsA)
-                .build();
-        warehouseNextHopsA.setWarehouse(warehouseA);
+        WarehouseNextHopsEntity warehouseNextHopsA = buildWarehouseNextHopsEntity(truckRecipient, 10);
+        WarehouseNextHopsEntity warehouseNextHopsB = buildWarehouseNextHopsEntity(truckSender, 10);
 
-        WarehouseEntity warehouseB = WarehouseEntity.builder()
-                .processingDelayMins(5)
-                .code("WarehouseB")
-                .nextHop(warehouseNextHopsB)
-                .build();
-        warehouseNextHopsB.setWarehouse(warehouseB);
+        WarehouseEntity warehouseA = buildWarehouse("WarehouseA", warehouseNextHopsA);
+        WarehouseEntity warehouseB = buildWarehouse("WarehouseB", warehouseNextHopsB);
 
-        WarehouseNextHopsEntity warehouseNextHopsC1 = WarehouseNextHopsEntity.builder()
-                .hop(warehouseA)
-                .traveltimeMins(15)
-                .build();
-        WarehouseNextHopsEntity warehouseNextHopsC2 = WarehouseNextHopsEntity.builder()
-                .hop(warehouseB)
-                .traveltimeMins(10)
-                .build();
+        WarehouseNextHopsEntity warehouseNextHopsC1 = buildWarehouseNextHopsEntity(warehouseA, 15);
+        WarehouseNextHopsEntity warehouseNextHopsC2 = buildWarehouseNextHopsEntity(warehouseB, 10);
 
+        WarehouseEntity warehouseC = buildWarehouse("WarehouseC", warehouseNextHopsC1, warehouseNextHopsC2);
 
-        WarehouseEntity warehouseC = WarehouseEntity.builder()
-                .processingDelayMins(5)
-                .code("WarehouseC")
-                .nextHop(warehouseNextHopsC1)
-                .nextHop(warehouseNextHopsC2)
-                .build();
-        warehouseNextHopsC1.setWarehouse(warehouseC);
-        warehouseNextHopsC2.setWarehouse(warehouseC);
-
-        when(warehouseNextHopsRepository.findByHop(any())).thenReturn(Optional.of(warehouseNextHopsA)).thenReturn(Optional.of(warehouseNextHopsB)).thenReturn(Optional.of(warehouseNextHopsC1)).thenReturn(Optional.of(warehouseNextHopsC2));
+        lenient().when(warehouseNextHopsRepository.findByHop(any()))
+                .thenReturn(Optional.of(warehouseNextHopsA))
+                .thenReturn(Optional.of(warehouseNextHopsB))
+                .thenReturn(Optional.of(warehouseNextHopsC1))
+                .thenReturn(Optional.of(warehouseNextHopsC2));
         // return parameter when calling save methode
         when(parcelRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
@@ -134,6 +113,25 @@ class ParcelServiceImplTest {
         assertThat(parcelFinished.getFutureHops().get(4).getDateTime()).isCloseTo(timeNow, within(1, ChronoUnit.MINUTES));
     }
 
+    private WarehouseEntity buildWarehouse(String code, WarehouseNextHopsEntity... warehouseNextHops) {
+        List<WarehouseNextHopsEntity> nextHopsList = List.of(warehouseNextHops);
+        WarehouseEntity warehouse = WarehouseEntity.builder()
+                .processingDelayMins(5)
+                .code(code)
+                .nextHops(nextHopsList)
+                .build();
+        nextHopsList.forEach(nextHop -> nextHop.setWarehouse(warehouse));
+        return warehouse;
+    }
+
+    private WarehouseNextHopsEntity buildWarehouseNextHopsEntity(HopEntity hop, int travelTimeMins) {
+        WarehouseNextHopsEntity warehouseNextHopsEntity = WarehouseNextHopsEntity.builder()
+                .traveltimeMins(travelTimeMins)
+                .build();
+        warehouseNextHopsEntity.setHop(hop);
+        return warehouseNextHopsEntity;
+    }
+
     @Test
     void GIVEN_invalidAddress_WHEN_submitting_parcel_THEN_throw_exception() {
         when(geoEncodingService.encodeAddress(any())).thenReturn(Optional.empty()).thenReturn(Optional.of(buildSenderGeo()));
@@ -151,7 +149,6 @@ class ParcelServiceImplTest {
                 .hopType("Truck")
                 .processingDelayMins(10)
                 .numberPlate(RECIPIENT_NUMBER_PLATE)
-                .processingDelayMins(10)
                 .build();
     }
 

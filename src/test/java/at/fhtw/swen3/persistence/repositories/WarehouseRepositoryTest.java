@@ -21,10 +21,13 @@ class WarehouseRepositoryTest {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder().build();
 
+        HopEntity hopEntity = buildHopEntity();
+
         WarehouseNextHopsEntity warehouseNextHopsEntity = WarehouseNextHopsEntity.builder()
                 .traveltimeMins(1)
-                .hop(buildHopEntity())
+                .hop(hopEntity)
                 .build();
+        hopEntity.setReferencedNextHop(warehouseNextHopsEntity);
 
         WarehouseEntity warehouseEntity = WarehouseEntity.builder()
                 .code("ABCD1234")

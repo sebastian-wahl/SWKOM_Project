@@ -168,24 +168,24 @@ public class ParcelServiceImpl implements ParcelService {
     }
 
     private int calculateDelaySender(HopEntity hopEntity) {
-        return hopEntity.getProcessingDelayMins() + hopEntity.getPreviousHop().getTraveltimeMins();
+        return hopEntity.getProcessingDelayMins() + hopEntity.getReferencedNextHop().getTraveltimeMins();
     }
 
     private int calculateDelayRecipient(HopEntity hopEntity) {
-        return hopEntity.getPreviousHop().getWarehouse().getProcessingDelayMins() + hopEntity.getPreviousHop().getTraveltimeMins();
+        return hopEntity.getReferencedNextHop().getWarehouse().getProcessingDelayMins() + hopEntity.getReferencedNextHop().getTraveltimeMins();
     }
 
     private List<HopEntity> retrieveAllHopParents(TruckEntity truckEntity) {
         List<HopEntity> nextHops = new ArrayList<>();
-        HopEntity nextHop = truckEntity.getPreviousHop().getWarehouse();
+        HopEntity nextHop = truckEntity.getReferencedNextHop().getWarehouse();
         while (nextHop != null) {
             nextHops.add(nextHop);
 
             // root warehouse
-            if (nextHop.getPreviousHop() == null) {
+            if (nextHop.getReferencedNextHop() == null) {
                 break;
             }
-            nextHop = nextHop.getPreviousHop().getWarehouse();
+            nextHop = nextHop.getReferencedNextHop().getWarehouse();
         }
         return nextHops;
     }
