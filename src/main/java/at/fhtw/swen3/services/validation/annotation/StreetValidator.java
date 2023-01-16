@@ -11,7 +11,7 @@ public class StreetValidator implements ConstraintValidator<StreetValidation, St
         if (street == null) {
             return false;
         }
-        Pattern pattern = Pattern.compile("^[a-zA-Zß ]+ \\d(((\\/)*([a-zA-z0-9]))|(\\d[a-zA-z0-9]))*$", Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[a-zA-ZßäöüÄÖÜ ]+ \\d(((\\/){0,1}\\w)|(\\d\\w))*$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(street);
         return matcher.find();
     }
