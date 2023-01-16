@@ -76,12 +76,25 @@ public class ParcelServiceImpl implements ParcelService {
 
             validateCodeFirstInFutureHops(parcel, code);
             moveHopArrivalToVisited(parcel);
+            setReportHopTrackingState(parcel, code);
 
             parcelRepository.save(parcel);
             return Optional.of(parcel);
         }
         log.info("Parcel with trackingId={} not found", trackingId);
         return Optional.empty();
+    }
+
+    private void setReportHopTrackingState(ParcelEntity parcel, String code) {
+        if (isLastTruck(parcel, code)) {
+            parcel.setState(TrackingInformationState.INTRUCKDELIVERY);
+        } else {
+            parcel.setState(TrackingInformationState.INTRANSPORT);
+        }
+    }
+
+    private boolean isLastTruck(ParcelEntity parcel, String code) {
+        return parcel.getFutureHops().isEmpty() && code.equals(getLastElement(parcel.getVisitedHops()).getCode());
     }
 
     private void validateCodeFirstInFutureHops(ParcelEntity parcel, String code) {
@@ -184,11 +197,11 @@ public class ParcelServiceImpl implements ParcelService {
         log.debug("Future hops set");
     }
 
-    private HopEntity getLastElement(List<HopEntity> list) {
+    private <T> T getLastElement(List<T> list) {
         return list.get(list.size() - 1);
     }
 
-    private void removeLastElement(List<HopEntity> list) {
+    private <T> void removeLastElement(List<T> list) {
         list.remove(list.size() - 1);
     }
 
