@@ -39,14 +39,12 @@ public class WarehouseApiController implements WarehouseApi {
 
     @Override
     public ResponseEntity<Warehouse> exportWarehouses() {
-        // ToDo change to .of
-        return ResponseEntity.ok(warehouseService.exportWarehouses().map(WarehouseMapper.INSTANCE::toDto).orElse(null));
+        return ResponseEntity.of(warehouseService.exportWarehouses().map(WarehouseMapper.INSTANCE::toDto));
     }
 
     @Override
     public ResponseEntity<Hop> getWarehouse(String code) {
-        // ToDo change to .of
-        return ResponseEntity.ok(warehouseService.getWarehouse(code).map(HopMapper.INSTANCE::toDto).orElse(null));
+        return ResponseEntity.of(warehouseService.getWarehouse(code).map(HopMapper.INSTANCE::toDto));
     }
 
     @Override
