@@ -19,10 +19,9 @@ import org.springframework.web.client.RestTemplate;
 @Configuration
 public class AppConfig {
     @Bean
-    public ParcelService parcelService(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository,
-                                       HopRepository hopRepository, GeoEncodingService geoEncodingService,
-                                       TruckRepository truckRepository) {
-        return new ParcelServiceImpl(entityValidatorService, parcelRepository, hopRepository, geoEncodingService, truckRepository);
+    public ParcelService parcelService(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository
+                                        , GeoEncodingService geoEncodingService, TruckRepository truckRepository) {
+        return new ParcelServiceImpl(entityValidatorService, parcelRepository, geoEncodingService, truckRepository);
     }
 
     @Bean
