@@ -288,7 +288,7 @@ class ParcelServiceImplTest {
     void GIVEN_used_tracking_code_WHEN_transferring_parcel_THEN_throw_exception() {
         // GIVEN
         // mock check tracking id
-        when(parcelRepository.findFirstByTrackingId(any())).thenReturn(Optional.of(buildParcelWithTrackingCode(TRACKING_CODE1)));
+        when(parcelRepository.findFirstByTrackingId(any())).thenReturn(Optional.of(buildParcel(TRACKING_CODE1)));
 
         // WHEN
         ParcelEntity parcel = buildParcel(TRACKING_CODE1);
