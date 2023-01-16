@@ -20,6 +20,8 @@ import java.util.List;
 @Entity
 @Table(name = "PARCEL")
 public class ParcelEntity implements BaseEntity {
+    public static final String TRACKING_ID_PATTERN = "^[A-Z0-9]{9}$";
+
     @Column(name = "ID")
     @Id
     @GeneratedValue

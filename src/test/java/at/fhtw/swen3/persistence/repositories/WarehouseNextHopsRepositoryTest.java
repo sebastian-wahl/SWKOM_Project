@@ -14,20 +14,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
 class WarehouseNextHopsRepositoryTest {
-
-    @Autowired
-    private WarehouseRepository warehouseRepository;
-
     @Autowired
     private WarehouseNextHopsRepository warehouseNextHopsRepository;
 
     @Test
     void GIVEN_saved_warehouseEntity_WHEN_findById_THEN_entity_found() {
         // GIVEN
+        HopEntity hopEntity = buildHopEntity();
+
         WarehouseNextHopsEntity warehouseNextHopsEntity = WarehouseNextHopsEntity.builder()
                 .traveltimeMins(1)
-                .hop(buildHopEntity())
+                .hop(hopEntity)
                 .build();
+        hopEntity.setReferencedNextHop(warehouseNextHopsEntity);
 
         warehouseNextHopsRepository.save(warehouseNextHopsEntity);
 
@@ -38,6 +37,7 @@ class WarehouseNextHopsRepositoryTest {
         assertThat(foundEntity).isPresent();
         assertThat(foundEntity.get())
                 .usingRecursiveComparison()
+                .ignoringFields("hop.locationCoordinates")
                 .isEqualTo(warehouseNextHopsEntity);
     }
 

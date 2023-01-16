@@ -20,6 +20,7 @@ import javax.validation.constraints.NotNull;
 public class WarehouseNextHopsEntity implements BaseEntity {
     @Column(name = "ID")
     @Id
+    @GeneratedValue
     private Long id;
 
     @Column(name = "TRAVELTIME_MINS")
@@ -27,8 +28,17 @@ public class WarehouseNextHopsEntity implements BaseEntity {
 
     @NotNull
     @Valid
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    @MapsId
+    @OneToOne(mappedBy = "referencedNextHop", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private HopEntity hop;
+
+    // ref WarehouseEntity
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "WAREHOUSE_ID")
+    private WarehouseEntity warehouse;
+
+    public void setHop(HopEntity hop) {
+        this.hop = hop;
+        hop.setReferencedNextHop(this);
+    }
 }
 

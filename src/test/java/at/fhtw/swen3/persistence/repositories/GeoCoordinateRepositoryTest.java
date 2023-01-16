@@ -22,7 +22,7 @@ class GeoCoordinateRepositoryTest {
     void GIVEN_saved_geoCoordinateEntity_WHEN_findById_THEN_entity_found() {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point) wktToGeometry("POINT(1 2)"))
+                .location((Point) wktToGeometry(1, 2))
                 .build();
 
         geoCoordinateRepository.save(geoCoordinateEntity);

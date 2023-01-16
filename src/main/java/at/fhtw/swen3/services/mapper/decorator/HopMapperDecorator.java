@@ -8,10 +8,7 @@ import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Transferwarehouse;
 import at.fhtw.swen3.services.dto.Truck;
 import at.fhtw.swen3.services.dto.Warehouse;
-import at.fhtw.swen3.services.mapper.HopMapper;
-import at.fhtw.swen3.services.mapper.TransferwarehouseMapper;
-import at.fhtw.swen3.services.mapper.TruckMapper;
-import at.fhtw.swen3.services.mapper.WarehouseMapper;
+import at.fhtw.swen3.services.mapper.*;
 
 public abstract class HopMapperDecorator implements HopMapper {
 
@@ -28,7 +25,7 @@ public abstract class HopMapperDecorator implements HopMapper {
         } else if (hop instanceof Truck truck) {
             return TruckMapper.INSTANCE.fromDto(truck);
         } else if (hop instanceof Warehouse warehouse) {
-            return WarehouseMapper.INSTANCE.fromDto(warehouse);
+            return WarehouseMapper.INSTANCE.fromDto(warehouse, new JpaWarehouseContext());
         }
         return delegate.fromDto(hop);
     }

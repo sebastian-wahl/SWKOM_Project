@@ -1,12 +1,10 @@
 package at.fhtw.swen3.services.mapper;
 
 import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseEntity;
 import at.fhtw.swen3.persistence.entities.WarehouseNextHopsEntity;
-import at.fhtw.swen3.services.dto.GeoCoordinate;
-import at.fhtw.swen3.services.dto.Hop;
-import at.fhtw.swen3.services.dto.Warehouse;
-import at.fhtw.swen3.services.dto.WarehouseNextHops;
+import at.fhtw.swen3.services.dto.*;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +21,43 @@ class WarehouseMapperTest {
     public static final int PROCESSING_DELAY_MINS = 2;
     public static final double LAT = 1.0;
     public static final double LON = 2.0;
+    public static final String CODE = "CODE";
+
+    @Test
+    void GIVEN_dto_WHEN_fromDto_THEN_maps_to_entity() {
+        // GIVEN
+        WarehouseNextHops dto = new WarehouseNextHops()
+                .traveltimeMins(TRAVELTIME_MINS)
+                .hop(new Truck().code(CODE));
+
+        // WHEN
+        WarehouseNextHopsEntity entity = WarehouseMapper.INSTANCE.fromDto(dto, new JpaWarehouseContext());
+
+        // THEN
+        assertThat(entity).isNotNull();
+        assertThat(entity.getWarehouse()).isNull();
+        assertThat(entity.getTraveltimeMins()).isEqualTo(TRAVELTIME_MINS);
+        assertThat(entity.getHop()).isNotNull();
+        assertThat(entity.getHop().getCode()).isEqualTo(CODE);
+    }
+
+    @Test
+    void GIVEN_entity_WHEN_toDto_THEN_maps_to_dto() {
+        // GIVEN
+        WarehouseNextHopsEntity entity = WarehouseNextHopsEntity.builder()
+                .traveltimeMins(TRAVELTIME_MINS)
+                .hop(TruckEntity.builder().code(CODE).build())
+                .build();
+
+        // WHEN
+        WarehouseNextHops dto = WarehouseMapper.INSTANCE.toDto(entity);
+
+        // THEN
+        assertThat(dto).isNotNull();
+        assertThat(dto.getTraveltimeMins()).isEqualTo(TRAVELTIME_MINS);
+        assertThat(dto.getHop()).isNotNull();
+        assertThat(dto.getHop().getCode()).isEqualTo(CODE);
+    }
 
     @Test
     void GIVEN_dto_WHEN_map_fromDto_THEN_maps_correctly_to_entity() {
@@ -35,7 +70,7 @@ class WarehouseMapperTest {
                 .addNextHopsItem(warehouseNextHop);
 
         // WHEN
-        WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.fromDto(warehouseDto);
+        WarehouseEntity warehouseEntity = WarehouseMapper.INSTANCE.fromDto(warehouseDto, new JpaWarehouseContext());
 
         // THEN
         assertThat(warehouseEntity).isNotNull();
@@ -54,6 +89,7 @@ class WarehouseMapperTest {
         WarehouseNextHopsEntity warehouseNextHopsEntity = warehouseEntity.getNextHops().get(0);
         assertThat(warehouseNextHopsEntity).isNotNull();
         assertThat(warehouseNextHopsEntity.getTraveltimeMins()).isEqualTo(TRAVELTIME_MINS);
+        assertThat(warehouseNextHopsEntity.getWarehouse().getCode()).isEqualTo(WAREHOUSE_CODE);
         HopEntity hopEntity = warehouseNextHopsEntity.getHop();
         assertThat(hopEntity).isNotNull();
         assertThat(hopEntity.getCode()).isEqualTo(NEXT_HOP_CODE);
