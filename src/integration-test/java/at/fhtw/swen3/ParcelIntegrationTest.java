@@ -68,11 +68,11 @@ class ParcelIntegrationTest extends BaseIntegrationTest {
 
         // 4.
         // Report parcel hop at Truck
-        // Expect parcel tracking state to be INTRANSPORT with correct visited and future hopArrivals
+        // Expect parcel tracking state to be INTRUCKDELIVERY with correct visited and future hopArrivals
         HopArrival nextFutureHop3 = moveFirstFutureHopToVisited(expectedVisitedHops, expectedFutureHops);
         postReportParcelHop(trackingId, nextFutureHop3);
 
-        checkParcelTrackingInfoInState(trackingId, INTRANSPORT, expectedVisitedHops, expectedFutureHops);
+        checkParcelTrackingInfoInState(trackingId, INTRUCKDELIVERY, expectedVisitedHops, expectedFutureHops);
 
         // 5.
         // Report parcel delivery
