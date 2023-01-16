@@ -5,6 +5,7 @@ import at.fhtw.swen3.services.dto.Error;
 import at.fhtw.swen3.services.exception.blexception.BLEntityValidationException;
 import at.fhtw.swen3.services.exception.blexception.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.blexception.BLSubmitParcelAddressIncorrect;
+import at.fhtw.swen3.services.exception.blexception.BLTrackingNumberExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,13 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         Error error = new Error().errorMessage(exception.getMessage());
         log.info(exception.getMessage());
 
+        return ResponseEntity.badRequest().body(error);
+    }
+
+    @ExceptionHandler({BLTrackingNumberExistException.class})
+    public ResponseEntity<Error> handleTrackingNumberExistsException(BLTrackingNumberExistException exception) {
+        Error error = new Error().errorMessage(exception.getMessage());
+        log.info(exception.getMessage());
         return ResponseEntity.badRequest().body(error);
     }
 
