@@ -42,6 +42,7 @@ class TransferwarehouseRepositoryTest {
         assertThat(foundTransferwarehouse).isPresent();
         assertThat(foundTransferwarehouse.get())
                 .usingRecursiveComparison()
+                .ignoringFields("locationCoordinates")
                 .isEqualTo(transferwarehouseEntity);
     }
 }
