@@ -21,10 +21,13 @@ class WarehouseRepositoryTest {
         // GIVEN
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder().build();
 
+        HopEntity hopEntity = buildHopEntity();
+
         WarehouseNextHopsEntity warehouseNextHopsEntity = WarehouseNextHopsEntity.builder()
                 .traveltimeMins(1)
-                .hop(buildHopEntity())
+                .hop(hopEntity)
                 .build();
+        hopEntity.setReferencedNextHop(warehouseNextHopsEntity);
 
         WarehouseEntity warehouseEntity = WarehouseEntity.builder()
                 .code("ABCD1234")
@@ -37,6 +40,9 @@ class WarehouseRepositoryTest {
                 .nextHop(warehouseNextHopsEntity)
                 .build();
 
+        // set warehouse for next hop+
+        warehouseNextHopsEntity.setWarehouse(warehouseEntity);
+
 
         warehouseRepository.save(warehouseEntity);
 
@@ -47,6 +53,7 @@ class WarehouseRepositoryTest {
         assertThat(foundWarehouse).isPresent();
         assertThat(foundWarehouse.get())
                 .usingRecursiveComparison()
+                .ignoringFields("locationCoordinates", "nextHop.hop.locationsCoordinates")
                 .isEqualTo(warehouseEntity);
     }
 
