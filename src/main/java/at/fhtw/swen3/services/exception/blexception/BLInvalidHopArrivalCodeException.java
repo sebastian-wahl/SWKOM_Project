@@ -1,4 +1,4 @@
-package at.fhtw.swen3.services.exception.BLException;
+package at.fhtw.swen3.services.exception.blexception;
 
 import at.fhtw.swen3.services.BLException;
 

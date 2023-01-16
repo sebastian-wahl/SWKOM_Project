@@ -8,8 +8,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Locale;
-
 import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 
 @Mapper
@@ -26,8 +24,7 @@ public interface GeoCoordinateMapper {
 
     @Named("mapLocation")
     static Point mapLocation(GeoCoordinate dto) {
-        String wktPoint = String.format(Locale.US,"POINT(%f %f)", dto.getLat(), dto.getLon());
-        return (Point) wktToGeometry(wktPoint);
+        return (Point) wktToGeometry(dto.getLat(), dto.getLon());
     }
 
     @Named("mapLat")
