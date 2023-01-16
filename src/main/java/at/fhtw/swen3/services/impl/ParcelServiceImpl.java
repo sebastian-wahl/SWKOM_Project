@@ -12,6 +12,7 @@ import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.TruckRepository;
 import at.fhtw.swen3.services.ParcelService;
+import at.fhtw.swen3.services.exception.blexception.BLInvalidHopArrivalCodeException;
 import at.fhtw.swen3.services.exception.blexception.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.blexception.BLParcelNotFound;
 import at.fhtw.swen3.services.exception.blexception.BLSubmitParcelAddressIncorrect;
@@ -69,16 +70,35 @@ public class ParcelServiceImpl implements ParcelService {
         log.debug("Reporting parcel hop for hop with id {} and parcel with id {}", code, trackingId);
         Optional<ParcelEntity> parcelOpt = parcelRepository.findFirstByTrackingId(trackingId);
 
-        Optional<HopEntity> hopOptional = hopRepository.findFirstByCode(code);
         // add hop do parcel
-        if (parcelOpt.isPresent() && hopOptional.isPresent()) {
+        if (parcelOpt.isPresent()) {
             ParcelEntity parcel = parcelOpt.get();
+
+            validateCodeFirstInFutureHops(parcel, code);
+            moveHopArrivalToVisited(parcel);
 
             parcelRepository.save(parcel);
             return Optional.of(parcel);
         }
-        log.error("Reporting parcel not possible! Hop found: {}; Parcel found: {}", hopOptional.isPresent(), parcelOpt.isPresent());
+        log.info("Parcel with trackingId={} not found", trackingId);
         return Optional.empty();
+    }
+
+    private void validateCodeFirstInFutureHops(ParcelEntity parcel, String code) {
+        findFirstFutureHop(parcel)
+            .filter(hopArrival -> code.equals(hopArrival.getCode()))
+            .orElseThrow(() -> new BLInvalidHopArrivalCodeException(code));
+    }
+
+    private Optional<HopArrivalEntity> findFirstFutureHop(ParcelEntity parcel) {
+        return parcel.getFutureHops().stream().findFirst();
+    }
+
+    private void moveHopArrivalToVisited(ParcelEntity parcel) {
+        findFirstFutureHop(parcel).ifPresent(hopArrivalEntity -> {
+            parcel.getFutureHops().remove(hopArrivalEntity);
+            parcel.getVisitedHops().add(hopArrivalEntity);
+        });
     }
 
     @Override

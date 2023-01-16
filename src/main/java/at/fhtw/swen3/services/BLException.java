@@ -4,7 +4,7 @@ import lombok.Getter;
 
 public class BLException extends RuntimeException {
     @Getter
-    protected String message;
+    protected final String message;
 
     public BLException(String message) {
         super(message);
