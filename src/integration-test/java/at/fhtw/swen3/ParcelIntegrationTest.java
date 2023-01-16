@@ -103,9 +103,11 @@ class ParcelIntegrationTest extends BaseIntegrationTest {
         assertThat(response.getBody()).isNotNull();
 
         List<HopArrival> expectedHops = mapper.readValue(readFromFile("expected-hops.json"), new TypeReference<>(){});
+        HopArrival visitedHop = expectedHops.remove(0);
+
         assertThat(response.getBody().getVisitedHops())
                 .usingRecursiveFieldByFieldElementComparatorOnFields("code")
-                .containsSequence(expectedHops.remove(0));
+                .containsSequence(visitedHop);
 
         assertThat(response.getBody().getFutureHops())
                 .usingRecursiveFieldByFieldElementComparatorOnFields("code")
@@ -167,6 +169,6 @@ class ParcelIntegrationTest extends BaseIntegrationTest {
 
     private HopArrival findNextHop(List<HopArrival> futureHops) {
         assertThat(futureHops).hasSizeGreaterThanOrEqualTo(2);
-        return futureHops.get(1);
+        return futureHops.get(0);
     }
 }
