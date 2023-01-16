@@ -9,6 +9,4 @@ public interface WarehouseRepository extends JpaRepository<WarehouseEntity, Long
     Optional<WarehouseEntity> getFirstByLevel(Integer level);
 
     void deleteAll();
-
-    //Optional<WarehouseEntity> getWarehouseEntityByNext
 }

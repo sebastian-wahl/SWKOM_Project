@@ -25,7 +25,7 @@ class GeoCoordinateMapperTest {
     @Test
     void GIVEN_entity_WHEN_toDto_THEN_mapped_to_dto() {
         GeoCoordinateEntity geoCoordinateEntity = GeoCoordinateEntity.builder()
-                .location((Point) wktToGeometry(1, 3))
+                .location((Point) wktToGeometry("POINT(1 3)"))
                 .build();
 
         GeoCoordinate geoCoordinateDto = GeoCoordinateMapper.INSTANCE.toDto(geoCoordinateEntity);

@@ -13,9 +13,9 @@ public interface ParcelMapper {
 
     ParcelMapper INSTANCE = Mappers.getMapper(ParcelMapper.class);
 
-    @Mapping(target = "state", constant = "PICKUP")
+    @Mapping(target = "state", constant = "TRANSFERRED")
     ParcelEntity fromDto(Parcel parcel);
-    @Mapping(target = "state", constant = "PICKUP")
+    @Mapping(target = "state", constant = "TRANSFERRED")
     ParcelEntity fromDto(String trackingId, Parcel parcel);
     Parcel toParcelDto(ParcelEntity parcel);
     NewParcelInfo toNewParcelInfoDto(ParcelEntity parcel);

@@ -1,7 +1,7 @@
 package at.fhtw.swen3.services.validation;
 
 import at.fhtw.swen3.persistence.entities.BaseEntity;
-import at.fhtw.swen3.services.exception.blexception.BLEntityValidationException;
+import at.fhtw.swen3.services.exception.BLException.BLEntityValidationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

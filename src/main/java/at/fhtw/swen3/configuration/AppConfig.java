@@ -4,7 +4,6 @@ import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.gps.service.impl.OpenStreetMapsEncodingProxy;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
-import at.fhtw.swen3.persistence.repositories.TruckRepository;
 import at.fhtw.swen3.persistence.repositories.WarehouseRepository;
 import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.WarehouseService;
@@ -18,11 +17,10 @@ import org.springframework.web.client.RestTemplate;
 
 @Configuration
 public class AppConfig {
+
     @Bean
-    public ParcelService parcelService(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository,
-                                       HopRepository hopRepository, GeoEncodingService geoEncodingService,
-                                       TruckRepository truckRepository) {
-        return new ParcelServiceImpl(entityValidatorService, parcelRepository, hopRepository, geoEncodingService, truckRepository);
+    public ParcelService parcelService(EntityValidatorService entityValidatorService, ParcelRepository parcelRepository, HopRepository hopRepository) {
+        return new ParcelServiceImpl(entityValidatorService, parcelRepository, hopRepository);
     }
 
     @Bean

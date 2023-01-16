@@ -35,14 +35,6 @@ public class HopArrivalEntity implements BaseEntity {
     @NotNull(message = "DateTime must not be null")
     private OffsetDateTime dateTime;
 
-    public static HopArrivalEntity fromHop(HopEntity hop, OffsetDateTime dateTime) {
-        return HopArrivalEntity.builder()
-                .code(hop.getCode())
-                .dateTime(dateTime)
-                .description(hop.getDescription())
-                .build();
-    }
-
     /*@OneToMany(mappedBy = "hopArrival")
     private List<ParcelHopArrivalEntity> parcelHopArrival = new ArrayList<>();*/
 

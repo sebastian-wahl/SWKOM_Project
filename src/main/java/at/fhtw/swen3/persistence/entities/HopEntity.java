@@ -48,9 +48,5 @@ public class HopEntity implements BaseEntity {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "GEO_COORDINATE_ID", referencedColumnName = "ID")
     private GeoCoordinateEntity locationCoordinates;
-
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "WAREHOUSE_NEXT_HOPS_ID")
-    private WarehouseNextHopsEntity referencedNextHop;
 }
 

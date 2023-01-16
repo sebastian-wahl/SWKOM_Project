@@ -26,7 +26,8 @@ public interface GeoCoordinateMapper {
 
     @Named("mapLocation")
     static Point mapLocation(GeoCoordinate dto) {
-        return (Point) wktToGeometry(dto.getLat(), dto.getLon());
+        String wktPoint = String.format(Locale.US,"POINT(%f %f)", dto.getLat(), dto.getLon());
+        return (Point) wktToGeometry(wktPoint);
     }
 
     @Named("mapLat")

@@ -51,6 +51,7 @@ public class ParcelApiController implements ParcelApi {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.fromDto(parcel);
 
         NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcelService.submitParcel(parcelEntity));
+
         return ResponseEntity.status(HttpStatus.CREATED).body(newParcelInfo);
     }
 

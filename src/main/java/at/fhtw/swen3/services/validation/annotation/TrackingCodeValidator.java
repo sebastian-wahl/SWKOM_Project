@@ -1,7 +1,5 @@
 package at.fhtw.swen3.services.validation.annotation;
 
-import at.fhtw.swen3.persistence.entities.ParcelEntity;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
@@ -13,7 +11,7 @@ public class TrackingCodeValidator implements ConstraintValidator<TrackingCodeVa
         if (street == null) {
             return false;
         }
-        Pattern pattern = Pattern.compile(ParcelEntity.TRACKING_ID_PATTERN, Pattern.CASE_INSENSITIVE);
+        Pattern pattern = Pattern.compile("^[A-Z0-9]{9}$", Pattern.CASE_INSENSITIVE);
         Matcher matcher = pattern.matcher(street);
         return matcher.find();
     }
