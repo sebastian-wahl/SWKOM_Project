@@ -7,6 +7,7 @@ import at.fhtw.swen3.services.WarehouseService;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.mapper.HopMapper;
+import at.fhtw.swen3.services.mapper.JpaWarehouseContext;
 import at.fhtw.swen3.services.mapper.WarehouseMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,19 +39,17 @@ public class WarehouseApiController implements WarehouseApi {
 
     @Override
     public ResponseEntity<Warehouse> exportWarehouses() {
-        // ToDo change to .of
-        return ResponseEntity.ok(warehouseService.exportWarehouses().map(WarehouseMapper.INSTANCE::toDto).orElse(null));
+        return ResponseEntity.of(warehouseService.exportWarehouses().map(WarehouseMapper.INSTANCE::toDto));
     }
 
     @Override
     public ResponseEntity<Hop> getWarehouse(String code) {
-        // ToDo change to .of
-        return ResponseEntity.ok(warehouseService.getWarehouse(code).map(HopMapper.INSTANCE::toDto).orElse(null));
+        return ResponseEntity.of(warehouseService.getWarehouse(code).map(HopMapper.INSTANCE::toDto));
     }
 
     @Override
     public ResponseEntity<Void> importWarehouses(Warehouse warehouseDto) {
-        WarehouseEntity warehouse = WarehouseMapper.INSTANCE.fromDto(warehouseDto);
+        WarehouseEntity warehouse = WarehouseMapper.INSTANCE.fromDto(warehouseDto, new JpaWarehouseContext());
         warehouseService.importWarehouses(warehouse);
         return ResponseEntity.ok(null);
     }

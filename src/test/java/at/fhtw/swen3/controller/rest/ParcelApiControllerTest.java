@@ -9,7 +9,6 @@ import at.fhtw.swen3.services.dto.NewParcelInfo;
 import at.fhtw.swen3.services.dto.Parcel;
 import at.fhtw.swen3.services.dto.Recipient;
 import at.fhtw.swen3.services.dto.TrackingInformation;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -41,7 +40,7 @@ class ParcelApiControllerTest {
     public static final String VALID_HOP_CODE = "ABCD1234";
     public static final String INVALID_HOP_CODE = "invalidCode";
 
-    @MockBean(name="parcelService")
+    @MockBean(name = "parcelService")
     private ParcelService parcelService;
 
     @Autowired
@@ -86,19 +85,6 @@ class ParcelApiControllerTest {
 
         assertThat(response).isNotNull();
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-    }
-
-    // ToDo remove disabled
-    @Test
-    @Disabled
-    void GIVEN_newParcelInfo_null_WHEN_submitParcel_THEN_404_not_found() {
-        doReturn(null).when(parcelService).submitParcel(any());
-        Parcel parcelDto = createParcel();
-
-        ResponseEntity<NewParcelInfo> response = parcelApiController.submitParcel(parcelDto);
-
-        assertThat(response).isNotNull();
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test

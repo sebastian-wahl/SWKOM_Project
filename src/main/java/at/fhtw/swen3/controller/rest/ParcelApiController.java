@@ -51,14 +51,12 @@ public class ParcelApiController implements ParcelApi {
         ParcelEntity parcelEntity = ParcelMapper.INSTANCE.fromDto(parcel);
 
         NewParcelInfo newParcelInfo = ParcelMapper.INSTANCE.toNewParcelInfoDto(parcelService.submitParcel(parcelEntity));
-
         return ResponseEntity.status(HttpStatus.CREATED).body(newParcelInfo);
     }
 
     @Override
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId) {
-        // ToDo change back to .of
-        return ResponseEntity.ok(parcelService.trackParcel(trackingId).map(parcelEntity -> ParcelMapper.INSTANCE.toTrackingInformationDto(parcelEntity)).orElse(null));
+        return ResponseEntity.of(parcelService.trackParcel(trackingId).map(parcelEntity -> ParcelMapper.INSTANCE.toTrackingInformationDto(parcelEntity)));
     }
 
     @Override

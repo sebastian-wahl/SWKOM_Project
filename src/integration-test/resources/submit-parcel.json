@@ -1,0 +1,17 @@
+{
+  "recipient": {
+    "name": "Recipient",
+    "street": "Höchstädtplatz 6",
+    "postalCode": "A-1200",
+    "city": "Wien",
+    "country": "Austria"
+  },
+  "sender": {
+    "name": "Sender",
+    "street": "Meidlinger Hauptstraße 62",
+    "postalCode": "A-1120",
+    "city": "Wien",
+    "country": "Austria"
+  },
+  "weight": 1.23
+}

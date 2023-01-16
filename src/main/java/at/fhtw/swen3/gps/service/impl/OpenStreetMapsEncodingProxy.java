@@ -45,6 +45,7 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
             return mapJsonToGeoCoordinateOptional(json);
         } catch (HttpClientErrorException e) {
             log.warn("Error while fetching geo coordinates");
+            // TODO: rethrow exception
         }
         return Optional.empty();
     }
@@ -52,7 +53,8 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
     private Optional<GeoEncodingCoordinate> mapJsonToGeoCoordinateOptional(String json) {
         ObjectMapper objectMapper = new ObjectMapper();
         try {
-            List<GeoEncodingCoordinate> coordinates = objectMapper.readValue(json, new TypeReference<>(){});
+            List<GeoEncodingCoordinate> coordinates = objectMapper.readValue(json, new TypeReference<>() {
+            });
             if (coordinates != null) {
                 log.debug("coordinates={}", coordinates);
                 return coordinates.stream().findFirst();
@@ -66,7 +68,7 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
     private URI buildUrl(Address address) {
         return UriComponentsBuilder.fromHttpUrl(OPENSTREETMAP_BASE_URL)
                 .queryParam(STREET_PARAM, address.getStreet())
-                .queryParam(POSTALCODE_PARAM, address.getPostalCode())
+                .queryParam(POSTALCODE_PARAM, address.getPostalCode().replaceFirst("A", ""))
                 .queryParam(CITY_PARAM, address.getCity())
                 .queryParam(COUNTRY_PARAM, address.getCountry())
                 .queryParam(FORMAT_PARAM, FORMAT)
