@@ -51,6 +51,6 @@ public class HopEntity implements BaseEntity {
 
     @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "WAREHOUSE_NEXT_HOPS_ID")
-    private WarehouseNextHopsEntity previousHop;
+    private WarehouseNextHopsEntity referencedNextHop;
 }
 
