@@ -3,7 +3,6 @@ package at.fhtw.swen3.services.impl;
 import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.gps.service.models.GeoEncodingCoordinate;
 import at.fhtw.swen3.persistence.entities.*;
-import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
 import at.fhtw.swen3.persistence.repositories.TruckRepository;
@@ -24,11 +23,11 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static at.fhtw.swen3.persistence.entities.enums.TrackingInformationState.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +43,7 @@ class ParcelServiceImplTest {
     public static final String SENDER_STREET = "Sender Street 12";
     public static final String SENDER_NUMBER_PLATE = "5678";
     public static final String RECIPIENT_NUMBER_PLATE = "1234";
-    
+
     @InjectMocks
     private ParcelServiceImpl parcelService;
 
@@ -74,11 +73,11 @@ class ParcelServiceImplTest {
         final String firstFutureHopCode = "firstFutureHop";
         final String secondFutureHopCode = "secondFutureHop";
 
-        ParcelEntity parcel = buildParcel();
+        ParcelEntity parcel = buildParcel(trackingId);
         parcel.setVisitedHops(buildHopArrivals(firstVisitedHopCode));
         parcel.setFutureHops(buildHopArrivals(firstFutureHopCode, secondFutureHopCode));
 
-        doReturn(Optional.of(parcel)).when(parcelRepository).findFirstByTrackingId(anyString());
+        doReturn(Optional.of(parcel)).when(parcelRepository).findFirstByTrackingId(trackingId);
 
         // WHEN
         Optional<ParcelEntity> processedParcel = parcelService.reportParcelHop(trackingId, firstFutureHopCode);
@@ -91,8 +90,28 @@ class ParcelServiceImplTest {
         assertThat(processedParcel.get().getFutureHops())
                 .usingRecursiveComparison()
                 .isEqualTo(buildHopArrivals(secondFutureHopCode));
+        assertThat(processedParcel.get().getState()).isEqualTo(INTRANSPORT);
     }
-    
+
+    @Test
+    void GIVEN_last_truck_WHEN_reportParcelHop_THEN_parcel_in_state_inTruckDelivery() {
+        // GIVEN
+        final String trackingId = "trackingId";
+        final String truckHopCode = "lastTruck";
+        ParcelEntity parcel = buildParcel(trackingId);
+        parcel.setVisitedHops(new ArrayList<>());
+        parcel.setFutureHops(buildHopArrivals(truckHopCode));
+
+        doReturn(Optional.of(parcel)).when(parcelRepository).findFirstByTrackingId(trackingId);
+
+        // WHEN
+        Optional<ParcelEntity> processedParcel = parcelService.reportParcelHop(trackingId, truckHopCode);
+
+        // THEN
+        assertThat(processedParcel).isPresent();
+        assertThat(processedParcel.get().getState()).isEqualTo(INTRUCKDELIVERY);
+    }
+
     @Test
     void GIVEN_validAddress_WHEN_submitting_parcel_THEN_return_correct_parcel() {
         // GIVEN
@@ -125,7 +144,7 @@ class ParcelServiceImplTest {
         // return parameter when calling save methode
         when(parcelRepository.save(any())).thenAnswer(i -> i.getArguments()[0]);
 
-        ParcelEntity parcel = buildParcel();
+        ParcelEntity parcel = buildParcel("trackingId");
 
         // settings date for assertion and
         OffsetDateTime timeNow = OffsetDateTime.now();
@@ -167,7 +186,7 @@ class ParcelServiceImplTest {
     void GIVEN_invalidAddress_WHEN_submitting_parcel_THEN_throw_exception() {
         when(geoEncodingService.encodeAddress(any())).thenReturn(Optional.empty()).thenReturn(Optional.of(buildSenderGeo()));
 
-        ParcelEntity parcel = buildParcel();
+        ParcelEntity parcel = buildParcel("trackingId");
         assertThrows(BLSubmitParcelAddressIncorrect.class, () -> parcelService.submitParcel(parcel));
     }
 
@@ -209,9 +228,10 @@ class ParcelServiceImplTest {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private ParcelEntity buildParcel() {
+    private ParcelEntity buildParcel(String trakcingId) {
         return ParcelEntity.builder()
-                .state(TrackingInformationState.PICKUP)
+                .state(PICKUP)
+                .trackingId(trakcingId)
                 .weight(1.2f)
                 .recipient(buildRecipient())
                 .sender(buildSender())
