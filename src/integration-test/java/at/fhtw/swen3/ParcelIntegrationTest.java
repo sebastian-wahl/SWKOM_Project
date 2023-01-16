@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static at.fhtw.swen3.services.dto.TrackingInformation.StateEnum.*;
@@ -35,31 +36,56 @@ class ParcelIntegrationTest extends BaseIntegrationTest {
 
     @Test
     void test_whole_parcel_tracking_flow() throws IOException {
-        // 0. Import all warehouses from json file
+        List<HopArrival> expectedVisitedHops = new ArrayList<>();
+        List<HopArrival> expectedFutureHops = mapper.readValue(readFromFile("expected-hops.json"), new TypeReference<>(){});
+
+        // 0.
+        // Import all warehouses from json file
         postImportWarehouses();
 
-        // 1. Submit a parcel
+        // 1.
+        // Submit a parcel
+        // Expect parcel tracking state to be PICKUP with correct visited and future hopArrivals
         String trackingId = postSubmitParcel();
 
-        // 2. Expect parcel tracking state to be PICKUP and futureHops have correct HopArrivals
-        TrackingInformation trackingInformation = checkParcelTrackingInfoInStatePickup(trackingId);
+        checkParcelTrackingInfoInState(trackingId, PICKUP, expectedVisitedHops, expectedFutureHops);
 
-        // 3. Report parcel hop
-        postReportParcelHop(trackingId, findNextHop(trackingInformation.getFutureHops()));
+        // 2.
+        // Report parcel hop at first Truck
+        // Expect parcel tracking state to be INTRANSPORT with correct visited and future hopArrivals
+        HopArrival nextFutureHop = moveFirstFutureHopToVisited(expectedVisitedHops, expectedFutureHops);
+        postReportParcelHop(trackingId, nextFutureHop);
 
-        // 4. Expect parcel tracking state to be INTRANSPORT and futureHops have correct HopArrivals
-        checkParcelTrackingInfoInStateInTransport(trackingId);
+        checkParcelTrackingInfoInState(trackingId, INTRANSPORT, expectedVisitedHops, expectedFutureHops);
 
-        // 5. Report parcel delivery
+        // 3.
+        // Report parcel hop at Warehouse
+        // Expect parcel tracking state to be INTRANSPORT with correct visited and future hopArrivals
+        HopArrival nextFutureHop2 = moveFirstFutureHopToVisited(expectedVisitedHops, expectedFutureHops);
+        postReportParcelHop(trackingId, nextFutureHop2);
+
+        checkParcelTrackingInfoInState(trackingId, INTRANSPORT, expectedVisitedHops, expectedFutureHops);
+
+        // 4.
+        // Report parcel hop at Truck
+        // Expect parcel tracking state to be INTRANSPORT with correct visited and future hopArrivals
+        HopArrival nextFutureHop3 = moveFirstFutureHopToVisited(expectedVisitedHops, expectedFutureHops);
+        postReportParcelHop(trackingId, nextFutureHop3);
+
+        checkParcelTrackingInfoInState(trackingId, INTRANSPORT, expectedVisitedHops, expectedFutureHops);
+
+        // 5.
+        // Report parcel delivery
+        // Expect parcel tracking state to be DELIVERED with correct visited and future hopArrivals
         postReportParcelDelivery(trackingId);
 
-        // 6. Expect parcel tracking state to be DELIVERED and futureHops to be empty
-        checkParcelTrackingInfoInStateInDelivered(trackingId);
+        checkParcelTrackingInfoInState(trackingId, DELIVERED, expectedVisitedHops, expectedFutureHops);
+
     }
 
     private void postReportParcelDelivery(String trackingId) {
         // WHEN
-        ResponseEntity<Void> response = httpClient.post("/parcel/" + trackingId + "/reportDelivery", null, Void.class);
+        ResponseEntity<Void> response = httpClient.post("/parcel/" + trackingId + "/reportDelivery/", null, Void.class);
 
         // THEN
         assertThat(response).isNotNull();
@@ -78,50 +104,25 @@ class ParcelIntegrationTest extends BaseIntegrationTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
     }
 
-    private TrackingInformation checkParcelTrackingInfoInStatePickup(String trackingId) throws IOException {
+    private void checkParcelTrackingInfoInState(
+            String trackingId,
+            TrackingInformation.StateEnum state,
+            List<HopArrival> expectedVisitedHops,
+            List<HopArrival> expectedFutureHops
+    ) {
         // WHEN
-        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, PICKUP);
+        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, state);
 
         // THEN
         assertThat(response.getBody()).isNotNull();
-
-        assertThat(response.getBody().getVisitedHops()).isEmpty();
-
-        List<HopArrival> expectedFutureHops = mapper.readValue(readFromFile("expected-hops.json"), new TypeReference<>(){});
-        assertThat(response.getBody().getFutureHops())
-                .usingRecursiveFieldByFieldElementComparatorOnFields("code")
-                .containsSequence(expectedFutureHops);
-
-        return response.getBody();
-    }
-
-    private void checkParcelTrackingInfoInStateInTransport(String trackingId) throws IOException {
-        // WHEN
-        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, INTRANSPORT);
-
-        // THEN
-        assertThat(response.getBody()).isNotNull();
-
-        List<HopArrival> expectedHops = mapper.readValue(readFromFile("expected-hops.json"), new TypeReference<>(){});
-        HopArrival visitedHop = expectedHops.remove(0);
 
         assertThat(response.getBody().getVisitedHops())
                 .usingRecursiveFieldByFieldElementComparatorOnFields("code")
-                .containsSequence(visitedHop);
+                .isEqualTo(expectedVisitedHops);
 
         assertThat(response.getBody().getFutureHops())
                 .usingRecursiveFieldByFieldElementComparatorOnFields("code")
-                .containsSequence(expectedHops);
-    }
-
-
-    private void checkParcelTrackingInfoInStateInDelivered(String trackingId) {
-        // WHEN
-        ResponseEntity<TrackingInformation> response = getTrackParcel(trackingId, DELIVERED);
-
-        // THEN
-        assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().getFutureHops()).isEmpty();
+                .isEqualTo(expectedFutureHops);
     }
 
     private ResponseEntity<TrackingInformation> getTrackParcel(String trackingId, TrackingInformation.StateEnum expectedState) {
@@ -167,8 +168,9 @@ class ParcelIntegrationTest extends BaseIntegrationTest {
         return trackingId;
     }
 
-    private HopArrival findNextHop(List<HopArrival> futureHops) {
-        assertThat(futureHops).hasSizeGreaterThanOrEqualTo(2);
-        return futureHops.get(0);
+    private HopArrival moveFirstFutureHopToVisited(List<HopArrival> expectedVisitedHops, List<HopArrival> expectedFutureHops) {
+        HopArrival nextFutureHop = expectedFutureHops.remove(0);
+        expectedVisitedHops.add(nextFutureHop);
+        return nextFutureHop;
     }
 }
