@@ -7,7 +7,6 @@ import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Hop;
 import at.fhtw.swen3.services.dto.Warehouse;
 import at.fhtw.swen3.services.dto.WarehouseNextHops;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ class WarehouseApiControllerTest {
 
     public static final String VALID_CODE = "ABCD123";
 
-    @MockBean(name="warehouseService")
+    @MockBean(name = "warehouseService")
     private WarehouseService warehouseService;
 
     @Autowired
@@ -47,11 +46,9 @@ class WarehouseApiControllerTest {
         assertThat(response.getBody()).isNotNull();
     }
 
-    // ToDo remove disabled
     @Test
-    @Disabled
     void GIVEN_warehouse_not_loaded_WHEN_exportWarehouses_THEN_404_not_found() {
-        doReturn(null).when(warehouseService).exportWarehouses();
+        doReturn(Optional.empty()).when(warehouseService).exportWarehouses();
         ResponseEntity<Warehouse> response = warehouseApiController.exportWarehouses();
 
         assertThat(response).isNotNull();
@@ -69,9 +66,7 @@ class WarehouseApiControllerTest {
         assertThat(response.getBody()).isNotNull();
     }
 
-    // ToDo remove disabled
     @Test
-    @Disabled
     void GIVEN_not_found_for_code_WHEN_getWarehouse_THEN_404_not_found() {
         doReturn(Optional.empty()).when(warehouseService).getWarehouse(anyString());
 

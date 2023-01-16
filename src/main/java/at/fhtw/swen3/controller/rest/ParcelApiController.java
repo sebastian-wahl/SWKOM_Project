@@ -56,8 +56,7 @@ public class ParcelApiController implements ParcelApi {
 
     @Override
     public ResponseEntity<TrackingInformation> trackParcel(String trackingId) {
-        // ToDo change back to .of
-        return ResponseEntity.ok(parcelService.trackParcel(trackingId).map(parcelEntity -> ParcelMapper.INSTANCE.toTrackingInformationDto(parcelEntity)).orElse(null));
+        return ResponseEntity.of(parcelService.trackParcel(trackingId).map(parcelEntity -> ParcelMapper.INSTANCE.toTrackingInformationDto(parcelEntity)));
     }
 
     @Override

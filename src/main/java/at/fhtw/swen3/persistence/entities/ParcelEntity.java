@@ -2,6 +2,7 @@ package at.fhtw.swen3.persistence.entities;
 
 import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.services.validation.annotation.MinExclusiveValidation;
+import at.fhtw.swen3.services.validation.annotation.TrackingCodeValidation;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -45,6 +46,7 @@ public class ParcelEntity implements BaseEntity {
     private RecipientEntity sender;
 
     // NewParcelInfo
+    @TrackingCodeValidation
     @Column(name = "TRACKING_ID") // unique = true ?
     private String trackingId;
 
