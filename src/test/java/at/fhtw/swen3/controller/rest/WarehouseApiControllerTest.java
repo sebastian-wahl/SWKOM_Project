@@ -24,13 +24,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.lenient;
 
 @SpringBootTest
 class WarehouseApiControllerTest {
 
     public static final String VALID_CODE = "ABCD123";
-    @MockBean
+
+    @MockBean(name="warehouseService")
     private WarehouseService warehouseService;
 
     @Autowired
@@ -130,10 +130,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
-                        .build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
                 .nextHop(warehouseNextHops)
                 .build());
     }
@@ -145,10 +142,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
-                        .build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
                 .build();
     }
 
@@ -159,10 +153,7 @@ class WarehouseApiControllerTest {
                 .hopType("hopType")
                 .locationName("locationName")
                 .processingDelayMins(1)
-                .locationCoordinates(GeoCoordinateEntity.builder()
-                        .lat(1.0)
-                        .lon(2.0)
-                        .build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT(1 2)")).build())
                 .build();
     }
 

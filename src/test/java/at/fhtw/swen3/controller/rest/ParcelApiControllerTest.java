@@ -5,8 +5,10 @@ import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
 import at.fhtw.swen3.persistence.entities.ParcelEntity;
 import at.fhtw.swen3.persistence.entities.RecipientEntity;
 import at.fhtw.swen3.services.ParcelService;
-import at.fhtw.swen3.services.dto.*;
-import at.fhtw.swen3.services.mapper.ParcelMapper;
+import at.fhtw.swen3.services.dto.NewParcelInfo;
+import at.fhtw.swen3.services.dto.Parcel;
+import at.fhtw.swen3.services.dto.Recipient;
+import at.fhtw.swen3.services.dto.TrackingInformation;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +41,7 @@ class ParcelApiControllerTest {
     public static final String VALID_HOP_CODE = "ABCD1234";
     public static final String INVALID_HOP_CODE = "invalidCode";
 
-    @MockBean
+    @MockBean(name="parcelService")
     private ParcelService parcelService;
 
     @Autowired

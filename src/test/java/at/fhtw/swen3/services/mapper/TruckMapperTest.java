@@ -5,7 +5,9 @@ import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.services.dto.GeoCoordinate;
 import at.fhtw.swen3.services.dto.Truck;
 import org.junit.jupiter.api.Test;
+import org.locationtech.jts.geom.Point;
 
+import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TruckMapperTest {
@@ -46,8 +48,8 @@ class TruckMapperTest {
         assertThat(entity.getProcessingDelayMins()).isEqualTo(PROCESSING_DELAYS_MINS);
         assertThat(entity.getLocationName()).isEqualTo(LOCATION_NAME);
         assertThat(entity.getLocationCoordinates()).isNotNull();
-        assertThat(entity.getLocationCoordinates().getLat()).isEqualTo(LAT);
-        assertThat(entity.getLocationCoordinates().getLon()).isEqualTo(LON);
+        assertThat(entity.getLocationCoordinates().getLocation().getX()).isEqualTo(LAT);
+        assertThat(entity.getLocationCoordinates().getLocation().getY()).isEqualTo(LON);
     }
 
     @Test
@@ -59,7 +61,7 @@ class TruckMapperTest {
                 .code(CODE)
                 .description(DESCRIPTION)
                 .hopType(HOP_TYPE)
-                .locationCoordinates(GeoCoordinateEntity.builder().lat(LAT).lon(LON).build())
+                .locationCoordinates(GeoCoordinateEntity.builder().location((Point) wktToGeometry("POINT("+LAT+" "+LON+")")).build())
                 .processingDelayMins(PROCESSING_DELAYS_MINS)
                 .locationName(LOCATION_NAME)
                 .build();
