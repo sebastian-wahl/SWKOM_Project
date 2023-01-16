@@ -19,17 +19,19 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
-//@SpringBootTest
 @ExtendWith(MockitoExtension.class)
 class ParcelServiceImplTest {
 
@@ -56,13 +58,42 @@ class ParcelServiceImplTest {
 
     @Mock
     private HopRepository hopRepository;
+
     @Mock
     private WarehouseNextHopsRepository warehouseNextHopsRepository;
 
     @Mock
     private GeoEncodingService geoEncodingService;
+
     @Mock
     private TruckRepository truckRepository;
+
+    @Test
+    void GIVEN_valid_hopCode_WHEN_reportParcelHop_THEN_move_hopArrival_to_visited() {
+        // GIVEN
+        final String trackingId = "trackingId";
+        final String firstVisitedHopCode = "firstVisitedHop";
+        final String firstFutureHopCode = "firstFutureHop";
+        final String secondFutureHopCode = "secondFutureHop";
+
+        ParcelEntity parcel = buildParcel();
+        parcel.setVisitedHops(buildHopArrivals(firstVisitedHopCode));
+        parcel.setFutureHops(buildHopArrivals(firstFutureHopCode, secondFutureHopCode));
+
+        doReturn(Optional.of(parcel)).when(parcelRepository).findFirstByTrackingId(anyString());
+
+        // WHEN
+        Optional<ParcelEntity> processedParcel = parcelService.reportParcelHop(trackingId, firstFutureHopCode);
+
+        // THEN
+        assertThat(processedParcel).isPresent();
+        assertThat(processedParcel.get().getVisitedHops())
+                .usingRecursiveComparison()
+                .isEqualTo(buildHopArrivals(firstVisitedHopCode,firstFutureHopCode));
+        assertThat(processedParcel.get().getFutureHops())
+                .usingRecursiveComparison()
+                .isEqualTo(buildHopArrivals(secondFutureHopCode));
+    }
 
     @Test
     void GIVEN_validAddress_WHEN_submitting_parcel_THEN_return_correct_parcel() {
@@ -281,6 +312,12 @@ class ParcelServiceImplTest {
 
     private GeoEncodingCoordinate buildSenderGeo() {
         return GeoEncodingCoordinate.builder().lat("2").lon("2").build();
+    }
+
+    private List<HopArrivalEntity> buildHopArrivals(String... codes) {
+        return Stream.of(codes)
+                .map(code -> HopArrivalEntity.builder().code(code).build())
+                .collect(Collectors.toCollection(ArrayList::new));
     }
 
     private ParcelEntity buildParcel() {

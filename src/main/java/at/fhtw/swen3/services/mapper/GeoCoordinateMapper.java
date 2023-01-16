@@ -8,8 +8,6 @@ import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Locale;
-
 import static at.fhtw.swen3.util.JTSUtil.wktToGeometry;
 
 @Mapper
