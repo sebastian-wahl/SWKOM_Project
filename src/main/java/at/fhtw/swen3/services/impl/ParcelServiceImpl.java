@@ -3,7 +3,10 @@ package at.fhtw.swen3.services.impl;
 import at.fhtw.swen3.gps.service.GeoEncodingService;
 import at.fhtw.swen3.gps.service.models.Address;
 import at.fhtw.swen3.gps.service.models.GeoEncodingCoordinate;
-import at.fhtw.swen3.persistence.entities.*;
+import at.fhtw.swen3.persistence.entities.HopArrivalEntity;
+import at.fhtw.swen3.persistence.entities.HopEntity;
+import at.fhtw.swen3.persistence.entities.ParcelEntity;
+import at.fhtw.swen3.persistence.entities.TruckEntity;
 import at.fhtw.swen3.persistence.entities.enums.TrackingInformationState;
 import at.fhtw.swen3.persistence.repositories.HopRepository;
 import at.fhtw.swen3.persistence.repositories.ParcelRepository;
@@ -209,15 +212,6 @@ public class ParcelServiceImpl implements ParcelService {
             nextHop = nextHop.getPreviousHop().getWarehouse();
         }
         return nextHops;
-    }
-
-    private void addRecipientHopsToHopArrivalList(List<WarehouseNextHopsEntity> recipientHopList, List<HopArrivalEntity> hopArrivalList, OffsetDateTime startDateTime) {
-        OffsetDateTime dateTimeRecipient = startDateTime;
-        for (WarehouseNextHopsEntity recipientNextHop : recipientHopList) {
-            dateTimeRecipient = dateTimeRecipient.plus(recipientNextHop.getTraveltimeMins(), ChronoUnit.MINUTES)
-                    .plus(recipientNextHop.getWarehouse().getProcessingDelayMins(), ChronoUnit.MINUTES);
-            hopArrivalList.add(HopArrivalEntity.fromHop(recipientNextHop.getHop(), dateTimeRecipient));
-        }
     }
 
     private ParcelEntity setTrackingIdAndSaveParcel(ParcelEntity parcel) {
