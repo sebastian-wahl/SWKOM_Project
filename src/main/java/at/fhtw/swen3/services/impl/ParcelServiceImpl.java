@@ -110,13 +110,17 @@ public class ParcelServiceImpl implements ParcelService {
     @Override
     public ParcelEntity submitParcel(ParcelEntity parcel) {
         log.debug("Submitting new parcel");
+
+        generateAndSetTrackingId(parcel);
+        parcel.setState(TrackingInformationState.PICKUP);
+
         entityValidatorService.validate(parcel);
         log.debug("Parcel validated");
 
         predictHops(parcel);
-        ParcelEntity out = setTrackingIdAndSaveParcel(parcel);
+        ParcelEntity parcelOut = parcelRepository.save(parcel);
         log.debug("Parcel saved successfully");
-        return out;
+        return parcelOut;
     }
 
     private void predictHops(ParcelEntity parcel) {
@@ -219,12 +223,6 @@ public class ParcelServiceImpl implements ParcelService {
             nextHop = nextHop.getReferencedNextHop().getWarehouse();
         }
         return nextHops;
-    }
-
-    private ParcelEntity setTrackingIdAndSaveParcel(ParcelEntity parcel) {
-        generateAndSetTrackingId(parcel);
-        parcel.setState(TrackingInformationState.PICKUP);
-        return parcelRepository.save(parcel);
     }
 
     /**
