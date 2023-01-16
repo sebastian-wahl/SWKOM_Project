@@ -16,6 +16,7 @@ import at.fhtw.swen3.services.exception.blexception.BLInvalidHopArrivalCodeExcep
 import at.fhtw.swen3.services.exception.blexception.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.blexception.BLParcelNotFound;
 import at.fhtw.swen3.services.exception.blexception.BLSubmitParcelAddressIncorrect;
+import at.fhtw.swen3.services.exception.blexception.BLTrackingNumberExistException;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import com.github.curiousoddman.rgxgen.RgxGen;
 import lombok.RequiredArgsConstructor;
@@ -119,6 +120,13 @@ public class ParcelServiceImpl implements ParcelService {
         entityValidatorService.validate(parcel);
         log.debug("Parcel validated");
 
+        predictHops(parcel);
+        ParcelEntity out = setTrackingIdAndSaveParcel(parcel);
+        log.debug("Parcel saved successfully");
+        return out;
+    }
+
+    private void predictHops(ParcelEntity parcel) {
         Address senderAddress = Address.fromRecipient(parcel.getSender());
         Address recipientAddress = Address.fromRecipient(parcel.getRecipient());
         Optional<GeoEncodingCoordinate> recipientCoordinates = geoEncodingService.encodeAddress(recipientAddress);
@@ -141,9 +149,6 @@ public class ParcelServiceImpl implements ParcelService {
         log.debug("Address validated");
 
         predictNextHops(parcel, nearestRecipientTruckOpt.get(), nearestSenderTruckOpt.get());
-        ParcelEntity out = setTrackingIdAndSaveParcel(parcel);
-        log.debug("Parcel saved successfully");
-        return out;
     }
 
     private void predictNextHops(ParcelEntity parcel, TruckEntity nearestRecipientTruck, TruckEntity nearestSenderTruck) {
@@ -252,7 +257,14 @@ public class ParcelServiceImpl implements ParcelService {
     public ParcelEntity transitionParcel(ParcelEntity parcel) {
         log.debug("Transition parcel with tracking id {}", parcel.getId());
         entityValidatorService.validate(parcel);
-        return parcelRepository.save(parcel);
+        if (parcelRepository.findFirstByTrackingId(parcel.getTrackingId()).isPresent()) {
+            throw new BLTrackingNumberExistException(parcel.getTrackingId());
+        }
+        predictHops(parcel);
+        parcel.setState(TrackingInformationState.PICKUP);
+        ParcelEntity out = parcelRepository.save(parcel);
+        log.debug("Parcel saved successfully");
+        return out;
     }
 
     private void changeTrackingStateToDelivered(ParcelEntity parcelEntity) {
