@@ -15,7 +15,7 @@ import at.fhtw.swen3.services.ParcelService;
 import at.fhtw.swen3.services.exception.blexception.BLNoTruckFound;
 import at.fhtw.swen3.services.exception.blexception.BLParcelNotFound;
 import at.fhtw.swen3.services.exception.blexception.BLSubmitParcelAddressIncorrect;
-import at.fhtw.swen3.services.exception.BLException.BLTrackingNumberExistException;
+import at.fhtw.swen3.services.exception.blexception.BLTrackingNumberExistException;
 import at.fhtw.swen3.services.validation.EntityValidatorService;
 import com.github.curiousoddman.rgxgen.RgxGen;
 import lombok.RequiredArgsConstructor;
@@ -87,6 +87,13 @@ public class ParcelServiceImpl implements ParcelService {
         entityValidatorService.validate(parcel);
         log.debug("Parcel validated");
 
+        predictHops(parcel);
+        ParcelEntity out = setTrackingIdAndSaveParcel(parcel);
+        log.debug("Parcel saved successfully");
+        return out;
+    }
+
+    private void predictHops(ParcelEntity parcel) {
         Address senderAddress = Address.fromRecipient(parcel.getSender());
         Address recipientAddress = Address.fromRecipient(parcel.getRecipient());
         Optional<GeoEncodingCoordinate> recipientCoordinates = geoEncodingService.encodeAddress(recipientAddress);
@@ -109,9 +116,6 @@ public class ParcelServiceImpl implements ParcelService {
         log.debug("Address validated");
 
         predictNextHops(parcel, nearestRecipientTruckOpt.get(), nearestSenderTruckOpt.get());
-        ParcelEntity out = setTrackingIdAndSaveParcel(parcel);
-        log.debug("Parcel saved successfully");
-        return out;
     }
 
     private void predictNextHops(ParcelEntity parcel, TruckEntity nearestRecipientTruck, TruckEntity nearestSenderTruck) {
@@ -223,8 +227,11 @@ public class ParcelServiceImpl implements ParcelService {
         if (parcelRepository.findFirstByTrackingId(parcel.getTrackingId()).isPresent()) {
             throw new BLTrackingNumberExistException(parcel.getTrackingId());
         }
-        // ToDo predict future hops (GeoSpatial)
-        return parcelRepository.save(parcel);
+        predictHops(parcel);
+        parcel.setState(TrackingInformationState.PICKUP);
+        ParcelEntity out = parcelRepository.save(parcel);
+        log.debug("Parcel saved successfully");
+        return out;
     }
 
     private void changeTrackingStateToDelivered(ParcelEntity parcelEntity) {

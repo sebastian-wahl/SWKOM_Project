@@ -1,13 +1,9 @@
-package at.fhtw.swen3.services.exception.BLException;
+package at.fhtw.swen3.services.exception.blexception;
 
-import lombok.Getter;
+import at.fhtw.swen3.services.BLException;
 
 public class BLTrackingNumberExistException extends BLException {
-    @Getter
-    private final String message;
-
     public BLTrackingNumberExistException(String trackingNumber) {
-        super();
-        this.message = "Tracking number \"" + trackingNumber + "\" already exists!";
+        super("Tracking number \"" + trackingNumber + "\" already exists!");
     }
 }
