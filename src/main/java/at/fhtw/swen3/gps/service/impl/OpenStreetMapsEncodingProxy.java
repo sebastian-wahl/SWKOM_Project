@@ -45,7 +45,6 @@ public class OpenStreetMapsEncodingProxy implements GeoEncodingService {
             return mapJsonToGeoCoordinateOptional(json);
         } catch (HttpClientErrorException e) {
             log.warn("Error while fetching geo coordinates");
-            // TODO: rethrow exception
         }
         return Optional.empty();
     }
